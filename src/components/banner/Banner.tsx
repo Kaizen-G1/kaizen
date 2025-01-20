@@ -3,7 +3,7 @@ import { StyleSheet, View, ImageBackground } from "react-native";
 import { Text } from "react-native-paper";
 
 interface BannerProps {
-  imageUrl: string; // Prop for the image URL
+  imageUrl: string;
   title: string;
   subtitle: string;
   caption: string;
