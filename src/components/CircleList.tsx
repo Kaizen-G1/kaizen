@@ -32,7 +32,7 @@ const CircleList: React.FC<CircleListProps> = ({ title, items, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    marginHorizontal: 20
   },
   title: {
     fontSize: 21,
