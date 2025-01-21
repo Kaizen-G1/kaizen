@@ -1,14 +1,36 @@
 // src/screens/HomeScreen.tsx
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Text, Button, Appbar } from "react-native-paper";
-import FlashSaleScreen from "../../components/flash-sale/FlashSale";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
+
+// Components
 import FlashSalePage from "../../components/flash/Flash";
+import FlashSaleScreen from "../../components/flash-sale/FlashSale";
+import CategoryList from "../../components/CategoryList";
+import CircleList from "../../components//CircleList"
+
+// Mock Data
+import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
+import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
 
 const HomeScreen = () => {
+
+  const handleSelectCategory = (id: number) => {
+    console.log(`Selected category ID: ${id}`);
+  };
+
+  const handleSeeAllCategories = () => {
+    console.log(`See all categories`);
+  };
+
+  const handleSelectProduct = (label: string) => {
+    console.log(`Pressed: ${label}`);
+  };
+
   return (
     <>
-      {/* <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* <View style={styles.container}>
         <Appbar.Header>
           <Appbar.Content title="Home" />
         </Appbar.Header>
@@ -19,8 +41,24 @@ const HomeScreen = () => {
           </Button>
         </View>
       </View> */}
-      <FlashSalePage />
-      <FlashSaleScreen />
+
+        <FlashSalePage />
+
+        {/* <FlashSaleScreen /> */}
+
+        <CategoryList
+          title="Categories"
+          categories={CATEGORIES_LIST_MOCK}
+          onSelectCategory={handleSelectCategory}
+          onSeeAll={handleSeeAllCategories}
+        />
+
+        <CircleList
+          title='Top Products'
+          items={TOP_PRODUCTS_MOCK}
+          onPress={handleSelectProduct}
+        />
+      </ScrollView>
     </>
   );
 };

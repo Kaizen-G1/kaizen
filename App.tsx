@@ -5,5 +5,5 @@ import FlashSalePage from "./src/components/flash/Flash";
 import HomeScreen from "./src/screens/home/Home";
 
 export default function App() {
-  return <FlashSalePage />;
+  return <HomeScreen />;
 }
