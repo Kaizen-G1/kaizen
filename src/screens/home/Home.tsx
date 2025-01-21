@@ -4,7 +4,6 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
 
 // Components
-import FlashSalePage from "../../components/flash/Flash";
 import FlashSaleScreen from "../../components/flash-sale/FlashSale";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts"
@@ -12,6 +11,7 @@ import TopProducts from "../../components/TopProducts"
 // Mock Data
 import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
 import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
 
@@ -29,41 +29,48 @@ const HomeScreen = () => {
 
   return (
     <>
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* <View style={styles.container}>
-        <Appbar.Header>
-          <Appbar.Content title="Home" />
-        </Appbar.Header>
-        <View style={styles.content}>
-          <Text style={styles.text}>Welcome to the E-Shop!</Text>
-          <Button mode="contained" onPress={() => console.log("Go to Shop")}>
-            Go to Shop
-          </Button>
-        </View>
-      </View> */}
+      <SafeAreaProvider>
+        <PaperProvider>
+          <SafeAreaView style={styles.container}>
 
-        <FlashSalePage />
+            <ScrollView contentContainerStyle={styles.container}>
+              {/* <View style={styles.container}>
+                <Appbar.Header>
+                  <Appbar.Content title="Home" />
+                </Appbar.Header>
+                <View style={styles.content}>
+                  <Text style={styles.text}>Welcome to the E-Shop!</Text>
+                  <Button mode="contained" onPress={() => console.log("Go to Shop")}>
+                    Go to Shop
+                  </Button>
+                </View>
+              </View> */}
 
-        {/* <FlashSaleScreen /> */}
+              <CategoryList
+                title="Categories"
+                categories={CATEGORIES_LIST_MOCK}
+                onSelectCategory={handleSelectCategory}
+                onSeeAll={handleSeeAllCategories}
+              />
 
-        <CategoryList
-          title="Categories"
-          categories={CATEGORIES_LIST_MOCK}
-          onSelectCategory={handleSelectCategory}
-          onSeeAll={handleSeeAllCategories}
-        />
-
-        <TopProducts
-          title='Top Products'
-          items={TOP_PRODUCTS_MOCK}
-          onPress={handleSelectProduct}
-        />
-      </ScrollView>
+              <TopProducts
+                title='Top Products'
+                items={TOP_PRODUCTS_MOCK}
+                onPress={handleSelectProduct}
+              />
+            </ScrollView>
+          </SafeAreaView>
+        </PaperProvider>
+      </SafeAreaProvider>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  appbar: {
+    height: 48,
+    backgroundColor: "red",
+  },
   container: {
     flex: 1,
   },
