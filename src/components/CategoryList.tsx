@@ -76,9 +76,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   seeAllText: {
-    fontSize: 16,
-    color: '#753742',
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   grid: {
     display: 'flex',
