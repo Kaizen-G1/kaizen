@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
 
-import CircleItem from 'tenzai-components/components/CircleItem';
+import CircleItem from 'tenzai-components/components/CircleItem/CircleItem';
 
 type TopProductsProps = {
   title: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import CategoryCard from 'tenzai-components/components/CategoryCard';
+import CategoryCard from 'tenzai-components/components/CategoryCard/CategoryCard';
 
 type CategoryListProps = {
   title: string;
