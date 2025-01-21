@@ -58,7 +58,8 @@ const CategoryList: React.FC<CategoryListProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    marginBottom: 15,
   },
   header: {
     flexDirection: 'row',

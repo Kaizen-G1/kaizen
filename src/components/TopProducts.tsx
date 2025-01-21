@@ -3,13 +3,13 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native';
 
 import CircleItem from 'tenzai-components/components/CircleItem';
 
-type CircleListProps = {
+type TopProductsProps = {
   title: string;
   items: { id: string; image: string }[];
   onPress: (label: string) => void;
 };
 
-const CircleList: React.FC<CircleListProps> = ({ title, items, onPress }) => {
+const TopProducts: React.FC<TopProductsProps> = ({ title, items, onPress }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -32,7 +32,8 @@ const CircleList: React.FC<CircleListProps> = ({ title, items, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    marginBottom: 15,
   },
   title: {
     fontSize: 21,
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CircleList;
+export default TopProducts;

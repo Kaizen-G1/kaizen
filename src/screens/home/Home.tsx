@@ -7,7 +7,7 @@ import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
 import FlashSalePage from "../../components/flash/Flash";
 import FlashSaleScreen from "../../components/flash-sale/FlashSale";
 import CategoryList from "../../components/CategoryList";
-import CircleList from "../../components//CircleList"
+import TopProducts from "../../components/TopProducts"
 
 // Mock Data
 import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
@@ -53,7 +53,7 @@ const HomeScreen = () => {
           onSeeAll={handleSeeAllCategories}
         />
 
-        <CircleList
+        <TopProducts
           title='Top Products'
           items={TOP_PRODUCTS_MOCK}
           onPress={handleSelectProduct}
