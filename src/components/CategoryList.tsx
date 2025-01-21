@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { IconButton } from 'react-native-paper';
 
 import CategoryCard from 'tenzai-components/components/CategoryCard/CategoryCard';
+import CustomIcon from 'tenzai-components/components/CustomIcon/CustomIcon';
 
 type CategoryListProps = {
   title: string;
@@ -35,7 +35,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
         {categories.length > maxVisibleCategories && (
           <TouchableOpacity onPress={onSeeAll} style={styles.seeAllContainer}>
             <Text style={styles.seeAllText}>See All</Text>
-            <IconButton icon="arrow-right" size={16} />
+            <CustomIcon icon='arrow-right' type='circle'/>
           </TouchableOpacity>
         )}
       </View>
