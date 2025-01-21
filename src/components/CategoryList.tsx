@@ -7,12 +7,12 @@ import CategoryCard from 'tenzai-components/components/CategoryCard';
 type CategoryListProps = {
   title: string;
   categories: {
-    id: number;
+    id: string;
     title: string;
     count: number;
     images: string[];
   }[];
-  onSelectCategory: (id: number) => void;
+  onSelectCategory: (id: string) => void;
   onSeeAll: () => void;
   maxVisibleCategories?: number;
 };

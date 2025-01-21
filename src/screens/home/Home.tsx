@@ -15,7 +15,7 @@ import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
 
 const HomeScreen = () => {
 
-  const handleSelectCategory = (id: number) => {
+  const handleSelectCategory = (id: string) => {
     console.log(`Selected category ID: ${id}`);
   };
 

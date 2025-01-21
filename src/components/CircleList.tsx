@@ -5,7 +5,7 @@ import CircleItem from 'tenzai-components/components/CircleItem';
 
 type CircleListProps = {
   title: string;
-  items: { id: number; image: string; label: string }[];
+  items: { id: string; image: string }[];
   onPress: (label: string) => void;
 };
 
@@ -22,7 +22,7 @@ const CircleList: React.FC<CircleListProps> = ({ title, items, onPress }) => {
           <CircleItem
             key={item.id}
             image={item.image}
-            onPress={() => onPress(item.label)}
+            onPress={() => onPress(item.id)}
           />
         ))}
       </ScrollView>

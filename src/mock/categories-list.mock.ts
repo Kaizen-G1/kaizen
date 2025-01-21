@@ -1,6 +1,6 @@
 export const CATEGORIES_LIST_MOCK = [
   {
-    id: 1,
+    id: "100",
     title: 'Clothing',
     count: 109,
     images: [
@@ -11,7 +11,7 @@ export const CATEGORIES_LIST_MOCK = [
     ],
   },
   {
-    id: 2,
+    id: "200",
     title: 'Shoes',
     count: 530,
     images: [
@@ -22,7 +22,7 @@ export const CATEGORIES_LIST_MOCK = [
     ],
   },
   {
-    id: 3,
+    id: "300",
     title: 'Bags',
     count: 87,
     images: [
@@ -33,7 +33,7 @@ export const CATEGORIES_LIST_MOCK = [
     ],
   },
   {
-    id: 4,
+    id: "400",
     title: 'Shoes',
     count: 530,
     images: [
@@ -44,7 +44,7 @@ export const CATEGORIES_LIST_MOCK = [
     ],
   },
   {
-    id: 5,
+    id: "500",
     title: 'Bags',
     count: 87,
     images: [
