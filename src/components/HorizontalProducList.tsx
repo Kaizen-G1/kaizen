@@ -145,12 +145,11 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   productName: {
-    fontSize: 14,
+    fontSize: 16,
     marginVertical: 5,
-    color: "#333",
   },
   productPrice: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#000",
   },
