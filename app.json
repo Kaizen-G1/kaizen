@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.kaizen"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,6 +25,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "assetBundlePatterns": ["**/*", "./assets/fonts/*"]
+    "assetBundlePatterns": [
+      "**/*",
+      "./assets/fonts/*"
+    ]
   }
 }

@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#FFFFFF",
     fontWeight: "bold",
+    fontFamily: "Raleway-Regular",
   },
 });
 
