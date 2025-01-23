@@ -39,6 +39,11 @@ const HomeScreen = () => {
     console.log(`Pressed: ${label}`);
   };
 
+  const handleSeeAllNewItems = () => {
+    console.log(`See all new items`);
+  };
+
+
   return (
     <>
       <SafeAreaProvider>
@@ -79,7 +84,7 @@ const HomeScreen = () => {
 
               <HorizontalProductList
                 products={NEW_ITEMS_LIST_MOCK}
-                onPressSeeAll={handleSeeAllCategories}
+                onPressSeeAll={handleSeeAllNewItems}
               />
             </ScrollView>
           </SafeAreaView>
