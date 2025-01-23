@@ -8,12 +8,14 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import FlashSaleScreen from "../../components/flash-sale/FlashSale";
 import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
-import TopProducts from "../../components/TopProducts"
+import TopProducts from "../../components/TopProducts";
+import HorizontalProductList from "../../components/HorizontalProducList";
 
 // Mock Data
 import { BANNERS_MOCK } from "../../mock/banners.mock";
 import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
 import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
+import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -73,6 +75,11 @@ const HomeScreen = () => {
                 title='Top Products'
                 items={TOP_PRODUCTS_MOCK}
                 onPress={handleSelectProduct}
+              />
+
+              <HorizontalProductList
+                products={NEW_ITEMS_LIST_MOCK}
+                onPressSeeAll={handleSeeAllCategories}
               />
             </ScrollView>
           </SafeAreaView>
