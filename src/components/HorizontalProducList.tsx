@@ -115,10 +115,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   seeAllText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#b22222",
-    marginRight: 5,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   imageContainer: {
     display: 'flex',
