@@ -12,7 +12,6 @@ import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
 // Mock Data
-import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
 import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
 
 const MARGIN_HORIZONTAL = 14;
@@ -63,16 +62,38 @@ const HomeScreen = () => {
             images: category.demoImages
           }));
         setCategories(activeCategories);
-
-        console.log("activeCategories");
-        console.log(activeCategories);
-
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchCategories();
+  }, []);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/products");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
+        const data = await response.json();
+        const formattedProducts = data.map((product: any) => ({
+          id: product.id,
+          image: product.images[0]
+        }));
+        setProducts(formattedProducts);
+
+        console.log("Products:");
+        console.log(formattedProducts);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const handleImagePress = (id: string) => {
@@ -130,7 +151,7 @@ const HomeScreen = () => {
 
               <TopProducts
                 title='Top Products'
-                items={TOP_PRODUCTS_MOCK}
+                items={products}
                 onPress={handleSelectProduct}
               />
 
