@@ -1,7 +1,6 @@
-// src/screens/HomeScreen.tsx
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 // Components
@@ -10,9 +9,6 @@ import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
-
-// Mock Data
-import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -71,7 +67,6 @@ const HomeScreen = () => {
   }, []);
 
   const [products, setProducts] = useState([]);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -82,12 +77,14 @@ const HomeScreen = () => {
         const data = await response.json();
         const formattedProducts = data.map((product: any) => ({
           id: product.id,
-          image: product.images[0]
+          image: product.images[0],
+          description: product.description,
+          title: product.title,
+          price: product.price,
+          count: product.soldCount,
+          stock: product.inStock,
         }));
         setProducts(formattedProducts);
-
-        console.log("Products:");
-        console.log(formattedProducts);
       } catch (error) {
         console.error(error);
       }
@@ -156,7 +153,7 @@ const HomeScreen = () => {
               />
 
               <HorizontalProductList
-                products={NEW_ITEMS_LIST_MOCK}
+                products={products}
                 onPressSeeAll={handleSeeAllNewItems}
               />
             </ScrollView>

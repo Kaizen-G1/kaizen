@@ -9,7 +9,7 @@ type Product = {
   count: number;
   price: number;
   stock: number;
-  images: string;
+  image: string;
 };
 
 type HeaderSectionProps = {
@@ -27,7 +27,7 @@ type HorizontalProductListProps = {
     count: number;
     price: number;
     stock: number;
-    images: string;
+    image: string;
   }[];
   onPressSeeAll: () => void;
 };
@@ -49,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
     <View style={styles.productCard}>
     <Card style={styles.card}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: item.images }} style={styles.productImage} />
+        <Image source={{ uri: item.image }} style={styles.productImage} />
       </View>
       </Card>
       <View style={styles.itemsFooterContainer}>
