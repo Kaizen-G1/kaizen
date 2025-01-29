@@ -1,5 +1,5 @@
 // src/screens/HomeScreen.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -12,7 +12,6 @@ import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
 // Mock Data
-import { BANNERS_MOCK } from "../../mock/banners.mock";
 import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
 import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
 import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
@@ -22,6 +21,30 @@ const MARGIN_HORIZONTAL = 14;
 const HomeScreen = () => {
 
   const sliderWidth = Dimensions.get('window').width - MARGIN_HORIZONTAL * 2;
+
+  const [banners, setBanners] = useState([]);
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/banners");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch banners: ${response.status}`);
+        }
+        const data = await response.json();
+        const activeBanners = data
+          .filter((banner: any) => banner.isActive)
+          .map((banner: any) => ({
+            id: banner.id,
+            imageUrl: banner.imageUrl,
+          }));
+        setBanners(activeBanners);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchBanners();
+  }, []);
 
   const handleImagePress = (id: string) => {
     console.log(`Selected image ID: ${id}`);
@@ -63,7 +86,7 @@ const HomeScreen = () => {
               </View> */}
               <View style={styles.sliderContainer}>
                 <ImageSlider
-                  data={BANNERS_MOCK}
+                  data={banners}
                   handleImagePress={handleImagePress}
                   sliderWidth={sliderWidth}
                 />
