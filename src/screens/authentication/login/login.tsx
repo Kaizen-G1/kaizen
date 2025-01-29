@@ -23,7 +23,7 @@ const LoginScreen = () => {
     }
 
     try {
-      // const response = await fetch("https://fakestoreapi.com/products", {
+      // TODO: Change IP to localhost later 
       const response = await fetch("http://10.6.88.29:3000/login", {
         method: "POST",
         headers: {
