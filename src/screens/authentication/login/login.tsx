@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,13 +8,47 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
-type LoginScreenProps = {
-  navigation: any;
-};
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Email and password are required.");
+      return;
+    }
+
+    try {
+      // const response = await fetch("https://fakestoreapi.com/products", {
+      const response = await fetch("http://10.6.88.29:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log("Connecting to Login API");
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        Alert.alert("Success", `Welcome ${data.customer.name}!`);
+        console.log("Login successful:", data);
+      } else {
+        const errorData = await response.json();
+        Alert.alert("Error", errorData.error || "Something went wrong.");
+        console.error("Login error:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during login request:", error);
+      Alert.alert("Error", "Failed to connect to the server.");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -33,31 +67,34 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         style={styles.input}
         placeholder="Email"
         placeholderTextColor="#D2D2D2"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         placeholderTextColor="#D2D2D2"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
 
       <TouchableOpacity
         style={styles.forgotPassword}
-        onPress={() => alert("Forgot Password?")}
+        onPress={() => Alert.alert("Forgot Password?")}
       >
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <CustomButton label="Login" onPress={() => navigation.navigate("Home")} />
+      <CustomButton
+        label="Login"
+        onPress={handleLogin}
+        paddingHorizontal={140}
+      />
 
-      {/* <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => alert("Login pressed!")}
-      >
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity> */}
-
-      <TouchableOpacity onPress={() => navigation.navigate("Splash")}>
+      <TouchableOpacity onPress={() => Alert.alert("Cancel pressed!")}>
         <Text style={styles.cancelButtonText}>Cancel</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -74,7 +111,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 52,
-
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,
@@ -87,7 +123,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignSelf: "flex-start",
     marginLeft: Platform.OS === "ios" ? 20 : 0,
-    // marginLeft: 5
   },
   heart: {
     color: "#000",
@@ -118,21 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#9FA2A5",
     fontWeight: "bold",
-  },
-  loginButton: {
-    backgroundColor: "#BC6C25",
-    width: "90%",
-    height: 61,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 15,
-    marginTop: 20,
-  },
-  loginButtonText: {
-    color: "#FFF",
-    fontSize: 24,
-    fontWeight: "medium",
   },
   cancelButtonText: {
     fontSize: 16,
