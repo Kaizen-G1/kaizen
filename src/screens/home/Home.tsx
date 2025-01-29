@@ -12,7 +12,6 @@ import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
 // Mock Data
-import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
 import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
 import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
 
@@ -44,6 +43,36 @@ const HomeScreen = () => {
     };
 
     fetchBanners();
+  }, []);
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/categories");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch categories: ${response.status}`);
+        }
+        const data = await response.json();
+        const activeCategories = data
+          .filter((category: any) => category.isActive)
+          .map((category: any) => ({
+            id: category.id,
+            title: category.name,
+            count: category.count,
+            images: category.demoImages
+          }));
+        setCategories(activeCategories);
+
+        console.log("activeCategories");
+        console.log(activeCategories);
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   const handleImagePress = (id: string) => {
@@ -94,7 +123,7 @@ const HomeScreen = () => {
               
               <CategoryList
                 title="Categories"
-                categories={CATEGORIES_LIST_MOCK}
+                categories={categories}
                 onSelectCategory={handleSelectCategory}
                 onSeeAll={handleSeeAllCategories}
               />
