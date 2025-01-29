@@ -34,7 +34,6 @@ const SplashScreen = ({ navigation }: LoginScreenProps) => {
           alignItems: "center",
         }}
       >
-        {" "}
         <CustomButton
           label="Get Started"
           // paddingHorizontal={100}
