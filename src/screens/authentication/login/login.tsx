@@ -11,7 +11,10 @@ import {
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
-const LoginScreen = () => {
+type LoginScreenProps = {
+  navigation: any;
+};
+const LoginScreen = ({ navigation }: LoginScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -45,11 +48,7 @@ const LoginScreen = () => {
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <CustomButton
-        label="Login"
-        onPress={() => alert("Login pressed!")}
-        paddingHorizontal={140}
-      />
+      <CustomButton label="Login" onPress={() => navigation.navigate("Home")} />
 
       {/* <TouchableOpacity
         style={styles.loginButton}
@@ -58,7 +57,7 @@ const LoginScreen = () => {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity> */}
 
-      <TouchableOpacity onPress={() => alert("Cancel pressed!")}>
+      <TouchableOpacity onPress={() => navigation.navigate("Splash")}>
         <Text style={styles.cancelButtonText}>Cancel</Text>
       </TouchableOpacity>
     </SafeAreaView>
