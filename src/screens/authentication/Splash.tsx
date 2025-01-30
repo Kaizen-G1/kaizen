@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
-type LoginScreenProps = {
+type SplashScreenProps = {
   navigation: any;
 };
 
-const SplashScreen = ({ navigation }: LoginScreenProps) => {
+const SplashScreen = ({ navigation }: SplashScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
@@ -37,7 +37,7 @@ const SplashScreen = ({ navigation }: LoginScreenProps) => {
         <CustomButton
           label="Get Started"
           // paddingHorizontal={100}
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.navigate("Register")}
         />
         <TouchableOpacity
           style={styles.accountButton}
@@ -49,12 +49,6 @@ const SplashScreen = ({ navigation }: LoginScreenProps) => {
           </View>
         </TouchableOpacity>
       </View>
-      {/* <TouchableOpacity
-        style={styles.getStartedButton}
-        onPress={() => alert("Let's get started!")}
-      >
-        <Text style={styles.getStartedButtonText}>Let's get started</Text>
-      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

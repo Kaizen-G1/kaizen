@@ -6,12 +6,14 @@ import Login from "./src/screens/authentication/login/login";
 import Register from "./src/screens/authentication/register/Register";
 import SplashScreen from "./src/screens/authentication/Splash";
 import BottomNav from "./src/navigation/BottomNavigation";
+import OTPScreen from "./src/screens/authentication/recovery/Otp";
 
 type RootStackParamList = {
   Splash: undefined;
   Home: { userId: string };
   Login: { userId: string };
   Register: { userId: string };
+  OTP: { email: string };
   // Add more screen names and types as needed
 };
 
@@ -36,11 +38,18 @@ const RootNavigator = () => {
           component={Login}
           options={{ headerShown: false }}
         />
+
         <Stack.Screen
           name="Register"
           component={Register}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="OTP"
+          component={OTPScreen}
+          options={{ headerShown: false }}
+        />
+
         {/* Add more screen names and components as needed */}
       </Stack.Navigator>
     </NavigationContainer>

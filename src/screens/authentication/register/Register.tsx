@@ -1,11 +1,58 @@
-import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Dimensions, Alert } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import { TextInput, Button, IconButton } from "react-native-paper"; // Import Paper components
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
+import { useAppDispatch, useAppSelector } from "../../../services/constants";
+import { registerUser } from "../slice/AuthSlice";
+
 const { width } = Dimensions.get("screen");
-const CreateAccountScreen: React.FC = () => {
+
+type RegisterProps = {
+  navigation: any;
+};
+
+function CreateAccountScreen({ navigation }: RegisterProps) {
+  // Custom hooks
+  const dispatch = useAppDispatch();
+
+  const { loading, error, success, response } = useAppSelector(
+    (state) => state.auth.register
+  );
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Registration Failed", error, [{ text: "OK" }]);
+    }
+    if (success && response?.status === "success") {
+      navigation.navigate("OTP", { email: formData.email });
+    }
+  }, [success, response, navigation, formData.email, error]);
+
+  const handleInputChange = (name: string, value: string) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    dispatch(registerUser(formData));
+    console.log(formData);
+  };
+
+  const handleCancel = () => {
+    navigation.navigate("Splash");
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
@@ -21,6 +68,20 @@ const CreateAccountScreen: React.FC = () => {
 
       <TextInput
         style={[styles.input, styles.textInput]}
+        label="Name"
+        placeholder="Enter your name"
+        mode="outlined"
+        activeOutlineColor="#753742"
+        outlineColor="transparent"
+        selectionColor="#753742"
+        placeholderTextColor="#BEBEBE"
+        value={formData.name}
+        onChangeText={(value) => handleInputChange("name", value)}
+        outlineStyle={{ borderRadius: 59.29 }}
+      />
+
+      <TextInput
+        style={[styles.input, styles.textInput]}
         label="Email"
         placeholder="Enter your email"
         mode="outlined"
@@ -28,34 +89,10 @@ const CreateAccountScreen: React.FC = () => {
         outlineColor="transparent"
         selectionColor="#753742"
         placeholderTextColor="#BEBEBE"
-        outlineStyle={{ borderRadius: 59.29 }} // Add this line to round the outline
+        value={formData.email}
+        onChangeText={(value) => handleInputChange("email", value)}
+        outlineStyle={{ borderRadius: 59.29 }}
       />
-
-      <View style={[styles.passwordContainer, { position: "relative" }]}>
-        <TextInput
-          style={[styles.input, styles.textInput]}
-          label="Password"
-          placeholder="Enter your password"
-          secureTextEntry={true}
-          mode="outlined"
-          activeOutlineColor="#753742"
-          outlineColor="transparent"
-          selectionColor="#753742"
-          placeholderTextColor="#BEBEBE"
-          outlineStyle={{ borderRadius: 59.29 }} // Rounded corners
-        />
-        <IconButton
-          icon="eye-off-outline"
-          size={20}
-          style={{
-            position: "absolute",
-            right: 10, // Adjust the position relative to the right edge
-            top: "30%", // Position in the middle vertically
-            transform: [{ translateY: -10 }], // Center adjustment for the icon size
-          }}
-          onPress={() => {}}
-        />
-      </View>
 
       <View style={styles.phoneContainer}>
         <TextInput
@@ -67,21 +104,52 @@ const CreateAccountScreen: React.FC = () => {
           outlineColor="transparent"
           selectionColor="#753742"
           placeholderTextColor="#BEBEBE"
+          value={formData.phone}
+          onChangeText={(value) => handleInputChange("phone", value)}
           theme={{ colors: { background: "#F8F8F8" } }}
           left={
             <TextInput.Icon
               icon={() => <Entypo name="old-phone" size={24} color="black" />}
             />
           }
-          outlineStyle={{ borderRadius: 59.29 }} // Add this line to round the outline
+          outlineStyle={{ borderRadius: 59.29 }}
         />
       </View>
 
-      <CustomButton label="Done" onPress={() => {}} />
-      <CustomButton label="Cancel" onPress={() => {}} type="secondary" />
+      <View style={[styles.passwordContainer, { position: "relative" }]}>
+        <TextInput
+          style={[styles.input, styles.textInput]}
+          label="Password"
+          placeholder="Enter your password"
+          secureTextEntry={true}
+          mode="outlined"
+          activeOutlineColor="#753742"
+          outlineColor="transparent"
+          selectionColor="#753742"
+          value={formData.password}
+          onChangeText={(value) => handleInputChange("password", value)}
+          placeholderTextColor="#BEBEBE"
+          outlineStyle={{ borderRadius: 59.29 }} // Rounded corners
+        />
+        <IconButton
+          icon="eye-off-outline"
+          size={20}
+          style={{
+            position: "absolute",
+            right: 10,
+            top: "30%",
+            transform: [{ translateY: -10 }],
+          }}
+          onPress={() => {}}
+        />
+      </View>
+
+      {/* ( */}
+      <CustomButton label="Done" onPress={handleSubmit} loading={loading} />
+      <CustomButton label="Cancel" onPress={handleCancel} type="secondary" />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -91,7 +159,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 0,
     position: "relative",
-    top: -20,
+    paddingVertical: 20,
+    // top: -20,
   },
   title: {
     fontSize: 50,
@@ -101,6 +170,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
     color: "#000000",
     marginBottom: 30,
+    marginTop: 40,
   },
   photoContainer: {
     width: 100,
@@ -124,6 +194,7 @@ const styles = StyleSheet.create({
   },
   passwordContainer: {
     position: "relative",
+    marginBottom: 71.9,
   },
   icon: {
     position: "absolute",
@@ -133,7 +204,7 @@ const styles = StyleSheet.create({
   phoneContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 52.1,
+    marginBottom: 7.9,
   },
   phoneInput: {
     flex: 1,

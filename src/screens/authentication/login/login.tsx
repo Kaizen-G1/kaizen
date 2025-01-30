@@ -11,8 +11,13 @@ import {
   Alert,
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import { BASE_URL } from "../../../services/constants";
 
-const LoginScreen = () => {
+type LoginScreenProps = {
+  navigation: any;
+};
+
+const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,7 +29,7 @@ const LoginScreen = () => {
 
     try {
       // const response = await fetch("https://fakestoreapi.com/products", {
-      const response = await fetch("http://10.6.88.29:3000/login", {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +41,8 @@ const LoginScreen = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        Alert.alert("Success", `Welcome ${data.customer.name}!`);
+        navigation.navigate("Home");
+        // Alert.alert("Success", `Welcome ${data.customer.name}!`);
         console.log("Login successful:", data);
       } else {
         const errorData = await response.json();
@@ -91,10 +97,10 @@ const LoginScreen = () => {
       <CustomButton
         label="Login"
         onPress={handleLogin}
-        paddingHorizontal={140}
+        // paddingHorizontal={140}
       />
 
-      <TouchableOpacity onPress={() => Alert.alert("Cancel pressed!")}>
+      <TouchableOpacity onPress={() => navigation.navigate("Splash")}>
         <Text style={styles.cancelButtonText}>Cancel</Text>
       </TouchableOpacity>
     </SafeAreaView>

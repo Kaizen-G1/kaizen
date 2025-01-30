@@ -16,8 +16,7 @@ import HorizontalProductList from "../../components/HorizontalProducList";
 const MARGIN_HORIZONTAL = 14;
 
 const HomeScreen = () => {
-
-  const sliderWidth = Dimensions.get('window').width - MARGIN_HORIZONTAL * 2;
+  const sliderWidth = Dimensions.get("window").width - MARGIN_HORIZONTAL * 2;
 
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -27,7 +26,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const { data } = await http.get('/api/dashboard');
+        const { data } = await http.get("/api/dashboard");
 
         // Getting active banners
         const activeBanners = data.banners
@@ -50,10 +49,12 @@ const HomeScreen = () => {
         setCategories(activeCategories);
 
         // Getting top products
-        const formattedTopProducts = data.topProducts.map((topProduct: any) => ({
-          id: topProduct.id,
-          image: topProduct.images[0],
-        }));
+        const formattedTopProducts = data.topProducts.map(
+          (topProduct: any) => ({
+            id: topProduct.id,
+            image: topProduct.images[0],
+          })
+        );
         setTopProducts(formattedTopProducts);
 
         // Getting new items
@@ -64,7 +65,6 @@ const HomeScreen = () => {
           price: newProduct.price,
         }));
         setNewItems(formattedNewItems);
-        
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
@@ -93,7 +93,6 @@ const HomeScreen = () => {
     console.log(`See all new items`);
   };
 
-
   return (
     <>
       <SafeAreaProvider>
@@ -107,7 +106,7 @@ const HomeScreen = () => {
                   sliderWidth={sliderWidth}
                 />
               </View>
-              
+
               <CategoryList
                 title="Categories"
                 categories={categories}
@@ -116,7 +115,7 @@ const HomeScreen = () => {
               />
 
               <TopProducts
-                title='Top Products'
+                title="Top Products"
                 items={topProducts}
                 onPress={handleSelectProduct}
               />
@@ -125,6 +124,8 @@ const HomeScreen = () => {
                 products={newItems}
                 onPressSeeAll={handleSeeAllNewItems}
               />
+
+              <FlashSaleScreen />
             </ScrollView>
           </SafeAreaView>
         </PaperProvider>
