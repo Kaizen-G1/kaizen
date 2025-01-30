@@ -59,39 +59,38 @@ export default function FlashSaleScreen() {
   const { hours, minutes, remainingSeconds } = formatTime(timeLeft);
 
   return (
-    <>
-      <View style={styles.container}>
-        <FlashSaleHeader
-          hours={hours}
-          minutes={minutes}
-          remainingSeconds={remainingSeconds}
-        />
-        <FlatList
-          style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-          data={DUMMY_DATA}
-          keyExtractor={(item) => item.id}
-          numColumns={3}
-          renderItem={({ item }) => (
-            <Card style={styles.itemContainer}>
-              <View style={styles.imageWrapper}>
-                <Image source={item.image} style={styles.itemImage} />
-              </View>
+    <View style={styles.container}>
+      <FlashSaleHeader
+        hours={hours}
+        minutes={minutes}
+        remainingSeconds={remainingSeconds}
+      />
+      <FlatList
+        style={{ paddingHorizontal: 20, paddingVertical: 10 }}
+        data={DUMMY_DATA}
+        scrollEnabled={false}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        renderItem={({ item }) => (
+          <Card style={styles.itemContainer}>
+            <View style={styles.imageWrapper}>
+              <Image source={item.image} style={styles.itemImage} />
+            </View>
 
-              <LinearGradient
-                colors={["#FF5790", "#F81140"]} // Gradient colors
-                style={styles.discountBadge}
-                start={[1, 1]} // Start the gradient at the left (0%)
-                end={[0, 0]} // End the gradient at the right (100%)
-              >
-                <Text style={styles.discountText}>-20%</Text>
-              </LinearGradient>
-            </Card>
-          )}
-          columnWrapperStyle={styles.columnWrapper}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    </>
+            <LinearGradient
+              colors={["#FF5790", "#F81140"]} // Gradient colors
+              style={styles.discountBadge}
+              start={[1, 1]} // Start the gradient at the left (0%)
+              end={[0, 0]} // End the gradient at the right (100%)
+            >
+              <Text style={styles.discountText}>-20%</Text>
+            </LinearGradient>
+          </Card>
+        )}
+        columnWrapperStyle={styles.columnWrapper}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
 
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    marginTop: 80,
+    marginTop: 20,
   },
   headerContainer: {
     flexDirection: "row",
