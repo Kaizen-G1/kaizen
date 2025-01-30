@@ -46,8 +46,11 @@ function CreateAccountScreen({ navigation }: RegisterProps) {
 
   const handleSubmit = () => {
     dispatch(registerUser(formData));
-
     console.log(formData);
+  };
+
+  const handleCancel = () => {
+    navigation.navigate("Splash");
   };
 
   return (
@@ -143,25 +146,7 @@ function CreateAccountScreen({ navigation }: RegisterProps) {
 
       {/* ( */}
       <CustomButton label="Done" onPress={handleSubmit} loading={loading} />
-
-      {/* Show success message */}
-      {success && response && (
-        <Text style={{ color: "green" }}>
-          Registration successful! Go to Verification,
-          {response.data.customerEmail}
-          {response.data.message.toString()}!
-        </Text>
-      )}
-
-      {error && <Text style={{ color: "red" }}>this is error: {error}</Text>}
-      <Button
-        mode="text"
-        style={styles.cancelButton}
-        labelStyle={styles.cancelText}
-        onPress={() => {}}
-      >
-        Cancel
-      </Button>
+      <CustomButton label="Cancel" onPress={handleCancel} type="secondary" />
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
-import { Button, Text as PaperText } from "react-native-paper";
+import { Text as PaperText } from "react-native-paper";
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -12,6 +12,7 @@ import Animated, {
   useAnimatedStyle,
   runOnJS,
 } from "react-native-reanimated";
+import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
 const OnboardingScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -67,13 +68,7 @@ const OnboardingScreen = () => {
               {pages[currentPage].description}
             </PaperText>
             {currentPage === pages.length - 1 && (
-              <Button
-                mode="contained"
-                onPress={() => alert("Getting Started!")}
-                style={styles.button}
-              >
-                Let’s Start
-              </Button>
+              <CustomButton label="Let’s Start" onPress={() => {alert("Getting Started!")}} />
             )}
           </Animated.View>
         </PanGestureHandler>
