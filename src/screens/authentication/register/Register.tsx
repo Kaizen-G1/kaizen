@@ -77,25 +77,8 @@ const CreateAccountScreen: React.FC = () => {
         />
       </View>
 
-      {/* <Button
-        mode="contained"
-        style={styles.doneButton}
-        labelStyle={styles.doneButtonText}
-        onPress={() => {}}
-      >
-        Done
-      </Button>
-       */}
       <CustomButton label="Done" onPress={() => {}} />
-
-      <Button
-        mode="text"
-        style={styles.cancelButton}
-        labelStyle={styles.cancelText}
-        onPress={() => {}}
-      >
-        Cancel
-      </Button>
+      <CustomButton label="Cancel" onPress={() => {}} type="secondary" />
     </View>
   );
 };

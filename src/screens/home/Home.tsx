@@ -101,17 +101,6 @@ const HomeScreen = () => {
         <PaperProvider>
           <SafeAreaView style={styles.safeArea}>
             <ScrollView>
-              {/* <View style={styles.container}>
-                <Appbar.Header>
-                  <Appbar.Content title="Home" />
-                </Appbar.Header>
-                <View style={styles.content}>
-                  <Text style={styles.text}>Welcome to the E-Shop!</Text>
-                  <Button mode="contained" onPress={() => console.log("Go to Shop")}>
-                    Go to Shop
-                  </Button>
-                </View>
-              </View> */}
               <View style={styles.sliderContainer}>
                 <ImageSlider
                   data={banners}
