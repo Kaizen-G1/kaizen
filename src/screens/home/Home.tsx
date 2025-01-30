@@ -1,7 +1,6 @@
-// src/screens/HomeScreen.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Text, Button, Appbar, PaperProvider } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 // Components
@@ -11,17 +10,69 @@ import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
-// Mock Data
-import { BANNERS_MOCK } from "../../mock/banners.mock";
-import { CATEGORIES_LIST_MOCK } from "../../mock/categories-list.mock";
-import { TOP_PRODUCTS_MOCK } from "../../mock/top-products.mock";
-import { NEW_ITEMS_LIST_MOCK } from "../../mock/new-items.mock";
-
 const MARGIN_HORIZONTAL = 14;
 
 const HomeScreen = () => {
 
   const sliderWidth = Dimensions.get('window').width - MARGIN_HORIZONTAL * 2;
+
+  const [banners, setBanners] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
+  const [newItems, setNewItems] = useState([]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/dashboard");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch dashboard data: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Getting active banners
+        const activeBanners = data.banners
+          .filter((banner: any) => banner.isActive)
+          .map((banner: any) => ({
+            id: banner.id,
+            imageUrl: banner.imageUrl,
+          }));
+        setBanners(activeBanners);
+
+        // Getting active categories
+        const activeCategories = data.categories
+          .filter((category: any) => category.isActive)
+          .map((category: any) => ({
+            id: category.id,
+            title: category.name,
+            count: category.count,
+            images: category.demoImages,
+          }));
+        setCategories(activeCategories);
+
+        // Getting top products
+        const formattedTopProducts = data.topProducts.map((topProduct: any) => ({
+          id: topProduct.id,
+          image: topProduct.images[0],
+        }));
+        setTopProducts(formattedTopProducts);
+
+        // Getting new items
+        const formattedNewItems = data.newItems.map((newProduct: any) => ({
+          id: newProduct.id,
+          image: newProduct.images[0],
+          title: newProduct.title,
+          price: newProduct.price,
+        }));
+        setNewItems(formattedNewItems);
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   const handleImagePress = (id: string) => {
     console.log(`Selected image ID: ${id}`);
@@ -63,7 +114,7 @@ const HomeScreen = () => {
               </View> */}
               <View style={styles.sliderContainer}>
                 <ImageSlider
-                  data={BANNERS_MOCK}
+                  data={banners}
                   handleImagePress={handleImagePress}
                   sliderWidth={sliderWidth}
                 />
@@ -71,19 +122,19 @@ const HomeScreen = () => {
               
               <CategoryList
                 title="Categories"
-                categories={CATEGORIES_LIST_MOCK}
+                categories={categories}
                 onSelectCategory={handleSelectCategory}
                 onSeeAll={handleSeeAllCategories}
               />
 
               <TopProducts
                 title='Top Products'
-                items={TOP_PRODUCTS_MOCK}
+                items={topProducts}
                 onPress={handleSelectProduct}
               />
 
               <HorizontalProductList
-                products={NEW_ITEMS_LIST_MOCK}
+                products={newItems}
                 onPressSeeAll={handleSeeAllNewItems}
               />
             </ScrollView>
