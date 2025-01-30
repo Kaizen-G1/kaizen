@@ -51,23 +51,18 @@ const HomeScreen = () => {
         setCategories(activeCategories);
 
         // Getting top products
-        const formattedTopProducts = data.topProducts.map((product: any) => ({
-          id: product.id,
-          title: product.title,
-          soldCount: product.soldCount,
-          price: product.price,
-          image: product.images?.[0] || "",
+        const formattedTopProducts = data.topProducts.map((topProduct: any) => ({
+          id: topProduct.id,
+          image: topProduct.images[0],
         }));
         setTopProducts(formattedTopProducts);
 
         // Getting new items
-        const formattedNewItems = data.newItems.map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          description: item.description,
-          createdDate: new Date(item.createdDate).toLocaleDateString(),
-          price: item.price,
-          image: item.images?.[0] || "",
+        const formattedNewItems = data.newItems.map((newProduct: any) => ({
+          id: newProduct.id,
+          image: newProduct.images[0],
+          title: newProduct.title,
+          price: newProduct.price,
         }));
         setNewItems(formattedNewItems);
         
