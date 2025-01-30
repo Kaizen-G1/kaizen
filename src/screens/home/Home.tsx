@@ -3,6 +3,9 @@ import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+// services
+import http from "../../services/httpService";
+
 // Components
 import FlashSaleScreen from "../../components/flash-sale/FlashSale";
 import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
@@ -24,11 +27,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/dashboard");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch dashboard data: ${response.status}`);
-        }
-        const data = await response.json();
+        const { data } = await http.get('/api/dashboard');
 
         // Getting active banners
         const activeBanners = data.banners
@@ -67,7 +66,7 @@ const HomeScreen = () => {
         setNewItems(formattedNewItems);
         
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching dashboard data:", error);
       }
     };
 
