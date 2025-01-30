@@ -17,80 +17,66 @@ const HomeScreen = () => {
   const sliderWidth = Dimensions.get('window').width - MARGIN_HORIZONTAL * 2;
 
   const [banners, setBanners] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
+  const [newItems, setNewItems] = useState([]);
+
   useEffect(() => {
-    const fetchBanners = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/banners");
+        const response = await fetch("http://localhost:3000/api/dashboard");
         if (!response.ok) {
-          throw new Error(`Failed to fetch banners: ${response.status}`);
+          throw new Error(`Failed to fetch dashboard data: ${response.status}`);
         }
         const data = await response.json();
-        const activeBanners = data
+
+        // Getting active banners
+        const activeBanners = data.banners
           .filter((banner: any) => banner.isActive)
           .map((banner: any) => ({
             id: banner.id,
             imageUrl: banner.imageUrl,
           }));
         setBanners(activeBanners);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    fetchBanners();
-  }, []);
-
-  const [categories, setCategories] = useState([]);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/categories");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch categories: ${response.status}`);
-        }
-        const data = await response.json();
-        const activeCategories = data
+        // Getting active categories
+        const activeCategories = data.categories
           .filter((category: any) => category.isActive)
           .map((category: any) => ({
             id: category.id,
             title: category.name,
             count: category.count,
-            images: category.demoImages
+            images: category.demoImages,
           }));
         setCategories(activeCategories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    fetchCategories();
-  }, []);
-
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/products");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch products: ${response.status}`);
-        }
-        const data = await response.json();
-        const formattedProducts = data.map((product: any) => ({
+        // Getting top products
+        const formattedTopProducts = data.topProducts.map((product: any) => ({
           id: product.id,
-          image: product.images[0],
-          description: product.description,
           title: product.title,
+          soldCount: product.soldCount,
           price: product.price,
-          count: product.soldCount,
-          stock: product.inStock,
+          image: product.images?.[0] || "",
         }));
-        setProducts(formattedProducts);
+        setTopProducts(formattedTopProducts);
+
+        // Getting new items
+        const formattedNewItems = data.newItems.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          description: item.description,
+          createdDate: new Date(item.createdDate).toLocaleDateString(),
+          price: item.price,
+          image: item.images?.[0] || "",
+        }));
+        setNewItems(formattedNewItems);
+        
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchProducts();
+    fetchDashboardData();
   }, []);
 
   const handleImagePress = (id: string) => {
@@ -148,12 +134,12 @@ const HomeScreen = () => {
 
               <TopProducts
                 title='Top Products'
-                items={products}
+                items={topProducts}
                 onPress={handleSelectProduct}
               />
 
               <HorizontalProductList
-                products={products}
+                products={newItems}
                 onPressSeeAll={handleSeeAllNewItems}
               />
             </ScrollView>
