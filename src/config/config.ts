@@ -8,7 +8,16 @@ const getBaseURL = (apiURL: string): string => {
   return apiURL;
 };
 
+const apiURL = getBaseURL(API_URL)
+
+console.log(`-----------------------------------------`);
+console.log(`[DEBUG] NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`[DEBUG] PLATFORM: ${Platform.OS}`);
+console.log(`[DEBUG] API_URL: ${apiURL}`);
+console.log(`[DEBUG] DEBUG_MODE Mode: ${DEBUG_MODE}`);
+console.log(`-----------------------------------------`);
+
 export default {
-  API_URL: getBaseURL(API_URL),
+  API_URL: apiURL,
   DEBUG_MODE: DEBUG_MODE === "true",
 };
