@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -6,80 +6,109 @@ import {
   StyleSheet,
   Image,
   TextInput,
+  Alert,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // For the checkmark icon
+import { useAppDispatch, useAppSelector } from "../../../services/constants";
+import { verify2FA } from "../slice/AuthSlice";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
-export default function PasswordRecoveryScreen() {
-  const [selectedMethod, setSelectedMethod] = useState("SMS");
-  const [otp, setOtp] = useState(["", "", "", ""]); // To store OTP values
+type Props = {
+  navigation: any;
+  route: any; // Accept route prop to get parameters
+};
+
+export default function OTPScreen({ navigation, route }: Props) {
+  const { email } = route.params;
+  const [selectedMethod, setSelectedMethod] = useState<string>("SMS");
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const inputRefs = useRef<TextInput[]>([]);
+
+  const dispatch = useAppDispatch();
+  const { loading, error, success, response } = useAppSelector(
+    (state) => state.auth.verify2FA
+  );
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Registration Failed", error, [{ text: "OK" }]);
+    }
+    if (success && response?.status === "success") {
+      navigation.navigate("Login");
+    }
+  }, [success, response, navigation, error]);
 
   const handleOtpChange = (value: string, index: number) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+
+    if (value && index < otp.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleSubmit = () => {
+    const enteredCode = otp.join("");
+    if (enteredCode.length !== 6) {
+      Alert.alert("Invalid OTP", "Please enter a valid 6-digit OTP.");
+      return;
+    }
+    dispatch(verify2FA({ code: enteredCode, customerEmail: email }));
   };
 
   return (
     <View style={styles.container}>
-      {/* Profile Avatar */}
       <View style={styles.avatarContainer}>
         <View style={styles.avatarCircle}>
           <Image
-            source={{ uri: "https://via.placeholder.com/100" }} // Replace with actual avatar URL
+            source={{ uri: "https://via.placeholder.com/100" }}
             style={styles.avatar}
           />
         </View>
       </View>
 
-      {/* Title and Subtitle */}
       <Text style={styles.title}>Password Recovery</Text>
       <Text style={styles.subtitle}>
-        Enter 4 digits code we sent you on your phone number
+        Enter the 6-digit code we sent to your {selectedMethod}
       </Text>
 
-      {/* Method Selection */}
       <Text style={styles.selectedMethodText}>
         Method Selected: {selectedMethod}
       </Text>
 
-      {/* OTP Input Fields */}
       <View style={styles.otpContainer}>
         {otp.map((digit, index) => (
           <TextInput
             key={index}
+            ref={(el) => (inputRefs.current[index] = el!)}
             style={styles.otpInput}
             keyboardType="numeric"
             maxLength={1}
             value={digit}
             onChangeText={(value) => handleOtpChange(value, index)}
+            returnKeyType={index === otp.length - 1 ? "done" : "next"}
           />
         ))}
       </View>
 
-      {/* Option to select SMS or Email
-      <View style={styles.methodSelectionContainer}>
-        <TouchableOpacity onPress={() => setSelectedMethod('SMS')} style={styles.methodButton}>
-          <Text style={styles.methodText}>SMS</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setSelectedMethod('Email')} style={styles.methodButton}>
-          <Text style={styles.methodText}>Email</Text>
-        </TouchableOpacity>
-      </View> */}
-
-      {/* Next Button */}
-      {/* <TouchableOpacity style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>Send Again</Text>
-      </TouchableOpacity> */}
-      <View style={{ marginTop: 150 }}>
+      <View style={{ marginTop: 50 }}>
         <CustomButton
-          label="Send Again"
-          paddingHorizontal={100}
-          onPress={() => alert("Send Again")}
+          label="Verify OTP"
+          // paddingHorizontal={100}
+          onPress={handleSubmit}
+          loading={loading}
         />
       </View>
 
-      {/* Cancel Text */}
+      {/* {success && response && (
+        <Text style={{ color: "green" }}>
+          Registration successful! Go to Verification,
+          {response.data.message.toString()}!
+        </Text>
+      )}
+
+      {error && <Text style={{ color: "red" }}>this is error: {error}</Text>} */}
+
       <TouchableOpacity>
         <Text style={styles.cancelText}>Cancel</Text>
       </TouchableOpacity>
@@ -92,8 +121,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
-    justifyContent: "center", // Vertically centers content
-    alignItems: "center", // Horizontally centers content
+    justifyContent: "center",
+    alignItems: "center",
   },
   avatarContainer: {
     alignItems: "center",
@@ -134,49 +163,20 @@ const styles = StyleSheet.create({
   otpContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 220, // Adjust width for OTP inputs
+    gap: 10,
+
     marginBottom: 30,
   },
   otpInput: {
     width: 45,
     height: 45,
-    borderRadius: 23,
-    borderWidth: 0,
-    marginTop: 10,
+    borderRadius: 40,
+    borderWidth: 1,
     borderColor: "#D8BD8A",
     textAlign: "center",
-    opacity: 0.4,
     fontSize: 18,
     fontWeight: "bold",
-    backgroundColor: "#D8BD8A",
-  },
-  methodSelectionContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginBottom: 20,
-  },
-  methodButton: {
     backgroundColor: "#FFF8E5",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    alignItems: "center",
-  },
-
-  nextButton: {
-    marginTop: 138,
-    backgroundColor: "#A5642A",
-    paddingVertical: 10,
-    borderRadius: 20,
-    alignItems: "center",
-    width: 335,
-    height: 60,
-  },
-  nextButtonText: {
-    fontSize: 24,
-    color: "#FFFFFF",
-    fontWeight: "medium",
   },
   cancelText: {
     marginTop: 28,
