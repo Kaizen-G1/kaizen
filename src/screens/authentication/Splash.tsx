@@ -37,7 +37,7 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
         <CustomButton
           label="Get Started"
           // paddingHorizontal={100}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Home")}
         />
         <TouchableOpacity
           style={styles.accountButton}

@@ -22,33 +22,25 @@ const Stack = createStackNavigator<RootStackParamList>();
 const RootNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen
-          name="Splash"
-          component={SplashScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={BottomNav}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator
+        initialRouteName="Splash"
+        screenOptions={{
+          headerShown: false,
+          cardStyle: { backgroundColor: "#fff" },
+        }}
+      >
+        <Stack.Screen name="Splash" component={SplashScreen} />
 
         <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="OTP"
-          component={OTPScreen}
-          options={{ headerShown: false }}
-        />
+          name="Home"
+          options={{ headerShown: false, gestureEnabled: false }}
+        >
+          {() => <BottomNav isVendor={true} />}
+        </Stack.Screen>
+
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="OTP" component={OTPScreen} />
 
         {/* Add more screen names and components as needed */}
       </Stack.Navigator>
