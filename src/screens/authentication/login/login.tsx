@@ -28,8 +28,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     }
 
     try {
-      // const response = await fetch("https://fakestoreapi.com/products", {
-      const response = await fetch(`${BASE_URL}/login`, {
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
