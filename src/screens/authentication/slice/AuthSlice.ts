@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
   "auth/register",
   async (payload: RegisterPayload, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${config.API_URL}/api/user/register`, {
+      const response = await fetch(`${config.API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -55,7 +55,7 @@ export const verify2FA = createAsyncThunk(
   "auth/verify2FA",
   async (payload: Verify2FAPayload, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${config.API_URL}/api/user/verify-2fa`, {
+      const response = await fetch(`${config.API_URL}/api/auth/verify-2fa`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
