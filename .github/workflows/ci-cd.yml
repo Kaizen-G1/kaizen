@@ -1,0 +1,63 @@
+name: CI/CD - Expo Build and Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # Running automatically when there is a merge to main
+  workflow_dispatch:  # Allowing to manually run the workflow on any branch
+
+jobs:
+  build:
+    name: Build Android & iOS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Expo CLI & EAS
+        run: npm install -g expo-cli eas-cli
+
+      - name: Authenticate with Expo
+        run: eas login --token ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Android App
+        run: eas build --platform android --profile production --non-interactive
+
+      - name: Build iOS App (Simulator)
+        run: eas build --platform ios --profile development --non-interactive
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: builds/
+
+  deploy:
+    name: Deploy to Firebase App Distribution
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: builds/
+
+      - name: Upload to Firebase App Distribution (Android)
+        run: firebase appdistribution:distribute builds/*.apk \
+          --app ${{ secrets.FIREBASE_APP_ID }} \
+          --groups testers \
+          --token ${{ secrets.FIREBASE_TOKEN }}
