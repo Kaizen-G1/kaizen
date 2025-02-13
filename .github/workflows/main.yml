@@ -28,14 +28,14 @@ jobs:
         run: npm install -g expo-cli eas-cli
 
       - name: Build Android App
-        env:
-          EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile production 
+        run: |
+          export EAS_TOKEN="${{ secrets.EXPO_TOKEN }}"
+          eas build --platform android --profile production
 
       - name: Build iOS App (Simulator)
-        env:
-          EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform ios --profile production 
+        run: |
+          export EAS_TOKEN="${{ secrets.EXPO_TOKEN }}"
+          eas build --platform ios --profile development
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
