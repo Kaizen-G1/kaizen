@@ -29,13 +29,13 @@ jobs:
 
       - name: Build Android App
         run: |
-          echo "First 5 chars of token: ${{ secrets.EXPO_TOKEN[:5] }}"  # For debugging ONLY
+          echo "First 5 chars of token: ${{ secrets.EXPO_TOKEN[:5] }}"
           export EAS_TOKEN="${{ secrets.EXPO_TOKEN }}"
           eas build --platform android --profile production --non-interactive
 
       - name: Build iOS App (Simulator)
         run: |
-          echo "First 5 chars of token: ${{ secrets.EXPO_TOKEN[:5] }}"  # For debugging ONLY
+          echo "First 5 chars of token: ${{ secrets.EXPO_TOKEN[:5] }}"
           export EAS_TOKEN="${{ secrets.EXPO_TOKEN }}"
           eas build --platform ios --profile production --non-interactive
 
