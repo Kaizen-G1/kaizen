@@ -12,7 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: EXPO_TOKEN is
-        run: echo "El secreto es ${{ secrets.EXPO_TOKEN }}"
+        run: |
+          if [ -z "${{ secrets.MI_SECRETO }}" ]; then
+            echo "Empty secret"
+          else
+            echo "Scret has value"
+          fi
 
       # - name: Checkout Repository
       #   uses: actions/checkout@v4
