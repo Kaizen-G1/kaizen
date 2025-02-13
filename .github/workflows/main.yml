@@ -33,8 +33,9 @@ jobs:
             echo "EXPO_TOKEN is empty"
           else
             echo "EXPO_TOKEN value: ${{ secrets.EXPO_TOKEN }}"
-            echo "EXPO_TOKEN starts with: ${{ secrets.EXPO_TOKEN:0:5 }}"
             echo "EXPO_TOKEN length: ${{ secrets.EXPO_TOKEN.length }}"
+            export FIRST_5_CHARS="${{ secrets.EXPO_TOKEN:0:5 }}"
+            echo "EXPO_TOKEN starts with: ${FIRST_5_CHARS:0:5}"
           fi
 
       - name: Authenticate with Expo
