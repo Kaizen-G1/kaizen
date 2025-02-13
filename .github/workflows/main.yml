@@ -33,7 +33,7 @@ jobs:
             echo "EXPO_TOKEN is empty"
           else
             echo "EXPO_TOKEN has value"
-            echo "Token Length: ${{ secrets.EXPO_TOKEN }}"
+            echo "Token value: ${{ secrets.EXPO_TOKEN }}"
             echo "EXPO_TOKEN has length"
             echo "Token Length: ${{ secrets.EXPO_TOKEN.length }}"
           fi
