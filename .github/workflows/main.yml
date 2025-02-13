@@ -30,7 +30,7 @@ jobs:
       - name: Authenticate with Expo
         env:
           EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas login
+        run: eas login --non-interactive
 
       - name: Build Android App
         run: eas build --platform android --profile production --non-interactive
