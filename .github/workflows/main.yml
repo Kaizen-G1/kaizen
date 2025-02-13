@@ -34,6 +34,9 @@ jobs:
             expo prebuild --platform android
           fi
 
+      - name: Remove duplicate resources
+        run: find android/app/src/main/res/ -name "ic_launcher*" | grep -E '\.png|\.webp' | sort | uniq -d | xargs rm -f || true
+
       - name: Build Android APK
         run: ./gradlew assembleRelease
         working-directory: android
