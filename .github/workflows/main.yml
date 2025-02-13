@@ -32,10 +32,9 @@ jobs:
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
             echo "EXPO_TOKEN is empty"
           else
-            echo "EXPO_TOKEN has value"
-            echo "Token value: ${{ secrets.EXPO_TOKEN }}"
-            echo "EXPO_TOKEN has length"
-            echo "Token Length: ${{ secrets.EXPO_TOKEN.length }}"
+            echo "EXPO_TOKEN value: ${{ secrets.EXPO_TOKEN }}"
+            echo "EXPO_TOKEN starts with: ${{ secrets.EXPO_TOKEN:0:5 }}"
+            echo "EXPO_TOKEN length: ${{ secrets.EXPO_TOKEN.length }}"
           fi
 
       - name: Authenticate with Expo
