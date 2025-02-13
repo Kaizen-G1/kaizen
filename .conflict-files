@@ -1,3 +1,0 @@
-ancestorEntries = ["package-lock.json", "package.json"]
-ourEntries = ["package-lock.json", "package.json"]
-theirEntries = ["package-lock.json", "package.json"]
