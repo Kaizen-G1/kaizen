@@ -1,2 +1,0 @@
-# kenzai
-Work Integrated Project
