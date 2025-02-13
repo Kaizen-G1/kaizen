@@ -63,6 +63,9 @@ jobs:
           name: build-artifacts
           path: .
 
+      - name: Authenticate with Firebase
+        run: echo '${{ secrets.FIREBASE_TOKEN }}' | firebase login:ci --interactive=false
+
       - name: Upload to Firebase App Distribution (Android)
         run: firebase appdistribution:distribute *.apk \
           --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
