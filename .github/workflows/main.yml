@@ -21,7 +21,9 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
 
       - name: Install Expo CLI & EAS
         run: npm install -g expo-cli eas-cli
@@ -39,7 +41,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: builds/
+          path: .
+          retention-days: 5
 
   deploy:
     name: Deploy to Firebase App Distribution
@@ -54,10 +57,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: builds/
+          path: .
 
       - name: Upload to Firebase App Distribution (Android)
-        run: firebase appdistribution:distribute builds/*.apk \
-          --app ${{ secrets.FIREBASE_APP_ID }} \
+        run: firebase appdistribution:distribute *.apk \
+          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
+          --groups testers \
+          --token ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Upload to Firebase App Distribution (iOS)
+        run: firebase appdistribution:distribute *.ipa \
+          --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }}
