@@ -38,17 +38,11 @@ jobs:
             echo "Token Length: ${{ secrets.EXPO_TOKEN.length }}"
           fi
 
+      - name: Authenticate with Expo
+        run: eas login --non-interactive
+
       - name: Build Android App
         run: |
-          export EAS_TOKEN="${{ secrets.EXPO_TOKEN }}"
-          echo "EAS_TOKEN has value (from secret)"  # Confirmation from secret
-          if [ -z "$EAS_TOKEN" ]; then
-            echo "EAS_TOKEN environment variable is empty"
-          else
-            echo "EAS_TOKEN environment variable has value"
-            echo "EAS_TOKEN Length: ${#EAS_TOKEN}"
-            echo "First few characters: ${EAS_TOKEN:0:5}"
-          fi
           eas build --platform android --profile production
 
       # - name: Build iOS App (Simulator)
