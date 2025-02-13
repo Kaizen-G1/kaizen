@@ -29,7 +29,9 @@ jobs:
         run: npm install -g expo-cli eas-cli
 
       - name: Set Expo Token
-        run: echo "EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+        run: |
+          echo "EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+          export EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}
 
       - name: Debug Environment Variables
         run: env | grep EAS_ACCESS_TOKEN || echo "Token not found"
