@@ -28,8 +28,15 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
+      - name: Generate Android project (if missing)
+        run: |
+          if [ ! -d "android" ]; then
+            expo prebuild --platform android
+          fi
+
       - name: Build Android APK
-        run: expo run:android --variant release
+        run: ./gradlew assembleRelease
+        working-directory: android
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -65,22 +72,31 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli
 
-      - name: Build iOS App
+      - name: Generate iOS project (if missing)
+        run: |
+          if [ ! -d "ios" ]; then
+            expo prebuild --platform ios
+          fi
+
+      - name: Install CocoaPods dependencies
         run: |
           cd ios
           pod install
-          xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -configuration Release -sdk iphoneos -archivePath YourApp.xcarchive archive
-          xcodebuild -exportArchive -archivePath YourApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath .
+
+      - name: Build iOS App
+        run: |
+          xcodebuild -workspace ios/kaizen.xcworkspace -scheme kaizen -configuration Release -sdk iphoneos -archivePath ios/kaizen.xcarchive archive
+          xcodebuild -exportArchive -archivePath ios/kaizen.xcarchive -exportOptionsPlist ios/ExportOptions.plist -exportPath ios/
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: YourApp.ipa
+          path: ios/kaizen.ipa
           retention-days: 5
 
       - name: Upload to Firebase App Distribution (iOS)
-        run: firebase appdistribution:distribute YourApp.ipa \
+        run: firebase appdistribution:distribute ios/kaizen.ipa \
           --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }}
