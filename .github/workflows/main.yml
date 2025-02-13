@@ -34,7 +34,7 @@ jobs:
           else
             export EXPO_TOKEN="${{ secrets.EXPO_TOKEN }}"
             echo "EXPO_TOKEN starts with: ${EXPO_TOKEN:0:5}"
-            echo "EXPO_TOKEN length: ${{ EXPO_TOKEN.length }}"
+            echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
           fi
 
       - name: Authenticate with Expo
