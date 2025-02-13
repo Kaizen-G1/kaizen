@@ -30,12 +30,12 @@ jobs:
       - name: Build Android App
         env:
           EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile production --non-interactive
+        run: eas build --platform android --profile production 
 
       - name: Build iOS App (Simulator)
         env:
           EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform ios --profile development --non-interactive
+        run: eas build --platform ios --profile production 
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
