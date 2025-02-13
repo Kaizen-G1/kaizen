@@ -1,0 +1,3 @@
+ancestorEntries = ["package-lock.json", "package.json", "src/components/CategoryList.tsx", "src/screens/authentication/Splash.tsx"]
+ourEntries = ["package-lock.json", "package.json", "src/components/CategoryList.tsx", "src/screens/authentication/Splash.tsx"]
+theirEntries = ["package-lock.json", "package.json", "src/components/CategoryList.tsx", "src/screens/authentication/Splash.tsx"]

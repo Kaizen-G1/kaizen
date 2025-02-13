@@ -1,0 +1,46 @@
+{
+  "name": "kaizen",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "start:local": "cross-env NODE_ENV=local expo start",
+    "start:dev": "cross-env NODE_ENV=development expo start",
+    "start:test": "cross-env NODE_ENV=test expo start",
+    "start:prod": "cross-env NODE_ENV=production expo start",
+    "build:dev": "cross-env NODE_ENV=development expo build",
+    "build:test": "cross-env NODE_ENV=test expo build",
+    "build:prod": "cross-env NODE_ENV=production expo build"
+  },
+  "dependencies": {
+    "@react-navigation/stack": "^7.1.1",
+    "@reduxjs/toolkit": "^2.5.1",
+    "axios": "^1.7.9",
+    "expo": "~52.0.25",
+    "expo-linear-gradient": "^14.0.2",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-native": "0.76.6",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-gesture-handler": "^2.22.0",
+    "react-native-paper": "^5.13.1",
+    "react-native-reanimated": "^3.16.7",
+    "react-native-safe-area-context": "^5.1.0",
+    "react-native-screens": "^4.5.0",
+    "react-native-vector-icons": "^10.2.0",
+    "react-redux": "^9.2.0",
+    "tailwind-rn": "^4.2.0",
+    "kaizen-components": "file:kaizen-components-1.0.0.tgz"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~18.3.12",
+    "@types/react-native-vector-icons": "^6.4.18",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
