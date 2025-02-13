@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: EXPO_TOKEN is
         run: |
-          if [ -z "${{ secrets.MI_SECRETO }}" ]; then
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
             echo "Empty secret"
           else
             echo "Scret has value"
