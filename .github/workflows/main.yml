@@ -7,8 +7,8 @@ on:
   workflow_dispatch:  # Allowing to manually run the workflow on any branch
 
 jobs:
-  build-android:
-    name: Build Android & Deploy
+  build:
+    name: Build Android & iOS
     runs-on: ubuntu-latest
 
     steps:
@@ -23,83 +23,58 @@ jobs:
       - name: Install Dependencies
         run: npm ci
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
 
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
+      - name: Install Expo CLI & EAS
+        run: npm install -g expo-cli eas-cli
 
-      - name: Generate Android project (if missing)
-        run: |
-          if [ ! -d "android" ]; then
-            expo prebuild --platform android
-          fi
+      - name: Set Expo Token
+        run: echo "EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
 
-      - name: Remove duplicate resources
-        run: find android/app/src/main/res/ -name "ic_launcher*" | grep -E '\.png|\.webp' | sort | uniq -d | xargs rm -f || true
+      - name: Build Android App
+        run: eas build --platform android --profile production --non-interactive
+        env:
+          EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build Android APK
-        run: ./gradlew assembleRelease
-        working-directory: android
+      - name: Build iOS App (Simulator)
+        run: eas build --platform ios --profile development --non-interactive
+        env:
+          EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: android-build
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: build-artifacts
+          path: .
           retention-days: 5
 
-      - name: Upload to Firebase App Distribution (Android)
-        run: firebase appdistribution:distribute android/app/build/outputs/apk/release/app-release.apk \
-          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
-          --groups testers \
-          --token ${{ secrets.FIREBASE_TOKEN }}
-
-  build-ios:
-    name: Build iOS & Deploy
-    runs-on: macos-latest  # iOS builds require macOS
+  deploy:
+    name: Deploy to Firebase App Distribution
+    needs: build
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: 18
+          name: build-artifacts
+          path: .
 
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+      - name: Authenticate with Firebase
+        run: echo '${{ secrets.FIREBASE_TOKEN }}' | firebase login:ci --interactive=false
 
-      - name: Install Expo CLI
-        run: npm install -g expo-cli
-
-      - name: Generate iOS project (if missing)
-        run: |
-          if [ ! -d "ios" ]; then
-            expo prebuild --platform ios
-          fi
-
-      - name: Install CocoaPods dependencies
-        run: |
-          cd ios
-          pod install
-
-      - name: Build iOS App
-        run: |
-          xcodebuild -workspace ios/kaizen.xcworkspace -scheme kaizen -configuration Release -sdk iphoneos -archivePath ios/kaizen.xcarchive archive
-          xcodebuild -exportArchive -archivePath ios/kaizen.xcarchive -exportOptionsPlist ios/ExportOptions.plist -exportPath ios/
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-build
-          path: ios/kaizen.ipa
-          retention-days: 5
+      - name: Upload to Firebase App Distribution (Android)
+        run: firebase appdistribution:distribute *.apk \
+          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
+          --groups testers \
+          --token ${{ secrets.FIREBASE_TOKEN }}
 
       - name: Upload to Firebase App Distribution (iOS)
-        run: firebase appdistribution:distribute ios/kaizen.ipa \
+        run: firebase appdistribution:distribute *.ipa \
           --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }}
+
