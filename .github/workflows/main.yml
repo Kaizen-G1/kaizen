@@ -1,6 +1,10 @@
 name: CI/CD - Expo Build and Deploy to Firebase
 
 on:
+ workflow_call:
+    secrets:
+      EXPO_TOKEN:
+        required: true
   push:
     branches:
       - main
