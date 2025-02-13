@@ -19,14 +19,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
-
-      - name: Install Expo CLI & EAS
-        run: npm install -g expo-cli eas-cli
-
       - name: EXPO_TOKEN is
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
@@ -37,12 +29,22 @@ jobs:
             echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
           fi
 
-      - name: Authenticate with Expo
-        run: eas login --non-interactive
+      - name:  Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build Android App
-        run: |
-          eas build --platform android --profile production
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
+
+      - name: Install Expo CLI & EAS
+        run: npm install -g expo-cli eas-cli
+
+      - name: Build Android
+        run: eas build --platform android --profile production
 
       # - name: Build iOS App (Simulator)
       #   run: |
