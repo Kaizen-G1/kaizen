@@ -1,0 +1,86 @@
+name: CI/CD - Expo Build and Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # Running automatically when there is a merge to main
+  workflow_dispatch:  # Allowing to manually run the workflow on any branch
+
+jobs:
+  build-android:
+    name: Build Android & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Build Android APK
+        run: expo run:android --variant release
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 5
+
+      - name: Upload to Firebase App Distribution (Android)
+        run: firebase appdistribution:distribute android/app/build/outputs/apk/release/app-release.apk \
+          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
+          --groups testers \
+          --token ${{ secrets.FIREBASE_TOKEN }}
+
+  build-ios:
+    name: Build iOS & Deploy
+    runs-on: macos-latest  # iOS builds require macOS
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Build iOS App
+        run: |
+          cd ios
+          pod install
+          xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -configuration Release -sdk iphoneos -archivePath YourApp.xcarchive archive
+          xcodebuild -exportArchive -archivePath YourApp.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath .
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: YourApp.ipa
+          retention-days: 5
+
+      - name: Upload to Firebase App Distribution (iOS)
+        run: firebase appdistribution:distribute YourApp.ipa \
+          --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
+          --groups testers \
+          --token ${{ secrets.FIREBASE_TOKEN }}
