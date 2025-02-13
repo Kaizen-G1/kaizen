@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build Android & iOS
     runs-on: ubuntu-latest
+    env:
+      EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
     steps:
       - name: Checkout Repository
@@ -28,28 +30,17 @@ jobs:
       - name: Install Expo CLI & EAS
         run: npm install -g expo-cli eas-cli
 
-      - name: Set Expo Token
-        run: |
-          echo "EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
-          export EAS_ACCESS_TOKEN=${{ secrets.EXPO_TOKEN }}
-
       - name: Debug Environment Variables
         run: env | grep EAS_ACCESS_TOKEN || echo "Token not found"
 
       - name: Authenticate with Expo
         run: eas whoami
-        env:
-          EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build Android App
         run: eas build --platform android --profile production --non-interactive
-        env:
-          EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build iOS App (Simulator)
         run: eas build --platform ios --profile development --non-interactive
-        env:
-          EAS_ACCESS_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -73,9 +64,6 @@ jobs:
           name: build-artifacts
           path: .
 
-      - name: Authenticate with Firebase
-        run: echo '${{ secrets.FIREBASE_TOKEN }}' | firebase login:ci --interactive=false
-
       - name: Upload to Firebase App Distribution (Android)
         run: firebase appdistribution:distribute *.apk \
           --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
@@ -87,4 +75,3 @@ jobs:
           --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }}
-
