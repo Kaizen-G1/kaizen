@@ -73,6 +73,18 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+      - name: Debug - List Files in Builds Folder
+        run: ls -lh builds/
+
+      - name: Debug - List All Files
+        run: find . -type f
+
+      - name: Debug - Show Firebase Variables
+        run: |
+          echo "App ID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}"
+          echo "Firebase Token Length: ${#FIREBASE_TOKEN}"
+          echo "Project ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
+        
       - name: Upload to Firebase App Distribution (Android)
         run: firebase appdistribution:distribute builds/*.apk \
           --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
