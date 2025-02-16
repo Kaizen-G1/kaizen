@@ -46,8 +46,8 @@ jobs:
       - name: Build Android
         run: eas build --platform android --profile production --non-interactive
 
-      - name: Build iOS App (Simulator)
-        run: eas build --platform ios --profile production --non-interactive
+      # - name: Build iOS App (Simulator)
+      #   run: eas build --platform ios --profile production --non-interactive
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
