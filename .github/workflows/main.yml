@@ -29,7 +29,7 @@ jobs:
             echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
           fi
 
-      - name:  Setup EAS
+      - name: Setup EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
@@ -46,14 +46,21 @@ jobs:
       - name: Build Android
         run: eas build --platform android --profile production --non-interactive
 
-      # - name: Build iOS App (Simulator)
-      #   run: eas build --platform ios --profile production --non-interactive --output builds/
+      - name: Download APK from EAS
+        run: |
+          BUILD_URL=$(eas build:list --platform android --status finished --json | jq -r '.[0].artifacts.buildUrl')
+          echo "Downloading APK from: $BUILD_URL"
+          mkdir -p builds
+          curl -o builds/app-release.apk "$BUILD_URL"
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: builds/app-release.apk
+
+      # - name: Build iOS App (Simulator)
+      #   run: eas build --platform ios --profile production --non-interactive --output builds/
 
   deploy:
     name: Deploy to Firebase App Distribution
