@@ -45,14 +45,6 @@ jobs:
             echo "FIREBASE_TOKEN starts with: ${FIREBASE_TOKEN:0:5}"
             echo "FIREBASE_TOKEN length: ${#FIREBASE_TOKEN}"
           fi
-        
-      - name: Upload to Firebase App Distribution (Android)
-        run: firebase appdistribution:distribute builds/app-release.apk \
-          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
-          --groups testers \
-          --token ${{ secrets.FIREBASE_TOKEN }} \
-          --project ${{ secrets.FIREBASE_PROJECT_ID }} \
-          --debug  # Add this for detailed logs
 
       # - name: Setup EAS
       #   uses: expo/expo-github-action@v8
@@ -110,6 +102,16 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: FIREBASE_TOKEN 2 is
+        run: |
+          if [ -z "${{ secrets.FIREBASE_TOKEN }}" ]; then
+            echo "FIREBASE_TOKEN is empty"
+          else
+            export FIREBASE_TOKEN="${{ secrets.FIREBASE_TOKEN }}"
+            echo "FIREBASE_TOKEN starts with: ${FIREBASE_TOKEN:0:5}"
+            echo "FIREBASE_TOKEN length: ${#FIREBASE_TOKEN}"
+          fi
 
       # - name: Download Build Artifacts
       #   uses: actions/download-artifact@v4
