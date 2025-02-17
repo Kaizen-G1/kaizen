@@ -106,9 +106,6 @@ jobs:
           echo "App ID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}"
           echo "Firebase Token Length: ${#FIREBASE_TOKEN}"
           echo "Project ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
-      
-      - name: Debug - Print Token Head (REMOVE AFTER DEBUGGING)
-        run: echo "Token Head: ${{ secrets.FIREBASE_TOKEN:0:10 }}"
         
       - name: Upload to Firebase App Distribution (Android)
         run: firebase appdistribution:distribute builds/app-release.apk \
