@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   textInput: {
-    color: "black", // Set the default text color to black
+    color: "black",
   },
 });
 

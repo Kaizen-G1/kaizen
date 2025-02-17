@@ -6,9 +6,12 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import { Divider } from "react-native-paper";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
+const { width } = Dimensions.get("screen");
 type SplashScreenProps = {
   navigation: any;
 };
@@ -29,15 +32,14 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
       <View
         style={{
           marginTop: "auto",
-          marginBottom: 50,
           flexDirection: "column",
+          paddingBottom: 20,
           alignItems: "center",
         }}
       >
         <CustomButton
           label="Get Started"
-          // paddingHorizontal={100}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Register")}
         />
         <TouchableOpacity
           style={styles.accountButton}
@@ -49,6 +51,25 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
           </View>
         </TouchableOpacity>
       </View>
+      <Divider
+        style={{
+          width: width / 2,
+          backgroundColor: "#666",
+          height: 0.5,
+        }}
+      />
+      <TouchableOpacity
+        style={styles.accountButton}
+        onPress={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Home", params: { isVendor: false } }],
+          })
+        }
+        // navigation.navigate("Home", { isVendor: false })}
+      >
+        <Text style={styles.accountText}>Skip</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -60,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: 'space-evenly',
     paddingHorizontal: 20,
+    marginBottom: 25,
   },
   logoContainer: {
     alignItems: "center",

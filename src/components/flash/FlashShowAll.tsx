@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -90,31 +90,54 @@ const products: Product[] = [
   },
 ];
 
-const FlashSalePage = () => {
+export default function FlashShowAll() {
+  const [timeLeft, setTimeLeft] = useState(3600);
+  const [isTimerActive, setIsTimerActive] = useState(true);
+
   const [selectedDiscount, setSelectedDiscount] = useState("All");
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      console.log("Timer reached 0");
+      setIsTimerActive(false);
+      return;
+    }
+
+    if (isTimerActive) {
+      const intervalId = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [timeLeft, isTimerActive]);
+
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((seconds % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const remainingSeconds = (seconds % 60).toString().padStart(2, "0");
+
+    return { hours, minutes, remainingSeconds };
+  };
+
+  const { hours, minutes, remainingSeconds } = formatTime(timeLeft);
 
   const filteredProducts =
     selectedDiscount === "All"
       ? products
       : products.filter((product) => product.discount === selectedDiscount);
 
-  const renderProduct = ({ item }: { item: Product }) => (
-    <View style={styles.productCard}>
-      <View style={styles.productImageContainer}>
-        <Image source={{ uri: item.image }} style={styles.productImage} />
-      </View>
-      <DiscountBadge discountPercentage={item.discount} />
-      <Text style={styles.productTitle}>{item.title}</Text>
-      <View style={styles.priceContainer}>
-        <Text style={styles.productPrice}>{item.price}</Text>
-        <Text style={styles.originalPrice}>{item.originalPrice}</Text>
-      </View>
-    </View>
-  );
-
   return (
     <ScrollView style={styles.container}>
-      <FlashSaleHeader hours={"00"} minutes={"10"} remainingSeconds={"49"} />
+      <FlashSaleHeader
+        hours={hours}
+        minutes={minutes}
+        remainingSeconds={remainingSeconds}
+      />
 
       <Text style={styles.subHeader}>Choose Your Discount</Text>
       <View style={styles.filterRow}>
@@ -171,13 +194,13 @@ const FlashSalePage = () => {
       />
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop: 50,
+    marginTop: 45,
   },
   header: {
     flexDirection: "row",
@@ -293,5 +316,3 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
   },
 });
-
-export default FlashSalePage;

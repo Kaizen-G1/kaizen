@@ -7,17 +7,19 @@ import { StyleSheet } from "react-native";
 
 import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import BottomNav from "./src/navigation/BottomNavigation";
+import AddOrUpdateProduct from "./src/components/AddOrUpdateProduct";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <PaperProvider theme={{ colors: { background: "#FFFFFF" } }}>
-          <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea}>
+        <SafeAreaProvider>
+          <PaperProvider theme={{ colors: { background: "#FFFFFF" } }}>
             <RootNavigator />
-          </SafeAreaView>
-        </PaperProvider>
-      </SafeAreaProvider>
+          </PaperProvider>
+        </SafeAreaProvider>
+      </SafeAreaView>
     </Provider>
   );
 }

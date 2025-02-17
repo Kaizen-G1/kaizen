@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { Card } from "react-native-paper";
@@ -13,7 +14,16 @@ import { Card } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import FlashSaleHeader from "../FlashSaleHeader";
 
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../RootNavigator";
+
 const { width } = Dimensions.get("screen");
+
+type FlashSaleScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "FlashShowAll"
+>;
 
 const DUMMY_DATA = [
   { id: "1", image: require("../../../assets/two.jpg") },
@@ -25,6 +35,8 @@ const DUMMY_DATA = [
 ];
 
 export default function FlashSaleScreen() {
+  const navigation = useNavigation<FlashSaleScreenNavigationProp>();
+
   const [timeLeft, setTimeLeft] = useState(3600);
   const [isTimerActive, setIsTimerActive] = useState(true);
 
@@ -65,31 +77,33 @@ export default function FlashSaleScreen() {
         minutes={minutes}
         remainingSeconds={remainingSeconds}
       />
-      <FlatList
-        style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-        data={DUMMY_DATA}
-        scrollEnabled={false}
-        keyExtractor={(item) => item.id}
-        numColumns={3}
-        renderItem={({ item }) => (
-          <Card style={styles.itemContainer}>
-            <View style={styles.imageWrapper}>
-              <Image source={item.image} style={styles.itemImage} />
-            </View>
+      <TouchableOpacity onPress={() => navigation.navigate("FlashShowAll")}>
+        <FlatList
+          style={{ paddingHorizontal: 20, paddingVertical: 10 }}
+          data={DUMMY_DATA}
+          scrollEnabled={false}
+          keyExtractor={(item) => item.id}
+          numColumns={3}
+          renderItem={({ item }) => (
+            <Card style={styles.itemContainer}>
+              <View style={styles.imageWrapper}>
+                <Image source={item.image} style={styles.itemImage} />
+              </View>
 
-            <LinearGradient
-              colors={["#FF5790", "#F81140"]} // Gradient colors
-              style={styles.discountBadge}
-              start={[1, 1]} // Start the gradient at the left (0%)
-              end={[0, 0]} // End the gradient at the right (100%)
-            >
-              <Text style={styles.discountText}>-20%</Text>
-            </LinearGradient>
-          </Card>
-        )}
-        columnWrapperStyle={styles.columnWrapper}
-        showsVerticalScrollIndicator={false}
-      />
+              <LinearGradient
+                colors={["#FF5790", "#F81140"]}
+                style={styles.discountBadge}
+                start={[1, 1]} // Start the gradient at the left (0%)
+                end={[0, 0]} // End the gradient at the right (100%)
+              >
+                <Text style={styles.discountText}>-20%</Text>
+              </LinearGradient>
+            </Card>
+          )}
+          columnWrapperStyle={styles.columnWrapper}
+          showsVerticalScrollIndicator={false}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -113,7 +127,6 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     letterSpacing: -0.21,
     fontFamily: "Raleway-Regular",
-    // marginBottom: 16,
     textAlign: "left",
   },
   timerContainer: {
