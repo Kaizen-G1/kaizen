@@ -112,7 +112,8 @@ jobs:
           --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
           --groups testers \
           --token ${{ secrets.FIREBASE_TOKEN }} \
-          --project ${{ secrets.FIREBASE_PROJECT_ID }}
+          --project ${{ secrets.FIREBASE_PROJECT_ID }} \
+          --debug  # Add this for detailed logs
 
       # - name: Upload to Firebase App Distribution (iOS)
       #   run: firebase appdistribution:distribute builds/*.ipa \
