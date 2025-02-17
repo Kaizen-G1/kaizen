@@ -117,14 +117,17 @@ jobs:
             echo "FIREBASE_TOKEN starts with: ${FIREBASE_TOKEN:0:5}"
             echo "FIREBASE_TOKEN length: ${#FIREBASE_TOKEN}"
           fi
+
+      - name: Check APK File
+        run: ls -lh builds/app-release.apk
         
       - name: Upload to Firebase App Distribution (Android)
-        run: firebase appdistribution:distribute builds/app-release.apk \
-          --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
-          --groups testers \
-          --token ${{ secrets.FIREBASE_TOKEN }} \
-          --project ${{ secrets.FIREBASE_PROJECT_ID }} \
-          --debug  # Add this for detailed logs
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.5.1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: builds/app-release.apk
 
       # - name: Upload to Firebase App Distribution (iOS)
       #   run: firebase appdistribution:distribute builds/*.ipa \
