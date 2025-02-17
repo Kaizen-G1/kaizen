@@ -41,7 +41,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
 
       - name: Build Android
-        run: eas build --platform android --profile production --non-interactive
+        env:
+          API_URL_PRODUCTION: ${{ secrets.API_URL_PRODUCTION }}
+          DEBUG_MODE_PRODUCTION: ${{ secrets.DEBUG_MODE_PRODUCTION }}
+          NODE_ENV: production
+        run: npm run build:prod && eas build --platform android --profile production --non-interactive
 
       - name: Get Android Build URL
         id: get_build_url
