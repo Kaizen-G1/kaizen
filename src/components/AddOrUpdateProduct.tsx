@@ -9,7 +9,7 @@ import { saveProductThunk } from "../screens/vendors/product/slice/ProductSlice"
 
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
-import AlertModal from "./alert/SuccessModal";
+import AlertModal from "./alert/AlertCustomModal";
 
 type Props = StackScreenProps<RootStackParamList, "AddProduct">;
 
