@@ -46,9 +46,27 @@ jobs:
       - name: Build Android
         run: eas build --platform android --profile production --non-interactive
 
+      - name: Debug EAS Build List # debug test
+        run: |
+          eas build:list --platform android --status finished --json
+      
+      - name: Debug EAS Build List (Raw Output) # debug test
+        run: |
+          eas build:list --platform android --status finished
+      
+      - name: Debug EXPO_TOKEN # debug test
+        run: |
+          echo "EXPO_TOKEN Length: ${#EXPO_TOKEN}"
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+
       - name: Download APK from EAS
         run: |
-          BUILD_URL=$(eas build:list --platform android --status finished --json | jq -r '.[0].artifacts.buildUrl')
+          BUILD_URL=$(eas build:list --platform android --status finished --json | jq -r 'if length > 0 then .[0].artifacts.buildUrl else empty end')
+          if [ -z "$BUILD_URL" ]; then
+            echo "Error: No build URL found. Exiting."
+            exit 1
+          fi
           echo "Downloading APK from: $BUILD_URL"
           mkdir -p builds
           curl -o builds/app-release.apk "$BUILD_URL"
