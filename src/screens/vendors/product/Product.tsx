@@ -22,7 +22,7 @@ import {
 } from "./slice/ProductSlice";
 import { useIsFocused } from "@react-navigation/native"; // Import useIsFocused
 import { Swipeable } from "react-native-gesture-handler";
-import AlertModal from "../../../components/alert/SuccessModal";
+import AlertModal from "../../../components/alert/AlertCustomModal";
 
 // Use your existing ProductPayload interface
 type ProductScreenNavigationProp = StackNavigationProp<
