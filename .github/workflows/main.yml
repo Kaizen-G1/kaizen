@@ -114,7 +114,7 @@ jobs:
         run: firebase appdistribution:distribute builds/app-release.apk \
           --app ${{ secrets.FIREBASE_APP_ID_ANDROID }} \
           --groups testers \
-          --token "${{ secrets.FIREBASE_TOKEN }}" \
+          --token ${{ secrets.FIREBASE_TOKEN }} \
           --project ${{ secrets.FIREBASE_PROJECT_ID }} \
           --debug  # Add this for detailed logs
 
