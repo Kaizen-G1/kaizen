@@ -76,16 +76,6 @@ export default function ProductListScreen() {
     );
   }
 
-  if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text variant="bodyLarge" style={{ color: "red" }}>
-          Failed to load products: {error}
-        </Text>
-      </View>
-    );
-  }
-
   const renderRightActions = (id: string) => (
     <View style={styles.deleteContainer}>
       <IconButton
@@ -100,7 +90,16 @@ export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <Headers searchQuery={searchQuery} onSearch={setSearchQuery} />
-
+      {error && (
+        <AlertModal
+          title="Error"
+          message={`Failed to load products: ${error}`}
+          visible={!!error}
+          isError={true}
+          btnlabel="Rety"
+          onPress={() => dispatch(getProductThunk())}
+        />
+      )}
       <FlatList
         data={filteredProducts.reverse()}
         keyExtractor={(item) => item.id!.toString()}
