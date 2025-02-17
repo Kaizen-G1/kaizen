@@ -7,73 +7,73 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build Android & iOS
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  # build:
+  #   name: Build Android & iOS
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
 
-      - name: EXPO_TOKEN is
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "EXPO_TOKEN is empty"
-          else
-            export EXPO_TOKEN="${{ secrets.EXPO_TOKEN }}"
-            echo "EXPO_TOKEN starts with: ${EXPO_TOKEN:0:5}"
-            echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
-          fi
+  #     - name: EXPO_TOKEN is
+  #       run: |
+  #         if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+  #           echo "EXPO_TOKEN is empty"
+  #         else
+  #           export EXPO_TOKEN="${{ secrets.EXPO_TOKEN }}"
+  #           echo "EXPO_TOKEN starts with: ${EXPO_TOKEN:0:5}"
+  #           echo "EXPO_TOKEN length: ${#EXPO_TOKEN}"
+  #         fi
 
-      - name: Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+  #     - name: Setup EAS
+  #       uses: expo/expo-github-action@v8
+  #       with:
+  #         eas-version: latest
+  #         token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
+  #     - name: Install Dependencies
+  #       run: npm ci
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
 
-      - name: Build Android
-        run: eas build --platform android --profile production --non-interactive
+  #     - name: Build Android
+  #       run: eas build --platform android --profile production --non-interactive
 
-      - name: Get Android Build URL
-        id: get_build_url
-        run: |
-          BUILD_URL=$(eas build:list --platform android --status finished --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
-          echo "::set-output name=url::$BUILD_URL"
+  #     - name: Get Android Build URL
+  #       id: get_build_url
+  #       run: |
+  #         BUILD_URL=$(eas build:list --platform android --status finished --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+  #         echo "::set-output name=url::$BUILD_URL"
       
-      - name: Debug EAS Build List (Raw Output) # debug test
-        run: |
-          eas build:list --platform android --status finished
+  #     - name: Debug EAS Build List (Raw Output) # debug test
+  #       run: |
+  #         eas build:list --platform android --status finished
       
-      - name: Debug EXPO_TOKEN # debug test
-        run: |
-          echo "EXPO_TOKEN Length: ${#EXPO_TOKEN}"
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+  #     - name: Debug EXPO_TOKEN # debug test
+  #       run: |
+  #         echo "EXPO_TOKEN Length: ${#EXPO_TOKEN}"
+  #       env:
+  #         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Download APK from EAS
-        run: |
-          if [[ -z "${{ steps.get_build_url.outputs.url }}" ]]; then
-            echo "Error: No build URL found. Exiting."
-            exit 1
-          fi
-          echo "Downloading APK from: ${{ steps.get_build_url.outputs.url }}"
-          mkdir -p builds
-          curl -L -o builds/app-release.apk "${{ steps.get_build_url.outputs.url }}" # -L follows redirects
+  #     - name: Download APK from EAS
+  #       run: |
+  #         if [[ -z "${{ steps.get_build_url.outputs.url }}" ]]; then
+  #           echo "Error: No build URL found. Exiting."
+  #           exit 1
+  #         fi
+  #         echo "Downloading APK from: ${{ steps.get_build_url.outputs.url }}"
+  #         mkdir -p builds
+  #         curl -L -o builds/app-release.apk "${{ steps.get_build_url.outputs.url }}" # -L follows redirects
 
-      - name: Upload APK as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: builds/app-release.apk
+  #     - name: Upload APK as Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: build-artifacts
+  #         path: builds/app-release.apk
 
       # - name: Build iOS App (Simulator)
       #   run: eas build --platform ios --profile production --non-interactive --output builds/
@@ -104,8 +104,19 @@ jobs:
       - name: Debug - Show Firebase Variables  # debug test
         run: |
           echo "App ID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}"
-          echo "Firebase Token Length: ${#FIREBASE_TOKEN}"
           echo "Project ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
+          echo "FIREBASE_APP_ID_ANDROID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}"
+          echo "FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}"
+
+      - name: FIREBASE_TOKEN is
+        run: |
+          if [ -z "${{ secrets.FIREBASE_TOKEN }}" ]; then
+            echo "FIREBASE_TOKEN is empty"
+          else
+            export FIREBASE_TOKEN="${{ secrets.FIREBASE_TOKEN }}"
+            echo "FIREBASE_TOKEN starts with: ${FIREBASE_TOKEN:0:5}"
+            echo "FIREBASE_TOKEN length: ${#FIREBASE_TOKEN}"
+          fi
         
       - name: Upload to Firebase App Distribution (Android)
         run: firebase appdistribution:distribute builds/app-release.apk \
