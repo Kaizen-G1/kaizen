@@ -40,15 +40,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
 
-      - name: Install Expo CLI & EAS
-        run: npm install -g expo-cli eas-cli
-
       - name: Build Android
         run: eas build --platform android --profile production --non-interactive
 
-      - name: Debug EAS Build List # debug test
+      - name: Get Android Build URL
+        id: get_build_url
         run: |
-          eas build:list --platform android --status finished --json
+          BUILD_URL=$(eas build:list --platform android --status finished --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "::set-output name=url::$BUILD_URL"
       
       - name: Debug EAS Build List (Raw Output) # debug test
         run: |
@@ -62,14 +61,13 @@ jobs:
 
       - name: Download APK from EAS
         run: |
-          BUILD_URL=$(eas build:list --platform android --status finished --json | jq -r 'if length > 0 then .[0].artifacts.buildUrl else empty end')
-          if [ -z "$BUILD_URL" ]; then
+          if [[ -z "${{ steps.get_build_url.outputs.url }}" ]]; then
             echo "Error: No build URL found. Exiting."
             exit 1
           fi
-          echo "Downloading APK from: $BUILD_URL"
+          echo "Downloading APK from: ${{ steps.get_build_url.outputs.url }}"
           mkdir -p builds
-          curl -o builds/app-release.apk "$BUILD_URL"
+          curl -L -o builds/app-release.apk "${{ steps.get_build_url.outputs.url }}" # -L follows redirects
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
