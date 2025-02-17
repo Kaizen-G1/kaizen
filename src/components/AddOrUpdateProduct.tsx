@@ -80,7 +80,12 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <ScrollView
-      contentContainerStyle={{ padding: 16, backgroundColor: "#fff" }}
+      style={{
+        marginTop: 40,
+        marginBottom: 20,
+        paddingHorizontal: 16,
+        backgroundColor: "#fff",
+      }}
     >
       <AlertModal
         title={!success ? "Failed" : "Success"}
