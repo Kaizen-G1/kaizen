@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./src/screens/home/Home";
@@ -7,6 +7,8 @@ import Register from "./src/screens/authentication/register/Register";
 import SplashScreen from "./src/screens/authentication/Splash";
 import BottomNav from "./src/navigation/BottomNavigation";
 import OTPScreen from "./src/screens/authentication/recovery/Otp";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserRole } from './src/utils/enums';
 
 type RootStackParamList = {
   Splash: undefined;
@@ -20,6 +22,26 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
+
+  const [isVendor, setIsVendor] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const role = await AsyncStorage.getItem("userRole");
+        setIsVendor(role === UserRole.COMPANY);
+        console.log(role);
+        console.log(UserRole.COMPANY);
+        console.log(role === UserRole.COMPANY);
+        console.log('--------------------');
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -35,7 +57,7 @@ const RootNavigator = () => {
           name="Home"
           options={{ headerShown: false, gestureEnabled: false }}
         >
-          {() => <BottomNav isVendor={true} />}
+          {() => <BottomNav isVendor={isVendor} />}
         </Stack.Screen>
 
         <Stack.Screen name="Login" component={Login} />
