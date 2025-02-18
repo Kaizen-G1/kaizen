@@ -144,7 +144,6 @@ function CreateAccountScreen({ navigation }: RegisterProps) {
         />
       </View>
 
-      {/* ( */}
       <CustomButton label="Done" onPress={handleSubmit} loading={loading} />
       <CustomButton label="Cancel" onPress={handleCancel} type="secondary" />
     </View>

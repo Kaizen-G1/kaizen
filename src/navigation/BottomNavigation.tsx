@@ -1,176 +1,320 @@
+// import React, { useState } from "react";
+// import { StyleSheet, Text, View } from "react-native";
+// import { BottomNavigation } from "react-native-paper";
+// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"; // Correct import
+// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+// import HomeScreen from "../screens/home/Home";
+// import Home from "../screens/vendors/home/Home";
+// import { Easing } from "react-native-reanimated";
+// import ProductListScreen from "../screens/vendors/product/Product";
+// import FlipCard from "../screens/vendors/wallet/Transaction";
+// import ProfileScreen from "../screens/vendors/profile/profile";
+
+// // Route components for customer
+// const FavoritesRoute = () => (
+//   <SafeAreaView style={styles.container}>
+//     <Text style={styles.headerText}>Favorites</Text>
+//   </SafeAreaView>
+// );
+
+// const CartRoute = () => (
+//   <SafeAreaView style={styles.container}>
+//     <Text style={styles.headerText}>Cart</Text>
+//   </SafeAreaView>
+// );
+
+// const ProfileRoute = () => (
+//   <SafeAreaView style={styles.container}>
+//     <Text style={styles.headerText}>Profile</Text>
+//   </SafeAreaView>
+// );
+
+// const CustomBottomNavigation = ({ isVendor = false }) => {
+//   const [index, setIndex] = useState(0);
+
+//   // Routes for customer
+//   const customerRoutes = [
+//     {
+//       key: "home",
+//       title: "Home",
+//       focusedIcon: "home",
+//       unfocusedIcon: "home-outline",
+//     },
+//     {
+//       key: "favorites",
+//       title: "Favorites",
+//       focusedIcon: "heart",
+//       unfocusedIcon: "heart-outline",
+//     },
+//     {
+//       key: "cart",
+//       title: "Cart",
+//       focusedIcon: "cart",
+//       unfocusedIcon: "cart-outline",
+//     },
+//     {
+//       key: "profile",
+//       title: "Profile",
+//       focusedIcon: "account",
+//       unfocusedIcon: "account-outline",
+//     },
+//   ];
+
+//   // Routes for vendor
+//   const vendorRoutes = [
+//     {
+//       key: "dashboard",
+//       title: "Orders",
+//       focusedIcon: "view-dashboard",
+//       unfocusedIcon: "view-dashboard-outline",
+//     },
+//     {
+//       key: "products",
+//       title: "Products",
+//       focusedIcon: "cube",
+//       unfocusedIcon: "cube-outline",
+//     },
+//     {
+//       key: "orders",
+//       title: "Wallet",
+//       focusedIcon: "clipboard-text",
+//       unfocusedIcon: "clipboard-text-outline",
+//     },
+
+//     {
+//       key: "settings",
+//       title: "Profile",
+//       focusedIcon: "account",
+//       unfocusedIcon: "account-outline",
+//     },
+//   ];
+
+//   const routes = isVendor ? vendorRoutes : customerRoutes;
+
+//   const renderScene = BottomNavigation.SceneMap({
+//     home: HomeScreen,
+//     favorites: FavoritesRoute,
+//     orders: FlipCard,
+//     cart: CartRoute,
+//     profile: ProfileRoute,
+//     dashboard: Home,
+//     products: ProductListScreen,
+//     settings: ProfileScreen,
+//   });
+
+//   return (
+//     <BottomNavigation
+//       navigationState={{ index, routes }}
+//       onIndexChange={setIndex}
+//       renderScene={renderScene}
+//       barStyle={[
+//         styles.bottomNav,
+//         {
+//           backgroundColor: "#fff",
+//           paddingHorizontal: isVendor ? 30 : 0,
+//         },
+//       ]}
+//       activeIndicatorStyle={{ backgroundColor: "transparent" }}
+//       compact={true}
+//       shifting={true}
+//       keyboardHidesNavigationBar={true}
+//       activeColor="#B76E79"
+//       sceneAnimationEnabled={true}
+//       sceneAnimationType="shifting"
+//       sceneAnimationEasing={Easing.inOut(Easing.quad)}
+//       labeled={true}
+//       renderIcon={({ route, focused }) => (
+//         <MaterialCommunityIcons
+//           name={focused ? route.focusedIcon : route.unfocusedIcon}
+//           size={24}
+//           color={focused ? "#B76E79" : "#000"}
+//         />
+//       )}
+//     />
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   headerText: {
+//     fontSize: 24,
+//     fontWeight: "bold",
+//     marginBottom: 10,
+//   },
+//   bottomNav: {
+//     backgroundColor: "#fff",
+
+//     paddingVertical: 0,
+//     height: 70,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: -1 },
+//     shadowOpacity: 0.1,
+//     elevation: 3,
+//   },
+// });
+
+// export default CustomBottomNavigation;
+
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BottomNavigation } from "react-native-paper";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"; // Correct import
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "../screens/home/Home";
-import Home from "../screens/vendors/home/Home";
 import { Easing } from "react-native-reanimated";
+
+// Import Screens
+import HomeScreen from "../screens/home/Home"; // Customer Home
+import Home from "../screens/vendors/home/Home"; // Vendor Dashboard
 import ProductListScreen from "../screens/vendors/product/Product";
 import FlipCard from "../screens/vendors/wallet/Transaction";
 import ProfileScreen from "../screens/vendors/profile/profile";
 
-// Route components for customer
+// Placeholder screens for customers
 const FavoritesRoute = () => (
   <SafeAreaView style={styles.container}>
     <Text style={styles.headerText}>Favorites</Text>
   </SafeAreaView>
 );
-
-const OrdersRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Orders</Text>
-  </SafeAreaView>
-);
-
 const CartRoute = () => (
   <SafeAreaView style={styles.container}>
     <Text style={styles.headerText}>Cart</Text>
   </SafeAreaView>
 );
-
 const ProfileRoute = () => (
   <SafeAreaView style={styles.container}>
     <Text style={styles.headerText}>Profile</Text>
   </SafeAreaView>
 );
 
-// Route components for vendor
-const DashboardRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Dashboard</Text>
-  </SafeAreaView>
-);
-
-const ProductsRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Products</Text>
-  </SafeAreaView>
-);
-
-const OrdersVendorRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Orders</Text>
-  </SafeAreaView>
-);
-
-const SettingsRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Settings</Text>
-  </SafeAreaView>
-);
-
 const CustomBottomNavigation = ({ isVendor = false }) => {
   const [index, setIndex] = useState(0);
 
-  // Routes for customer
-  const customerRoutes = [
-    {
-      key: "home",
-      title: "Home",
-      focusedIcon: "home",
-      unfocusedIcon: "home-outline",
-    },
-    {
-      key: "favorites",
-      title: "Favorites",
-      focusedIcon: "heart",
-      unfocusedIcon: "heart-outline",
-    },
-    {
-      key: "orders",
-      title: "Orders",
-      focusedIcon: "clipboard-text",
-      unfocusedIcon: "clipboard-text-outline",
-    },
-    {
-      key: "cart",
-      title: "Cart",
-      focusedIcon: "cart",
-      unfocusedIcon: "cart-outline",
-    },
-    {
-      key: "profile",
-      title: "Profile",
-      focusedIcon: "account",
-      unfocusedIcon: "account-outline",
-    },
-  ];
+  // Define routes dynamically
+  const routes = isVendor
+    ? [
+        {
+          key: "dashboard",
+          title: "Dashboard",
+          focusedIcon: "view-dashboard",
+          unfocusedIcon: "view-dashboard-outline",
+        },
+        {
+          key: "products",
+          title: "Products",
+          focusedIcon: "cube",
+          unfocusedIcon: "cube-outline",
+        },
+        {
+          key: "wallet",
+          title: "Wallet",
+          focusedIcon: "wallet",
+          unfocusedIcon: "wallet-outline",
+        },
+        {
+          key: "settings",
+          title: "Profile",
+          focusedIcon: "account",
+          unfocusedIcon: "account-outline",
+        },
+      ]
+    : [
+        {
+          key: "home",
+          title: "Home",
+          focusedIcon: "home",
+          unfocusedIcon: "home-outline",
+        },
+        {
+          key: "favorites",
+          title: "Favorites",
+          focusedIcon: "heart",
+          unfocusedIcon: "heart-outline",
+        },
+        {
+          key: "cart",
+          title: "Cart",
+          focusedIcon: "cart",
+          unfocusedIcon: "cart-outline",
+        },
+        {
+          key: "profile",
+          title: "Profile",
+          focusedIcon: "account",
+          unfocusedIcon: "account-outline",
+        },
+      ];
 
-  // Routes for vendor
-  const vendorRoutes = [
-    {
-      key: "dashboard",
-      title: "Orders",
-      focusedIcon: "view-dashboard",
-      unfocusedIcon: "view-dashboard-outline",
-    },
-    {
-      key: "products",
-      title: "Products",
-      focusedIcon: "cube",
-      unfocusedIcon: "cube-outline",
-    },
-    {
-      key: "orders",
-      title: "Wallet",
-      focusedIcon: "clipboard-text",
-      unfocusedIcon: "clipboard-text-outline",
-    },
+  // Function-based scene rendering for better performance
+  const renderScene = ({ route }: { route: { key: string } }) => {
+    switch (route.key) {
+      case "home":
+        return <HomeScreen />;
+      case "favorites":
+        return <FavoritesRoute />;
+      case "cart":
+        return <CartRoute />;
+      case "profile":
+        return <ProfileRoute />;
+      case "dashboard":
+        return <Home />;
+      case "products":
+        return <ProductListScreen />;
+      case "wallet":
+        return <FlipCard />;
+      case "settings":
+        return <ProfileScreen />;
+      default:
+        return null;
+    }
+  };
 
-    {
-      key: "settings",
-      title: "Profile",
-      focusedIcon: "account",
-      unfocusedIcon: "account-outline",
-    },
-  ];
-
-  const routes = isVendor ? vendorRoutes : customerRoutes;
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeScreen,
-    favorites: FavoritesRoute,
-    orders: FlipCard,
-    cart: CartRoute,
-    profile: ProfileRoute,
-    dashboard: Home,
-    products: ProductListScreen,
-    settings: ProfileScreen,
-  });
+  const renderIcon = ({
+    route,
+    focused,
+  }: {
+    route: { focusedIcon: string; unfocusedIcon: string };
+    focused: boolean;
+  }) => (
+    <MaterialCommunityIcons
+      name={focused ? route.focusedIcon : route.unfocusedIcon}
+      size={24}
+      color={focused ? "#B76E79" : "#000"}
+    />
+  );
 
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-      barStyle={[
-        styles.bottomNav,
-        {
-          backgroundColor: "#fff",
-          paddingHorizontal: isVendor ? 30 : 0,
-        },
-      ]}
-      activeIndicatorStyle={{ backgroundColor: "transparent" }}
-      compact={true}
-      shifting={true}
-      keyboardHidesNavigationBar={true}
-      activeColor="#B76E79"
-      sceneAnimationEnabled={true}
-      sceneAnimationType="shifting"
-      sceneAnimationEasing={Easing.inOut(Easing.quad)}
-      labeled={true}
-      renderIcon={({ route, focused }) => (
-        <MaterialCommunityIcons
-          name={focused ? route.focusedIcon : route.unfocusedIcon}
-          size={24}
-          color={focused ? "#B76E79" : "#000"}
-        />
-      )}
-    />
+    <SafeAreaView
+      style={{ flex: 1, paddingTop: 25, backgroundColor: "#FFFFFF" }}
+    >
+      <BottomNavigation
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        renderIcon={renderIcon}
+        barStyle={[
+          styles.bottomNav,
+          { backgroundColor: "#fff", paddingHorizontal: isVendor ? 20 : 0 }, // Adjusted padding
+        ]}
+        activeIndicatorStyle={{ backgroundColor: "transparent" }}
+        compact={true}
+        shifting={true}
+        keyboardHidesNavigationBar={true}
+        activeColor="#B76E79"
+        sceneAnimationEnabled={true}
+        sceneAnimationType="shifting"
+        sceneAnimationEasing={Easing.inOut(Easing.quad)}
+        labeled={true}
+      />
+    </SafeAreaView>
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -184,14 +328,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bottomNav: {
-    backgroundColor: "#fff",
-
-    paddingVertical: 0,
     height: 70,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -1 },
     shadowOpacity: 0.1,
     elevation: 3,
+    borderTopWidth: 1, // Set the width of the top border
+    borderTopColor: "rgba(0, 0, 0, 0.1)",
   },
 });
 
