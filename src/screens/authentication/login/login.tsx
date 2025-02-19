@@ -14,6 +14,7 @@ import CustomButton from "tenzai-components/components/CustomButton/CustomButton
 import { BASE_URL } from "../../../services/constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from "jwt-decode";
+import { UserRole } from "../../../utils/enums";
 
 type LoginScreenProps = {
   navigation: any;
@@ -62,8 +63,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         await AsyncStorage.setItem("refreshToken", refreshToken || "");
         await AsyncStorage.setItem("userRole", decodedToken.role || "");
         await AsyncStorage.setItem("userEmail", decodedToken.email || "");
-  
-        navigation.navigate("Home");
+
+        const isVendor = decodedToken.role === UserRole.COMPANY;
+        navigation.navigate("Home", { isVendor });
       } else {
         console.error("Login failed:", data);
         Alert.alert("Error", data.error || "Something went wrong.");
