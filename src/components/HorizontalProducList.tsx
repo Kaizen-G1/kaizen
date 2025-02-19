@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { Card } from "react-native-paper";
 import CustomIcon from "tenzai-components/components/CustomIcon/CustomIcon";
 
@@ -38,7 +45,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ onPressSeeAll }) => {
       <Text style={styles.title}>New Items</Text>
       <TouchableOpacity onPress={onPressSeeAll} style={styles.seeAllButton}>
         <Text style={styles.seeAllText}>See All</Text>
-        <CustomIcon icon='arrow-right' type='circle'/>
+        <CustomIcon icon="arrow-right" type="circle" />
       </TouchableOpacity>
     </View>
   );
@@ -47,10 +54,10 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ onPressSeeAll }) => {
 const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   return (
     <View style={styles.productCard}>
-    <Card style={styles.card}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: item.image }} style={styles.productImage} />
-      </View>
+      <Card style={styles.card}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item.image }} style={styles.productImage} />
+        </View>
       </Card>
       <View style={styles.itemsFooterContainer}>
         <Text style={styles.productName}>{item.title}</Text>
@@ -60,14 +67,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   );
 };
 
-const HorizontalProductList: React.FC<HorizontalProductListProps> = ({ products, onPressSeeAll }) => {
+const HorizontalProductList: React.FC<HorizontalProductListProps> = ({
+  products,
+  onPressSeeAll,
+}) => {
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <HeaderSection onPressSeeAll={onPressSeeAll} />
 
       {/* Product List */}
-      <View  style={styles.listcontainer}>
+      <View style={styles.listcontainer}>
         <FlatList
           horizontal
           data={products}
@@ -75,30 +85,30 @@ const HorizontalProductList: React.FC<HorizontalProductListProps> = ({ products,
           renderItem={({ item }) => <ProductCard item={item} />}
           showsHorizontalScrollIndicator={false}
         />
-      </View>      
+      </View>
     </View>
   );
 };
 
 export default HorizontalProductList;
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   card: {
     borderRadius: 9,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 7,
-    marginLeft: 5
+    marginLeft: 5,
   },
   container: {
     marginHorizontal: 20,
     marginBottom: 15,
     backgroundColor: "#fff",
   },
-  listcontainer:{    
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly'
+  listcontainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
   },
   header: {
     flexDirection: "row",
@@ -116,20 +126,20 @@ const styles = StyleSheet.create({
   },
   seeAllText: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   imageContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
     gap: 5,
   },
   productCard: {
     borderRadius: 10,
     alignItems: "center",
     width: 145,
-    height: 200,
+    // height: 200,
   },
   productImage: {
     width: "100%",

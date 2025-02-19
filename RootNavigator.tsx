@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeScreen from "./src/screens/home/Home";
-import Login from "./src/screens/authentication/login/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import BottomNav from "./src/navigation/BottomNavigation";
+
 import Register from "./src/screens/authentication/register/Register";
 import SplashScreen from "./src/screens/authentication/Splash";
-import BottomNav from "./src/navigation/BottomNavigation";
 import OTPScreen from "./src/screens/authentication/recovery/Otp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Login from "./src/screens/authentication/login/login";
+
+import AddProduct from "./src/components/AddOrUpdateProduct";
+import FlashShowAll from "./src/components/flash/FlashShowAll";
+
 import { UserRole } from './src/utils/enums';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Splash: undefined;
-  Home: { userId: string };
-  Login: { userId: string };
-  Register: { userId: string };
+  Home: { isVendor: boolean };
+  Login: undefined;
+  Register: undefined;
   OTP: { email: string };
-  // Add more screen names and types as needed
+  AddProduct: { mode: "add" | "update"; initialData?: any };
+  FlashShowAll: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -48,10 +53,35 @@ const RootNavigator = () => {
         initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
+          headerTransparent: true,
+          animation: "scale_from_center",
           cardStyle: { backgroundColor: "#fff" },
         }}
       >
         <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="OTP" component={OTPScreen} />
+        <Stack.Screen
+          name="FlashShowAll"
+          component={FlashShowAll}
+          options={{
+            headerShown: true,
+            title: "",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="AddProduct"
+          component={AddProduct}
+          options={{
+            headerShown: true,
+            title: "",
+            headerBackTitle: "Back",
+          }}
+        />
+
+        {/* Home Screen with Bottom Navigation */}
 
         <Stack.Screen
           name="Home"
@@ -59,12 +89,6 @@ const RootNavigator = () => {
         >
           {() => <BottomNav isVendor={isVendor} />}
         </Stack.Screen>
-
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="OTP" component={OTPScreen} />
-
-        {/* Add more screen names and components as needed */}
       </Stack.Navigator>
     </NavigationContainer>
   );

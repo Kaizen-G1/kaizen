@@ -95,41 +95,37 @@ const HomeScreen = () => {
 
   return (
     <>
-      <SafeAreaProvider>
-        <PaperProvider>
-          <SafeAreaView style={styles.safeArea}>
-            <ScrollView>
-              <View style={styles.sliderContainer}>
-                <ImageSlider
-                  data={banners}
-                  handleImagePress={handleImagePress}
-                  sliderWidth={sliderWidth}
-                />
-              </View>
+      <PaperProvider>
+        <ScrollView>
+          <View style={styles.sliderContainer}>
+            <ImageSlider
+              data={banners}
+              handleImagePress={handleImagePress}
+              sliderWidth={sliderWidth}
+            />
+          </View>
 
-              <CategoryList
-                title="Categories"
-                categories={categories}
-                onSelectCategory={handleSelectCategory}
-                onSeeAll={handleSeeAllCategories}
-              />
+          <CategoryList
+            title="Categories"
+            categories={categories}
+            onSelectCategory={handleSelectCategory}
+            onSeeAll={handleSeeAllCategories}
+          />
 
-              <TopProducts
-                title="Top Products"
-                items={topProducts}
-                onPress={handleSelectProduct}
-              />
+          <TopProducts
+            title="Top Products"
+            items={topProducts}
+            onPress={handleSelectProduct}
+          />
 
-              <HorizontalProductList
-                products={newItems}
-                onPressSeeAll={handleSeeAllNewItems}
-              />
+          <HorizontalProductList
+            products={newItems}
+            onPressSeeAll={handleSeeAllNewItems}
+          />
 
-              <FlashSaleScreen />
-            </ScrollView>
-          </SafeAreaView>
-        </PaperProvider>
-      </SafeAreaProvider>
+          <FlashSaleScreen />
+        </ScrollView>
+      </PaperProvider>
     </>
   );
 };
