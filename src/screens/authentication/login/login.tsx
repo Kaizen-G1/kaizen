@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 import { BASE_URL } from "../../../services/constants";
+import config from "../../../config/config"
 
 type LoginScreenProps = {
   navigation: any;
@@ -28,7 +29,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/api/auth/login`, {
+      const response = await fetch(`${config.API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
