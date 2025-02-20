@@ -131,8 +131,6 @@ const styles = StyleSheet.create({
   productCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 10,
     padding: 10,
     marginBottom: 10,
     shadowColor: "#000",
