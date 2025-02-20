@@ -2,6 +2,7 @@ import { ApiResponse, ExtendedApiState } from "../../../../services/apiState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../../../config/config";
 import { handleApiCall } from "../../../../services/reducerUtils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface VendorProductResponseData {
   message: string;
@@ -63,11 +64,12 @@ export const getProductThunk = createAsyncThunk(
   "products/productList",
   async (_, { rejectWithValue }) => {
     try {
+      const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
         `${config.API_URL}/api/products/productList`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" , "Authorization": `Bearer ${token}`},
         }
       );
 
@@ -95,10 +97,11 @@ export const saveProductThunk = createAsyncThunk(
         : `${config.API_URL}/api/products/createProduct`;
 
       const method = isUpdate ? "PUT" : "POST";
+      const token = await AsyncStorage.getItem("accessToken");
 
       const response = await fetch(endpoint, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(payload),
       });
 
@@ -123,11 +126,12 @@ export const deleteProductThunk = createAsyncThunk(
   "product/delete",
   async (productId: string, { rejectWithValue }) => {
     try {
+      const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
         `${config.API_URL}/api/products/deleteProductById/${productId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         }
       );
 

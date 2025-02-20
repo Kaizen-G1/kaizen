@@ -13,6 +13,9 @@ import {
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 import { BASE_URL } from "../../../services/constants";
 import config from "../../../config/config"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from "jwt-decode";
+import { UserRole } from "../../../utils/enums";
 
 type LoginScreenProps = {
   navigation: any;
@@ -27,7 +30,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       Alert.alert("Error", "Email and password are required.");
       return;
     }
-
+  
     try {
       const response = await fetch(`${config.API_URL}/api/auth/login`, {
         method: "POST",
@@ -36,23 +39,51 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       console.log("Connecting to Login API");
+  
+      const data = await response.json();
+      console.log("Parsed response:", data);
+  
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        navigation.navigate("Home");
-        // Alert.alert("Success", `Welcome ${data.customer.name}!`);
-        console.log("Login successful:", data);
+        const accessToken = data.data?.accessToken;
+        const refreshToken = data.data?.refreshToken;
+  
+        if (!accessToken || typeof accessToken !== "string") {
+          console.error("Invalid accessToken:", accessToken);
+          Alert.alert("Error", "Invalid token received from the server.");
+          return;
+        }
+  
+        // Decodificar el JWT
+        const decodedToken: any = jwtDecode(accessToken);
+        console.log("Decoded JWT:", decodedToken);
+  
+        // Guardar tokens en AsyncStorage
+        await AsyncStorage.setItem("accessToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken || "");
+        await AsyncStorage.setItem("userRole", decodedToken.role || "");
+        await AsyncStorage.setItem("userEmail", decodedToken.email || "");
+
+        const isVendor = decodedToken.role === UserRole.COMPANY;
+        navigation.navigate("Home", { isVendor });
       } else {
-        const errorData = await response.json();
-        Alert.alert("Error", errorData.error || "Something went wrong.");
-        console.error("Login error:", errorData);
+        console.error("Login failed:", data);
+        Alert.alert("Error", data.error || "Something went wrong.");
       }
     } catch (error) {
       console.error("Error during login request:", error);
       Alert.alert("Error", "Failed to connect to the server.");
     }
+  };
+  
+
+  const handleLogout = async () => { // TODO: Implement method on logout event
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("userEmail");
+    navigation.replace("Login");
   };
 
   return (
