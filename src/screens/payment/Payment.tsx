@@ -10,6 +10,8 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+import { Badge, Banner, Icon, IconButton } from "react-native-paper";
+import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
 const PaymentScreen: React.FC = () => {
   // Local states for shipping & contact info
@@ -43,12 +45,13 @@ const PaymentScreen: React.FC = () => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionTitleRow}>
             <Text style={styles.sectionTitle}>Shipping Address</Text>
-            <TouchableOpacity
+            <IconButton
+              icon="pencil"
+              iconColor="white"
+              size={20}
               style={styles.circleButton}
               onPress={() => setShippingModalVisible(true)}
-            >
-              <Text style={styles.circleButtonText}>✎</Text>
-            </TouchableOpacity>
+            />
           </View>
           <Text style={styles.sectionDescription}>{shippingAddress}</Text>
         </View>
@@ -57,12 +60,14 @@ const PaymentScreen: React.FC = () => {
         <View style={styles.sectionContainer}>
           <View style={styles.sectionTitleRow}>
             <Text style={styles.sectionTitle}>Contact Information</Text>
-            <TouchableOpacity
+
+            <IconButton
+              icon="pencil"
+              iconColor="white"
+              size={20}
               style={styles.circleButton}
               onPress={() => setContactModalVisible(true)}
-            >
-              <Text style={styles.circleButtonText}>✎</Text>
-            </TouchableOpacity>
+            />
           </View>
           <Text style={styles.sectionDescription}>{contactPhone}</Text>
           <Text style={styles.sectionDescription}>{contactEmail}</Text>
@@ -81,10 +86,12 @@ const PaymentScreen: React.FC = () => {
           <View style={styles.itemRow}>
             <Image
               source={{
-                uri: "https://via.placeholder.com/60x60.png?text=Item+1",
+                uri: "https://images.unsplash.com/photo-1574201635302-388dd92a4c3f",
               }}
               style={styles.itemImage}
             />
+            <Badge style={styles.badge}>1</Badge>
+
             <View style={styles.itemInfo}>
               <Text style={styles.itemName}>
                 Lorem ipsum dolor sit amet consectetur.
@@ -97,10 +104,11 @@ const PaymentScreen: React.FC = () => {
           <View style={styles.itemRow}>
             <Image
               source={{
-                uri: "https://via.placeholder.com/60x60.png?text=Item+2",
+                uri: "https://images.unsplash.com/photo-1574201635302-388dd92a4c3f",
               }}
               style={styles.itemImage}
             />
+            <Badge style={styles.badge}>2</Badge>
             <View style={styles.itemInfo}>
               <Text style={styles.itemName}>
                 Lorem ipsum dolor sit amet consectetur.
@@ -179,9 +187,7 @@ const PaymentScreen: React.FC = () => {
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalAmount}>$34.00</Text>
           </View>
-          <TouchableOpacity style={styles.payButton}>
-            <Text style={styles.payButtonText}>Pay</Text>
-          </TouchableOpacity>
+          <CustomButton label="Pay" type="primary" onPress={() => {}} />
         </View>
       </ScrollView>
 
@@ -281,6 +287,9 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginBottom: 24,
+    padding: 16,
+    backgroundColor: "#F9F9F9",
+    borderRadius: 8,
   },
   sectionTitleRow: {
     flexDirection: "row",
@@ -288,21 +297,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "bold",
     marginBottom: 8,
-    color: "#333",
+    color: "#202020",
   },
   sectionDescription: {
-    fontSize: 14,
-    color: "#555",
+    fontSize: 15,
+    color: "#000",
     marginBottom: 4,
   },
   circleButton: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#B23850",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "#753742",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -317,6 +326,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
+  imagePlaceholder: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  badge: {
+    backgroundColor: "#B23850",
+    borderRadius: 20,
+    position: "absolute",
+    top: 2,
+
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#fff",
+  },
+
   voucherButton: {
     backgroundColor: "#f2f2f2",
     paddingHorizontal: 12,
