@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { BottomNavigation } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -12,6 +12,7 @@ import ProductListScreen from "../screens/vendors/product/Product";
 import FlipCard from "../screens/vendors/wallet/Transaction";
 import ProfileScreen from "../screens/vendors/profile/profile";
 import ProfileScreenCustomer from "../screens/profile/Profile";
+import CartScreen from "../screens/cart/Cart";
 
 // Placeholder screens for customers
 const FavoritesRoute = () => (
@@ -19,11 +20,7 @@ const FavoritesRoute = () => (
     <Text style={styles.headerText}>Favorites</Text>
   </SafeAreaView>
 );
-const CartRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Cart</Text>
-  </SafeAreaView>
-);
+
 
 const CustomBottomNavigation = ({ isVendor = false }) => {
   const [index, setIndex] = useState(0);
@@ -91,7 +88,7 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
       case "favorites":
         return <FavoritesRoute />;
       case "cart":
-        return <CartRoute />;
+        return <CartScreen />;
       case "profile":
         return <ProfileScreenCustomer />;
       case "dashboard":
