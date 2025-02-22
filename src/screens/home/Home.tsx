@@ -26,7 +26,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const { data } = await http.get("/api/dashboard");
+        const { data } = await http.get("/api/v1/customer/dashboard");
 
         // Getting active banners
         const activeBanners = data.banners

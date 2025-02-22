@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../../../../config/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface Product {
   product_id: string;
@@ -32,7 +33,13 @@ const initialState: OrderState = {
 // Fetch orders asynchronously
 export const getOrdersThunk = createAsyncThunk("orders/fetchOrders", async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${config.API_URL}/api/orders`);
+    const token = await AsyncStorage.getItem("accessToken");
+    const response = await axios.get(`${config.API_URL}/api/v1/company/orders`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
     return response.data.data.orders;
   } catch (error) {
     return rejectWithValue("Failed to fetch orders");
