@@ -61,7 +61,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
       return null;
     }
 
-    const response = await axios.post(`${config.API_URL}/api/auth/refresh`, {
+    const response = await axios.post(`${config.API_URL}/api/v1/auth/refresh`, {
       refreshToken,
     });
 

@@ -66,7 +66,7 @@ export const getProductThunk = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `${config.API_URL}/api/products/productList`,
+        `${config.API_URL}/api/v1/company/products/productList`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" , "Authorization": `Bearer ${token}`},
@@ -93,8 +93,8 @@ export const saveProductThunk = createAsyncThunk(
     try {
       const isUpdate = !!payload.id;
       const endpoint = isUpdate
-        ? `${config.API_URL}/api/products/updateProduct/${payload.id}`
-        : `${config.API_URL}/api/products/createProduct`;
+        ? `${config.API_URL}/api/v1/company/products/updateProduct/${payload.id}`
+        : `${config.API_URL}/api/v1/company/products/createProduct`;
 
       const method = isUpdate ? "PUT" : "POST";
       const token = await AsyncStorage.getItem("accessToken");
@@ -128,7 +128,7 @@ export const deleteProductThunk = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `${config.API_URL}/api/products/deleteProductById/${productId}`,
+        `${config.API_URL}/api/v1/company/products/deleteProductById/${productId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
