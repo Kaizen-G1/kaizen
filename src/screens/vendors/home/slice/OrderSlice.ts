@@ -34,7 +34,7 @@ const initialState: OrderState = {
 export const getOrdersThunk = createAsyncThunk("orders/fetchOrders", async (_, { rejectWithValue }) => {
   try {
     const token = await AsyncStorage.getItem("accessToken");
-    const response = await axios.get(`${config.API_URL}/api/v1/companies/67a40eff40c34d9517f5aef0/orders`, {
+    const response = await axios.get(`${config.API_URL}/api/v1/orders/companies/67a40eff40c34d9517f5aef0/`, { // TODO: Replace with actual company ID
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
