@@ -8,6 +8,9 @@ import OTPScreen from "./src/screens/authentication/recovery/Otp";
 import Login from "./src/screens/authentication/login/login";
 import AddProduct from "./src/components/AddOrUpdateProduct";
 import FlashShowAll from "./src/components/flash/FlashShowAll";
+import AllProductPage from "./src/screens/product/AllProduct";
+import ProductDetailsPage from "./src/screens/product/ProductDetails";
+import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -17,12 +20,13 @@ export type RootStackParamList = {
   OTP: { email: string };
   AddProduct: { mode: "add" | "update"; initialData?: any };
   FlashShowAll: undefined;
+  AllProduct: undefined;
+  ProductDetails: { productId: string; product: ProductPayload };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -30,6 +34,13 @@ const RootNavigator = () => {
         screenOptions={{
           headerShown: false,
           headerTransparent: true,
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 20,
+            color: "#000",
+            lineHeight: 20,
+            letterSpacing: 2,
+          },
           animation: "scale_from_center",
           cardStyle: { backgroundColor: "#fff" },
         }}
@@ -53,6 +64,27 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
+            headerBackTitle: "Back",
+          }}
+        />
+
+        <Stack.Screen
+          name="AllProduct"
+          component={AllProductPage}
+          options={{
+            headerShown: true,
+            title: "New Products",
+
+            headerBackTitle: "Back",
+          }}
+        />
+
+        <Stack.Screen
+          name="ProductDetails"
+          component={ProductDetailsPage}
+          options={{
+            headerShown: true,
+            title: "Product Details",
             headerBackTitle: "Back",
           }}
         />

@@ -69,7 +69,10 @@ export const getProductThunk = createAsyncThunk(
         `${config.API_URL}/api/v1/company/products/productList`,
         {
           method: "GET",
-          headers: { "Content-Type": "application/json" , "Authorization": `Bearer ${token}`},
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -101,7 +104,10 @@ export const saveProductThunk = createAsyncThunk(
 
       const response = await fetch(endpoint, {
         method,
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
 
@@ -131,7 +137,10 @@ export const deleteProductThunk = createAsyncThunk(
         `${config.API_URL}/api/v1/company/products/deleteProductById/${productId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
