@@ -2,8 +2,30 @@ import React from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Avatar, Text } from "react-native-paper";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../../RootNavigator";
+
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
 const ProfileScreen = () => {
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  const handleLogout = async () => {
+    // TODO: Implement method on logout event
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("userEmail");
+    await AsyncStorage.removeItem("vendorId");
+    navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
@@ -29,7 +51,7 @@ const ProfileScreen = () => {
         <Feather name="settings" size={20} color="black" />
         <Text style={styles.menuText}>Settings</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuItem}>
+      <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
         <Feather name="log-out" size={20} color="black" />
         <Text style={styles.menuText}>Log Out</Text>
       </TouchableOpacity>

@@ -23,6 +23,7 @@ import {
 import { useIsFocused } from "@react-navigation/native"; // Import useIsFocused
 import { Swipeable } from "react-native-gesture-handler";
 import AlertModal from "../../../components/alert/AlertCustomModal";
+import { resetSelectedCategory } from "../../category/slice/CategorySlice";
 
 // Use your existing ProductPayload interface
 type ProductScreenNavigationProp = StackNavigationProp<
@@ -48,7 +49,7 @@ export default function ProductListScreen() {
     if (isFocused) {
       dispatch(getProductThunk()); // Fetch products when the screen comes into focus
     }
-  }, [dispatch, isFocused]);
+  }, [isFocused, dispatch]);
 
   const handleRefresh = async () => {
     setRefreshing(true);

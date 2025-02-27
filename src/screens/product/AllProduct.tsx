@@ -83,7 +83,11 @@ export default function AllProduct() {
             title={item.title}
             price={"$" + item.price.toString()}
             originalPrice={"$" + item.costPrice.toString()}
-            image={item.images.length > 0 ? item.images[0] : ""}
+            image={
+              item.images.length > 0
+                ? item.images[0]
+                : "https://images.unsplash.com/photo-1628842456883-f8d529168be9"
+            }
             isDiscounted={false}
             discount={"0"}
             onPress={() =>

@@ -11,6 +11,7 @@ import FlashShowAll from "./src/components/flash/FlashShowAll";
 import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
 import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
+import Category from "./src/screens/category/CategoryPage";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -22,6 +23,7 @@ export type RootStackParamList = {
   FlashShowAll: undefined;
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
+  Category: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -85,6 +87,15 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "Product Details",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="Category"
+          component={Category}
+          options={{
+            headerShown: true,
+            title: "",
             headerBackTitle: "Back",
           }}
         />
