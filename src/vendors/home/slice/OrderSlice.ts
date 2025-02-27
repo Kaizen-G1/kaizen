@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import config from "../../../../config/config";
+import config from "../../../config/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface Product {

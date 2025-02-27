@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { Text, Button, Chip } from "react-native-paper";
-import Header from "../../../components/vendor/V-header";
-import { useAppDispatch, useAppSelector } from "../../../services/constants";
+import Header from "../../components/vendor/V-header";
+import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { getOrdersThunk, Order } from "./slice/OrderSlice";
 
 const getStatusStyle = (status: string) => {
