@@ -66,7 +66,14 @@ export const getProductThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const vendorId = await AsyncStorage.getItem("vendorId");
-      const response = await http.get(`/api/v1/company/products/${vendorId}`);
+      const role = await AsyncStorage.getItem("userRole");
+
+      const baseUrl =
+        role?.toLowerCase() === "company"
+          ? `/api/v1/company/products/${vendorId}`
+          : `/api/v1/company/products/productList`;
+
+      const response = await http.get(baseUrl);
 
       const data = await response.data;
 

@@ -14,6 +14,15 @@ import ProductItem from "../ProductItem";
 import FlashSaleHeader from "../FlashSaleHeader";
 import Banner from "../banner/test";
 
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../RootNavigator";
+
+type FlashShowAllNavigationProps = StackNavigationProp<
+  RootStackParamList,
+  "FlashShowAll"
+>;
+
 interface Product {
   id: string;
   title: string;
@@ -91,6 +100,8 @@ const products: Product[] = [
 ];
 
 export default function FlashShowAll() {
+  const navigation = useNavigation<FlashShowAllNavigationProps>();
+
   const [timeLeft, setTimeLeft] = useState(3600);
   const [isTimerActive, setIsTimerActive] = useState(true);
 
@@ -277,12 +288,10 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     borderColor: "#FFFFFF",
     backgroundColor: "#FFFFFF",
-    // Shadow for iOS
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.102,
     shadowRadius: 10,
-    // Elevation for Android
     elevation: 5,
   },
 

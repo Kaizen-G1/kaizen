@@ -13,9 +13,17 @@ import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../RootNavigator";
+
 const MARGIN_HORIZONTAL = 14;
 
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
 const HomeScreen = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const sliderWidth = Dimensions.get("window").width - MARGIN_HORIZONTAL * 2;
 
   const [banners, setBanners] = useState([]);
@@ -91,6 +99,7 @@ const HomeScreen = () => {
 
   const handleSeeAllNewItems = () => {
     console.log(`See all new items`);
+    navigation.navigate("AllProduct");
   };
 
   return (
