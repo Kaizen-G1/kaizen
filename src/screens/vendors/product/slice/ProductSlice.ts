@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../../../config/config";
 import { handleApiCall } from "../../../../services/reducerUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import http from "../../../../services/httpService";
 
 export interface VendorProductResponseData {
   message: string;
@@ -25,7 +26,7 @@ export interface ProductPayload {
   images: string[];
   costPrice: number;
   lowStockWarning: number;
-  category: string;
+  subCategoryId?: string;
   unit: string;
   vendorId: string;
 }
@@ -64,21 +65,15 @@ export const getProductThunk = createAsyncThunk(
   "products/productList",
   async (_, { rejectWithValue }) => {
     try {
-      const token = await AsyncStorage.getItem("accessToken");
-      const response = await fetch(
-        `${config.API_URL}/api/v1/company/products/productList`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" , "Authorization": `Bearer ${token}`},
-        }
-      );
+      const vendorId = await AsyncStorage.getItem("vendorId");
+      const response = await http.get(`/api/v1/company/products/${vendorId}`);
 
-      const data: ApiResponse = await response.json();
-      console.log(data);
+      const data = await response.data;
 
-      if (!response.ok) {
+      if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch products");
       }
+
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -86,41 +81,56 @@ export const getProductThunk = createAsyncThunk(
   }
 );
 
-// Create or update product
+// Save product
 export const saveProductThunk = createAsyncThunk(
   "product/save",
   async (payload: ProductPayload, { rejectWithValue }) => {
     try {
       const isUpdate = !!payload.id;
       const endpoint = isUpdate
-        ? `${config.API_URL}/api/v1/company/products/updateProduct/${payload.id}`
-        : `${config.API_URL}/api/v1/company/products/createProduct`;
-
+        ? `/api/v1/company/products/updateProduct/${payload.id}`
+        : `/api/v1/company/products/createProduct`;
       const method = isUpdate ? "PUT" : "POST";
-      const token = await AsyncStorage.getItem("accessToken");
 
-      const response = await fetch(endpoint, {
-        method,
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-        body: JSON.stringify(payload),
-      });
-
-      const data: ApiResponse = await response.json();
-      console.log(data);
-
-      if (!response.ok) {
-        throw new Error(
-          data?.data?.message || data?.message || "Product operation failed"
-        );
+      const formData = new FormData();
+      for (const key in payload) {
+        if (key === "images" && payload.images && payload.images.length > 0) {
+          payload.images.forEach((img: string, index: number) => {
+            if (img.startsWith("file://")) {
+              formData.append("images", {
+                uri: img,
+                name: `image_${index}.jpg`,
+                type: "image/jpeg",
+              } as any);
+            } else {
+              formData.append("images", img);
+            }
+          });
+        } else {
+          if (key === "vendorId") {
+            const vendorId = await AsyncStorage.getItem("vendorId");
+            formData.append(key, String(vendorId));
+          } else {
+            formData.append(key, String((payload as any)[key]));
+          }
+        }
       }
 
-      return data;
+      const response = await http.request({
+        url: endpoint,
+        method,
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return response.data;
     } catch (err: any) {
       return rejectWithValue(err.message);
     }
   }
 );
-
 // Delete product
 export const deleteProductThunk = createAsyncThunk(
   "product/delete",
@@ -131,7 +141,10 @@ export const deleteProductThunk = createAsyncThunk(
         `${config.API_URL}/api/v1/company/products/deleteProductById/${productId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
