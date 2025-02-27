@@ -7,7 +7,7 @@ import { Easing } from "react-native-reanimated";
 
 // Import Screens
 import HomeScreen from "../screens/home/Home"; // Customer Home
-import Home from "../vendors/home/Home"; // Vendor Dashboard
+import Home from "../screens/vendors/home/ui/OrderListScreen"; // Vendor Dashboard
 import ProductListScreen from "../screens/vendors/product/Product";
 import FlipCard from "../screens/vendors/wallet/Transaction";
 import ProfileScreen from "../screens/vendors/profile/profile";
