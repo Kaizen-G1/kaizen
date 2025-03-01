@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,20 @@ import {
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../RootNavigator";
 import { IconButton } from "react-native-paper";
+import { useAppDispatch, useAppSelector } from "../../services/constants";
+import {
+  addToWishlistThunk,
+  getWishlistThunk,
+  removeFromWishlistThunk,
+} from "../favourites/slice/WishlistSlice";
+import AlertModal from "../../components/alert/AlertCustomModal";
+
+import { useIsFocused } from "@react-navigation/native";
+import {
+  getProductThunk,
+  ProductPayload,
+} from "../vendors/product/slice/ProductSlice";
+import { get, set } from "mongoose";
 
 const { width } = Dimensions.get("window");
 
@@ -28,6 +42,29 @@ const defaultImages = [
 const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   const { product } = route.params;
 
+  const dispatch = useAppDispatch();
+  const { loading, error, success, response } = useAppSelector(
+    (state) => state.wishlist.wishlist
+  );
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(getWishlistThunk());
+    }
+  }, [dispatch, isFocused]);
+
+  const products: ProductPayload[] = response?.data.wishList || [];
+
+  const existingProduct = products.find((item) => item.id === product.id);
+
+  useEffect(() => {
+    if (existingProduct) {
+      setIsFavorite(true);
+    }
+  }, [existingProduct]);
+
   const imageUrls =
     product?.images && product.images.length > 0
       ? product.images
@@ -39,6 +76,8 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const slide = Math.floor(event.nativeEvent.contentOffset.x / width);
     if (slide !== activeIndex) {
@@ -48,10 +87,39 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 
   const toggleFavorite = () => {
     setIsFavorite((prev) => !prev);
+
+    if (isFavorite) {
+      dispatch(removeFromWishlistThunk(product));
+    } else {
+      dispatch(addToWishlistThunk(product));
+    }
+
+    setShowSuccessModal(true);
   };
+
+  if (error) {
+    setShowSuccessModal(true);
+    return (
+      <AlertModal
+        title={"Error"}
+        visible={showSuccessModal}
+        message="Something went wrong"
+        btnlabel="Try again"
+        onPress={() => getWishlistThunk()}
+        onClose={() => setShowSuccessModal(false)}
+      />
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
+      <AlertModal
+        title={loading ? "Loading" : "Success"}
+        isLoading={loading}
+        visible={showSuccessModal}
+        message={response?.data.message}
+        onClose={() => setShowSuccessModal(false)}
+      />
       {/* Image Carousel */}
       <View style={styles.carouselContainer}>
         <ScrollView

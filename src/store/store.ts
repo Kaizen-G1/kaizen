@@ -3,6 +3,7 @@ import authReducer from "../screens/authentication/slice/AuthSlice";
 import productReducer from "../screens/vendors/product/slice/ProductSlice";
 import orderReducer from "../screens/vendors/home/slice/OrderSlice";
 import categoryReducer from "../screens/category/slice/CategorySlice";
+import wishlistReducer from "../screens/favourites/slice/WishlistSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     product: productReducer,
     orders: orderReducer,
     category: categoryReducer,
+    wishlist: wishlistReducer,
   },
 });
 

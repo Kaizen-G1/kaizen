@@ -80,11 +80,7 @@ export default function NewPasswordScreen() {
         <Text style={styles.submitButtonText}>Submit</Text>
       </TouchableOpacity> */}
       <View style={{ paddingTop: 50 }}>
-        <CustomButton
-          label="Submit"
-          onPress={handleSubmit}
-          paddingHorizontal={110}
-        />
+        <CustomButton label="Submit" onPress={handleSubmit} />
       </View>
       {/* Cancel Button */}
       <TouchableOpacity>
