@@ -2,14 +2,13 @@ import { API_URL, DEBUG_MODE } from "@env";
 import { Platform } from "react-native";
 
 const getBaseURL = (apiURL: string): string => {
-  
   if (Platform.OS === "android" && apiURL.includes("localhost")) {
     return apiURL.replace("localhost", "10.0.2.2");
   }
   return apiURL;
 };
 
-const apiURL = getBaseURL(API_URL)
+const apiURL = getBaseURL(API_URL);
 
 console.log(`-----------------------------------------`);
 console.log(`[DEBUG] NODE_ENV: ${process.env.NODE_ENV}`);

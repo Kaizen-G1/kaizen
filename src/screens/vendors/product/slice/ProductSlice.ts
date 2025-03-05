@@ -23,7 +23,7 @@ export interface ProductPayload {
   inStock: number;
   price: number;
   discount: number;
-  images: string[];
+  images: Array<string> | string[];
   costPrice: number;
   lowStockWarning: number;
   subCategoryId?: string;

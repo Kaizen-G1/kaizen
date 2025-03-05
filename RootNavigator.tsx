@@ -12,6 +12,8 @@ import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
 import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
 import Category from "./src/screens/category/CategoryPage";
+import PaymentScreen from "./src/screens/payment/Payment";
+import { CartPayload } from "./src/screens/cart/slice/CartSlice";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,6 +26,10 @@ export type RootStackParamList = {
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
+  Payment: {
+    cart: CartPayload[];
+    subTotal: number;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -98,6 +104,11 @@ const RootNavigator = () => {
             title: "",
             headerBackTitle: "Back",
           }}
+        />
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ headerShown: true, headerBackTitle: "Back" }}
         />
 
         {/* Home Screen with Bottom Navigation */}

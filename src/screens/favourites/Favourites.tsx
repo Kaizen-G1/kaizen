@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  StyleSheet,
+  Text,
+  FlatList,
   Image,
-  ScrollView,
   TouchableOpacity,
-  ImageBackground,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
-
-import { Text } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+import AddIcon from "../../components/AddIcon";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import {
   getWishlistThunk,
@@ -20,53 +20,80 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import AlertModal from "../../components/alert/AlertCustomModal";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../RootNavigator";
+import CartItem from "../../components/CartItem";
+import {
+  addToCartThunk,
+  CartPayload,
+  getCartThunk,
+} from "../cart/slice/CartSlice";
 
-interface Product {
-  id: string;
-  image: string;
-  price: number;
-  discountPrice?: number;
-  color: string;
-  size: string;
-  description: string;
-}
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface RecentlyViewedItem {
-  id: string;
-  image: string;
-}
-
-const recentlyViewedData: RecentlyViewedItem[] = [
+const recentlyViewed = [
   {
     id: "1",
-    image:
-      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
   },
   {
     id: "2",
-    image:
-      "https://images.unsplash.com/photo-1542067420-a303f57c7956?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
   },
   {
     id: "3",
-    image:
-      "https://images.unsplash.com/photo-1592755704856-26c9d9ac205f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
   },
   {
     id: "4",
-    image:
-      "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
   },
   {
     id: "5",
-    image:
-      "https://images.unsplash.com/photo-1571867424486-7f2d27c2e4f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
+  },
+];
+
+const wishlistItems = [
+  {
+    id: "1",
+    image: "https://via.placeholder.com/80",
+    title: "Lorem ipsum dolor sit amet consectetur.",
+    price: "$17,00",
+    oldPrice: null,
+    color: "Pink",
+    size: "M",
+  },
+  {
+    id: "2",
+    image: "https://via.placeholder.com/80",
+    title: "Lorem ipsum dolor sit amet consectetur.",
+    price: "$12,00",
+    oldPrice: "$17,00",
+    color: "Pink",
+    size: "M",
+  },
+  {
+    id: "3",
+    image: "https://via.placeholder.com/80",
+    title: "Lorem ipsum dolor sit amet consectetur.",
+    price: "$27,00",
+    oldPrice: null,
+    color: "Pink",
+    size: "M",
+  },
+  {
+    id: "4",
+    image: "https://via.placeholder.com/80",
+    title: "Lorem ipsum dolor sit amet consectetur.",
+    price: "$19,00",
+    oldPrice: null,
+    color: "Pink",
+    size: "M",
   },
 ];
 
 type WishlistScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
-const WishlistScreen: React.FC = () => {
+const WishlistScreen = () => {
   const navigation = useNavigation<WishlistScreenProp>();
   const dispach = useAppDispatch();
 
@@ -85,192 +112,138 @@ const WishlistScreen: React.FC = () => {
   }, [dispach, isFocused]);
 
   const handleRemoveFromWishlist = async (product: ProductPayload) => {
-    await dispach(removeFromWishlistThunk(product));
-    setShowSuccessModal(true);
-    dispach(getWishlistThunk());
+    await dispach(removeFromWishlistThunk(product)).then(() => {
+      dispach(getWishlistThunk());
+    });
+    // setShowSuccessModal(true);
   };
 
+  const wishList = response?.data?.wishList || [];
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <AlertModal
-        title="Success"
-        isLoading={loading}
-        isError={!success}
         visible={showSuccessModal}
-        message="Product removed from wishlist"
+        title="Success"
+        message="Product added to Cart"
+        isLoading={loading}
         onClose={() => setShowSuccessModal(false)}
       />
-      <Text style={styles.headerTitle}>Wishlist</Text>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ marginTop: 20 }}
-      >
-        {/* Recently Viewed */}
-        <Text style={styles.sectionTitle}>Most Popular</Text>
-        <ScrollView
+
+      <Text style={styles.title}>Wishlist</Text>
+
+      <Text style={styles.subtitle}>Recently viewed</Text>
+
+      <View style={styles.recentlyViewedContainer}>
+        <FlatList
+          data={recentlyViewed}
           horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Image source={{ uri: item.image }} style={styles.recentImage} />
+          )}
           showsHorizontalScrollIndicator={false}
-          style={styles.recentlyViewedScroll}
-        >
-          {recentlyViewedData.map((item) => (
-            <View key={item.id} style={styles.avatarWrapper}>
-              <Image source={{ uri: item.image }} style={styles.avatarImage} />
-            </View>
-          ))}
-        </ScrollView>
+        />
+        <TouchableOpacity style={styles.arrowButton}>
+          <Ionicons name="arrow-forward" size={15} color="#6C3EA6" />
+        </TouchableOpacity>
+      </View>
 
-        {/* Wishlist Items */}
-        {response?.data && response?.data.wishList.length > 0 ? (
-          response?.data.wishList.map((item, index) => {
-            const hasDiscount = item.discount !== undefined;
-
-            return (
-              <TouchableOpacity
+      {wishList.length > 0 ? (
+        <FlatList<ProductPayload>
+          data={wishList}
+          keyExtractor={(item, index) =>
+            item.id ? item.id.toString() : index.toString()
+          }
+          renderItem={({ item }) => (
+            <View style={{ paddingVertical: 10, paddingHorizontal: 16 }}>
+              <CartItem
+                title={item.title}
+                price={item.price}
+                imageUrl={
+                  item.images && item.images.length > 0 ? item.images[0] : ""
+                }
+                description={item.description || "No description available"}
+                isWish={true}
                 onPress={() => {
-                  if (item.id) {
-                    navigation.navigate("ProductDetails", {
-                      productId: item.id,
-                      product: item,
-                    });
-                  }
+                  navigation.navigate("ProductDetails", {
+                    productId: item.id!,
+                    product: item,
+                  });
                 }}
-              >
-                <View
-                  key={item.id ? item.id.toString() : index.toString()}
-                  style={styles.itemCard}
-                >
-                  <View style={styles.itemInfo}>
-                    {/* Price Row */}
-                    <View style={styles.priceRow}>
-                      {hasDiscount ? (
-                        <>
-                          <Text style={styles.oldPrice}>${item.costPrice}</Text>
-                          <Text style={styles.newPrice}>
-                            ${item.discount?.toString()}
-                          </Text>
-                        </>
-                      ) : (
-                        <Text style={styles.newPrice}>${item.price}</Text>
-                      )}
-                    </View>
-
-                    <Text style={styles.description}>{item.description}</Text>
-                    <Text style={styles.metaText}>
-                      {item.inStock} | {item.unit}
-                    </Text>
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.iconButton}
-                    onPress={() => handleRemoveFromWishlist(item)}
-                  >
-                    <Ionicons name={"heart"} size={22} color={"red"} />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-            );
-          })
-        ) : (
-          <Text style={styles.headerTitle}>No items in wishlist</Text>
-        )}
-      </ScrollView>
-    </View>
+                onWishPress={async () => {
+                  const customerId = await AsyncStorage.getItem("vendorId");
+                  const cart: CartPayload = {
+                    id: "",
+                    customerId: customerId || "",
+                    productId: item.id!,
+                    quantity: 1,
+                    status: "active",
+                    product: item,
+                  };
+                  dispach(addToCartThunk(cart));
+                  dispach(getCartThunk());
+                  setShowSuccessModal(true);
+                }}
+                onRemove={() => handleRemoveFromWishlist(item)}
+              />
+            </View>
+          )}
+          scrollEnabled={false}
+        />
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No items in wishlist</Text>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
-export default WishlistScreen;
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-    paddingHorizontal: 20,
+    backgroundColor: "#fff",
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  headerTitle: {
+  title: {
+    paddingHorizontal: 16,
     fontSize: 24,
     fontWeight: "bold",
+    marginBottom: 10,
+    color: "#000",
   },
-  headerIcon: {
-    padding: 4,
-  },
-
-  /* Section Title */
-  sectionTitle: {
+  subtitle: {
+    paddingHorizontal: 16,
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 10,
   },
-
-  /* Recently Viewed */
-  recentlyViewedScroll: {
+  recentlyViewedContainer: {
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
-  avatarWrapper: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    overflow: "hidden",
+  recentImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     marginRight: 10,
   },
-  avatarImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
+  arrowButton: {
+    padding: 8,
+    backgroundColor: "#EAEAEA",
+    borderRadius: 20,
   },
-
-  /* Wishlist Items */
-  itemCard: {
-    flexDirection: "row",
-    backgroundColor: "#F9F9F9",
-    borderRadius: 8,
-    marginBottom: 15,
-    padding: 10,
-    alignItems: "center",
-  },
-  itemImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 6,
-    marginRight: 10,
-    resizeMode: "cover",
-  },
-  itemInfo: {
+  emptyContainer: {
     flex: 1,
     justifyContent: "center",
-  },
-  priceRow: {
-    flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5,
   },
-  oldPrice: {
-    fontSize: 14,
-    color: "#999",
-    textDecorationLine: "line-through",
-    marginRight: 6,
-  },
-  newPrice: {
-    fontSize: 16,
+  emptyText: {
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
-  },
-  description: {
-    fontSize: 14,
     color: "#333",
-    marginBottom: 4,
-  },
-  metaText: {
-    fontSize: 12,
-    color: "#666",
-  },
-  iconButton: {
-    marginLeft: 10,
-    padding: 4,
   },
 });
+
+export default WishlistScreen;
