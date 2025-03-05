@@ -77,7 +77,10 @@ export default function FlashSaleScreen() {
         minutes={minutes}
         remainingSeconds={remainingSeconds}
       />
-      <TouchableOpacity onPress={() => navigation.navigate("FlashShowAll")}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate("FlashShowAll")}
+      >
         <FlatList
           style={{ paddingHorizontal: 20, paddingVertical: 10 }}
           data={DUMMY_DATA}
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.102,
     shadowRadius: 10,
-    elevation: 10,
+    elevation: 5,
   },
   imageWrapper: {
     padding: 5,

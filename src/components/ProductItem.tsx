@@ -25,7 +25,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
 }) => {
   return (
     <View style={styles.productCard}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
         <View style={styles.productImageContainer}>
           <Image source={{ uri: image }} style={styles.productImage} />
           {isDiscounted && <DiscountBadge discountPercentage={discount} />}

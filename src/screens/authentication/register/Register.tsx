@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, Alert } from "react-native";
+import { View, StyleSheet, Dimensions, Alert } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
-import { TextInput, Button, IconButton } from "react-native-paper"; // Import Paper components
+import {
+  TextInput,
+  Button,
+  IconButton,
+  Text,
+  PaperProvider,
+} from "react-native-paper";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import { registerUser } from "../slice/AuthSlice";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("screen");
 
@@ -54,99 +61,103 @@ function CreateAccountScreen({ navigation }: RegisterProps) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Create Account</Text>
 
-      <View style={styles.photoContainer}>
-        <IconButton
-          icon="camera-outline"
-          size={32}
-          iconColor="#753742"
-          onPress={() => {}}
-        />
-      </View>
+        <View style={styles.photoContainer}>
+          <IconButton
+            icon="camera-outline"
+            size={32}
+            iconColor="#753742"
+            onPress={() => {}}
+          />
+        </View>
 
-      <TextInput
-        style={[styles.input, styles.textInput]}
-        label="Name"
-        placeholder="Enter your name"
-        mode="outlined"
-        activeOutlineColor="#753742"
-        outlineColor="transparent"
-        selectionColor="#753742"
-        placeholderTextColor="#BEBEBE"
-        value={formData.name}
-        onChangeText={(value) => handleInputChange("name", value)}
-        outlineStyle={{ borderRadius: 59.29 }}
-      />
-
-      <TextInput
-        style={[styles.input, styles.textInput]}
-        label="Email"
-        placeholder="Enter your email"
-        mode="outlined"
-        activeOutlineColor="#753742"
-        outlineColor="transparent"
-        selectionColor="#753742"
-        placeholderTextColor="#BEBEBE"
-        value={formData.email}
-        onChangeText={(value) => handleInputChange("email", value)}
-        outlineStyle={{ borderRadius: 59.29 }}
-      />
-
-      <View style={styles.phoneContainer}>
-        <TextInput
-          style={[styles.phoneInput, styles.textInput]}
-          label="Your number"
-          placeholder="Enter your phone number"
-          mode="outlined"
-          activeOutlineColor="#753742"
-          outlineColor="transparent"
-          selectionColor="#753742"
-          placeholderTextColor="#BEBEBE"
-          value={formData.phone}
-          onChangeText={(value) => handleInputChange("phone", value)}
-          theme={{ colors: { background: "#F8F8F8" } }}
-          left={
-            <TextInput.Icon
-              icon={() => <Entypo name="old-phone" size={24} color="black" />}
-            />
-          }
-          outlineStyle={{ borderRadius: 59.29 }}
-        />
-      </View>
-
-      <View style={[styles.passwordContainer, { position: "relative" }]}>
         <TextInput
           style={[styles.input, styles.textInput]}
-          label="Password"
-          placeholder="Enter your password"
-          secureTextEntry={true}
+          label="Name"
+          placeholder="Enter your name"
           mode="outlined"
           activeOutlineColor="#753742"
           outlineColor="transparent"
           selectionColor="#753742"
-          value={formData.password}
-          onChangeText={(value) => handleInputChange("password", value)}
           placeholderTextColor="#BEBEBE"
-          outlineStyle={{ borderRadius: 59.29 }} // Rounded corners
+          value={formData.name}
+          onChangeText={(value) => handleInputChange("name", value)}
+          outlineStyle={{ borderRadius: 59.29 }}
         />
-        <IconButton
-          icon="eye-off-outline"
-          size={20}
-          style={{
-            position: "absolute",
-            right: 10,
-            top: "30%",
-            transform: [{ translateY: -10 }],
-          }}
-          onPress={() => {}}
-        />
-      </View>
 
-      <CustomButton label="Done" onPress={handleSubmit} loading={loading} />
-      <CustomButton label="Cancel" onPress={handleCancel} type="secondary" />
-    </View>
+        <TextInput
+          style={[styles.input, styles.textInput]}
+          label="Email"
+          placeholder="Enter your email"
+          mode="outlined"
+          keyboardType="email-address"
+          activeOutlineColor="#753742"
+          outlineColor="transparent"
+          selectionColor="#753742"
+          placeholderTextColor="#BEBEBE"
+          value={formData.email}
+          onChangeText={(value) => handleInputChange("email", value)}
+          outlineStyle={{ borderRadius: 59.29 }}
+        />
+
+        <View style={styles.phoneContainer}>
+          <TextInput
+            style={[styles.phoneInput, styles.textInput]}
+            label="Your number"
+            placeholder="Enter your phone number"
+            mode="outlined"
+            keyboardType="numeric"
+            activeOutlineColor="#753742"
+            outlineColor="transparent"
+            selectionColor="#753742"
+            placeholderTextColor="#BEBEBE"
+            value={formData.phone}
+            onChangeText={(value) => handleInputChange("phone", value)}
+            theme={{ colors: { background: "#F8F8F8" } }}
+            left={
+              <TextInput.Icon
+                icon={() => <Entypo name="old-phone" size={24} color="black" />}
+              />
+            }
+            outlineStyle={{ borderRadius: 59.29 }}
+          />
+        </View>
+
+        <View style={[styles.passwordContainer, { position: "relative" }]}>
+          <TextInput
+            style={[styles.input, styles.textInput]}
+            label="Password"
+            placeholder="Enter your password"
+            secureTextEntry={true}
+            mode="outlined"
+            activeOutlineColor="#753742"
+            outlineColor="transparent"
+            selectionColor="#753742"
+            value={formData.password}
+            onChangeText={(value) => handleInputChange("password", value)}
+            placeholderTextColor="#BEBEBE"
+            outlineStyle={{ borderRadius: 59.29 }} // Rounded corners
+          />
+          <IconButton
+            icon="eye-off-outline"
+            size={20}
+            style={{
+              position: "absolute",
+              right: 10,
+              top: "30%",
+              transform: [{ translateY: -10 }],
+            }}
+            onPress={() => {}}
+          />
+        </View>
+
+        <CustomButton label="Done" onPress={handleSubmit} loading={loading} />
+        <CustomButton label="Cancel" onPress={handleCancel} type="secondary" />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -156,9 +167,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
-    paddingTop: 0,
     position: "relative",
-    paddingVertical: 20,
+
     // top: -20,
   },
   title: {
@@ -168,7 +178,6 @@ const styles = StyleSheet.create({
     lineHeight: 54,
     letterSpacing: -0.5,
     color: "#000000",
-    marginBottom: 30,
     marginTop: 40,
   },
   photoContainer: {
@@ -179,8 +188,8 @@ const styles = StyleSheet.create({
     borderColor: "#A55C2F",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 32,
     borderRadius: 50,
+    marginBottom: 10,
     marginTop: 27,
   },
   input: {
@@ -193,7 +202,7 @@ const styles = StyleSheet.create({
   },
   passwordContainer: {
     position: "relative",
-    marginBottom: 71.9,
+    marginBottom: 30,
   },
   icon: {
     position: "absolute",

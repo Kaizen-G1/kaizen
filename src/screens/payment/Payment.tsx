@@ -1,3 +1,4 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { useState } from "react";
 import {
   View,
@@ -9,15 +10,23 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  FlatList,
 } from "react-native";
 import { Badge, Banner, Icon, IconButton } from "react-native-paper";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import { RootStackParamList } from "../../../RootNavigator";
+import { set } from "mongoose";
 
-const PaymentScreen: React.FC = () => {
+type Props = StackScreenProps<RootStackParamList, "Payment">;
+
+const PaymentScreen: React.FC<Props> = ({ route }) => {
+  const { cart, subTotal } = route.params;
   // Local states for shipping & contact info
+
   const [shippingAddress, setShippingAddress] = useState(
     "50 Charles Street East, Toronto ON M5C 0A6"
   );
+  const [total, setTotal] = useState(subTotal);
   const [contactPhone, setContactPhone] = useState("+1 493-200-0000");
   const [contactEmail, setContactEmail] = useState("romania@example.com");
 
@@ -33,13 +42,18 @@ const PaymentScreen: React.FC = () => {
   // Handlers for shipping selection
   const handleShippingSelect = (option: "standard" | "express") => {
     setSelectedShipping(option);
+    if (option === "standard") {
+      setTotal(subTotal);
+    } else if (option === "express") {
+      setTotal(subTotal + 12.0);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Page Title */}
-        <Text style={styles.headerTitle}>Payment</Text>
+        {/* <Text style={styles.headerTitle}>Payment</Text> */}
 
         {/* SHIPPING ADDRESS */}
         <View style={styles.sectionContainer}>
@@ -82,40 +96,28 @@ const PaymentScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Item 1 */}
-          <View style={styles.itemRow}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1574201635302-388dd92a4c3f",
-              }}
-              style={styles.itemImage}
-            />
-            <Badge style={styles.badge}>1</Badge>
+          <FlatList
+            scrollEnabled={false}
+            data={cart}
+            renderItem={({ item }) => (
+              <View style={styles.itemRow}>
+                <Image
+                  source={{
+                    uri: (item.product.images && item.product.images[0]) || "",
+                  }}
+                  style={styles.itemImage}
+                />
+                <Badge style={styles.badge}>{item.quantity}</Badge>
 
-            <View style={styles.itemInfo}>
-              <Text style={styles.itemName}>
-                Lorem ipsum dolor sit amet consectetur.
-              </Text>
-            </View>
-            <Text style={styles.itemPrice}>$17.00</Text>
-          </View>
-
-          {/* Item 2 */}
-          <View style={styles.itemRow}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1574201635302-388dd92a4c3f",
-              }}
-              style={styles.itemImage}
-            />
-            <Badge style={styles.badge}>2</Badge>
-            <View style={styles.itemInfo}>
-              <Text style={styles.itemName}>
-                Lorem ipsum dolor sit amet consectetur.
-              </Text>
-            </View>
-            <Text style={styles.itemPrice}>$17.00</Text>
-          </View>
+                <View style={styles.itemInfo}>
+                  <Text style={styles.itemName}>
+                    {item.product.title || "Lorem ipsum dolor sit amet."}
+                  </Text>
+                </View>
+                <Text style={styles.itemPrice}>${item.product.price}</Text>
+              </View>
+            )}
+          />
         </View>
 
         {/* SHIPPING OPTIONS */}
@@ -185,7 +187,7 @@ const PaymentScreen: React.FC = () => {
         <View style={styles.footerContainer}>
           <View style={styles.totalContainer}>
             <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalAmount}>$34.00</Text>
+            <Text style={styles.totalAmount}>${total}</Text>
           </View>
           <CustomButton label="Pay" type="primary" onPress={() => {}} />
         </View>
@@ -274,6 +276,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    marginTop: 50,
   },
   scrollContainer: {
     paddingHorizontal: 16,
@@ -288,7 +291,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 24,
     padding: 16,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: "#F6F6F6",
     borderRadius: 8,
   },
   sectionTitleRow: {
@@ -366,6 +369,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 6,
+    backgroundColor: "#fff",
+    padding: 4,
     marginRight: 10,
   },
   itemInfo: {
