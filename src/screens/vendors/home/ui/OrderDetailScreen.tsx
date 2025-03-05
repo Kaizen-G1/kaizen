@@ -16,6 +16,11 @@ export default function OrderDetailScreen() {
     dispatch(fetchOrderById(orderId));
   }, [dispatch, orderId]);
 
+  useEffect(() => {
+    if (selectedOrder) {
+    }
+  }, [selectedOrder]);
+
   if (loading || !selectedOrder) {
     return <ActivityIndicator size="large" style={{ marginTop: 20 }} />;
   }
@@ -24,15 +29,13 @@ export default function OrderDetailScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>{selectedOrder.customer_id}</Text>
       <Text style={styles.info}>Order ID: {selectedOrder.id}</Text>
-      {/* {.toFixed(2)} TODO: Check price formtting */}
-      {/* <Text style={styles.info}>Total Price: ${selectedOrder.total_price.toString()}</Text> */}
+      <Text style={styles.info}>Total Price: ${selectedOrder.total_price.toFixed(2)}</Text>
 
-      {/* {selectedOrder.products.map((product, index) => (
+      {selectedOrder.products.map((product, index) => (
         <Text key={index} style={styles.product}>
           {product.product_name || product.product_id} (x{product.quantity})
         </Text>
-      ))} */}
-
+      ))}
       <Button mode="contained" style={styles.button} onPress={() => console.log("Update order")}>
         Update Order
       </Button>

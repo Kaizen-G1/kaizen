@@ -34,7 +34,7 @@ class OrderRepository {
           },
         }
       );
-      return response.data;
+      return response.data.data.orders;
     } catch (error) {
       throw new Error("Failed to fetch order details");
     }
