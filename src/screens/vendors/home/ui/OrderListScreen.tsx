@@ -1,12 +1,20 @@
 import React from "react";
-import { View, FlatList, ScrollView, ActivityIndicator } from "react-native";
+import { View, FlatList, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Text, Chip } from "react-native-paper";
 import Header from "../../../../components/vendor/V-header";
 import { useOrderViewModel } from "../viewmodel/OrderViewModel";
 import OrderItem from "./components/OrderItem";
 import { styles } from "./styles";
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../../../RootNavigator";
 
+type ProductScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 export default function OrderListScreen() {
+  const navigation = useNavigation<ProductScreenNavigationProp>();
   const { orders, loading, error, searchQuery, setSearchQuery, selectedFilter, setSelectedFilter } = useOrderViewModel();
 
   if (loading) return <ActivityIndicator size="large" color="#753742" style={{ marginTop: 20 }} />;
@@ -39,7 +47,12 @@ export default function OrderListScreen() {
           data={orders}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
-          renderItem={({ item }) => <OrderItem order={item} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity 
+              onPress={() => navigation.navigate("OrderDetail", { orderId: item.id })}>
+              <OrderItem order={item} />
+            </TouchableOpacity>
+          )}
         />
       </View>
     </ScrollView>

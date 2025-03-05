@@ -8,6 +8,7 @@ import OTPScreen from "./src/screens/authentication/recovery/Otp";
 import Login from "./src/screens/authentication/login/login";
 import AddProduct from "./src/components/AddOrUpdateProduct";
 import FlashShowAll from "./src/components/flash/FlashShowAll";
+import OrderDetailScreen from "./src/screens/vendors/home/ui/OrderDetailScreen";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   OTP: { email: string };
   AddProduct: { mode: "add" | "update"; initialData?: any };
   FlashShowAll: undefined;
+  OrderDetail: { orderId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -56,7 +58,15 @@ const RootNavigator = () => {
             headerBackTitle: "Back",
           }}
         />
-
+        <Stack.Screen
+          name="OrderDetail"
+          component={OrderDetailScreen}
+          options={{
+            headerShown: true,
+            title: "",
+            headerBackTitle: "Back",
+          }}
+        />
         {/* Home Screen with Bottom Navigation */}
         <Stack.Screen name="Home" options={{ headerShown: false }}>
           {({ route }) => (
