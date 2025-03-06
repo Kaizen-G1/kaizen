@@ -13,6 +13,8 @@ import ProductDetailsPage from "./src/screens/product/ProductDetails";
 import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
 import Category from "./src/screens/category/CategoryPage";
 import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUpdateVendorDetail";
+import PaymentScreen from "./src/screens/payment/Payment";
+import { CartPayload } from "./src/screens/cart/slice/CartSlice";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -26,6 +28,10 @@ export type RootStackParamList = {
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
   AddOrUpdateVendor: { mode: "add" | "update"; initialData?: any };
+  Payment: {
+    cart: CartPayload[];
+    subTotal: number;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -102,7 +108,6 @@ const RootNavigator = () => {
             headerBackTitle: "Back",
           }}
         />
-        
         <Stack.Screen
           name="AddOrUpdateVendor"
           component={AddOrUpdateVendorDetail}
@@ -111,6 +116,10 @@ const RootNavigator = () => {
             title: "",
             headerBackTitle: "Back",
           }}
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ headerShown: true, headerBackTitle: "Back" }}
         />
 
         {/* Home Screen with Bottom Navigation */}

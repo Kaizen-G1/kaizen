@@ -23,11 +23,13 @@ import {
 import AlertModal from "../../components/alert/AlertCustomModal";
 
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   getProductThunk,
   ProductPayload,
 } from "../vendors/product/slice/ProductSlice";
 import { get, set } from "mongoose";
+import { addToCartThunk, CartPayload } from "../cart/slice/CartSlice";
 
 const { width } = Dimensions.get("window");
 
@@ -59,12 +61,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 
   const existingProduct = products.find((item) => item.id === product.id);
 
-  useEffect(() => {
-    if (existingProduct) {
-      setIsFavorite(true);
-    }
-  }, [existingProduct]);
-
   const imageUrls =
     product?.images && product.images.length > 0
       ? product.images
@@ -78,6 +74,12 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  useEffect(() => {
+    if (existingProduct) {
+      setIsFavorite(true);
+    }
+  }, [existingProduct, isFavorite]);
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const slide = Math.floor(event.nativeEvent.contentOffset.x / width);
     if (slide !== activeIndex) {
@@ -88,12 +90,20 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   const toggleFavorite = () => {
     setIsFavorite((prev) => !prev);
 
-    if (isFavorite) {
-      dispatch(removeFromWishlistThunk(product));
-    } else {
-      dispatch(addToWishlistThunk(product));
-    }
+    setShowSuccessModal(true);
+  };
 
+  const handleAddToCart = async () => {
+    const customerId = await AsyncStorage.getItem("vendorId");
+    const cart: CartPayload = {
+      id: "",
+      customerId: customerId || "",
+      productId: product.id || "",
+      quantity: 1,
+      status: "pending",
+      product: product,
+    };
+    dispatch(addToCartThunk(cart));
     setShowSuccessModal(true);
   };
 
@@ -165,7 +175,14 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
             icon={isFavorite ? "heart" : "heart-outline"}
             iconColor={isFavorite ? "#BC6C25" : "gray"}
             size={30}
-            onPress={toggleFavorite}
+            onPress={() => {
+              if (isFavorite) {
+                dispatch(removeFromWishlistThunk(product));
+              } else {
+                dispatch(addToWishlistThunk(product));
+              }
+              toggleFavorite();
+            }}
           />
         </View>
         <Text style={styles.price}>${product.price}</Text>
@@ -187,7 +204,10 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
         </View>
 
         {/* Add to Cart */}
-        <TouchableOpacity style={styles.addToCartButton}>
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={handleAddToCart}
+        >
           <Text style={styles.addToCartText}>Add to Cart</Text>
         </TouchableOpacity>
       </View>
