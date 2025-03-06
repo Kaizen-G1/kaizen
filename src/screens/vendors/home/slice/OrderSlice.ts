@@ -36,6 +36,17 @@ export const fetchOrderById = createAsyncThunk(
     }
 });
 
+export const updateOrderStatus = createAsyncThunk(
+  "orders/updateOrderStatus",
+  async ({ orderId, status }: { orderId: string; status: string }, { rejectWithValue }) => {
+    try {
+      return await OrderRepository.updateOrderStatus(orderId, status);
+    } catch (error) {
+      return rejectWithValue("Failed to update order status");
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "orders",
   initialState,
@@ -55,6 +66,24 @@ const orderSlice = createSlice({
         state.selectedOrder = action.payload;
       })
       .addCase(fetchOrderById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedOrder = action.payload;
+        state.orders = state.orders.map((order) =>
+          order.id === updatedOrder.id ? updatedOrder : order
+        );
+        if (state.selectedOrder?.id === updatedOrder.id) {
+          state.selectedOrder = updatedOrder;
+        }
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import { Text, Button, Card, List, Divider, Modal, Portal } from "react-native-paper";
 import { Picker } from '@react-native-picker/picker';
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../../../services/constants";
-import { fetchOrderById } from "../slice/OrderSlice";
+import { fetchOrderById, updateOrderStatus } from "../slice/OrderSlice";
 import { OrderStatus } from "../../../../utils/enums";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
 export default function OrderDetailScreen() {
   const route = useRoute();
+  const navigation = useNavigation();
   const { orderId } = route.params as { orderId: string };
   const dispatch = useAppDispatch();
   const { selectedOrder, loading } = useAppSelector((state) => state.orders);
@@ -38,6 +39,14 @@ export default function OrderDetailScreen() {
   const handleStatusChange = (status: OrderStatus) => {
     setSelectedStatus(status);
     setPickerVisible(false);
+  };
+
+  const handleUpdateOrder = () => {
+    if (selectedOrder) {
+      dispatch(updateOrderStatus({ orderId: selectedOrder.id, status: selectedStatus })).then(() => {
+        navigation.goBack();
+      });
+    }
   };
 
   return (
@@ -74,7 +83,7 @@ export default function OrderDetailScreen() {
                       selectedValue={selectedStatus}
                       onValueChange={(itemValue) => handleStatusChange(itemValue as OrderStatus)}
                     >
-                      {["Pending", "Awaiting Pickup", "In transit", "Complete", "Cancelled"].map((status) => (
+                      {Object.values(OrderStatus).map((status) => (
                         <Picker.Item key={status} label={status} value={status} />
                       ))}
                     </Picker>
@@ -107,7 +116,7 @@ export default function OrderDetailScreen() {
       </Card>
       <CustomButton
         label="Update Order"
-        onPress={() => { console.log("Update Order") }}
+        onPress={handleUpdateOrder}
       />
     </ScrollView>
   );
@@ -150,8 +159,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#333",
     alignSelf: "center",
-  },
-  deleteButton: {
-    backgroundColor: "#D32F2F",
   },
 });
