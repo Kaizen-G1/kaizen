@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, FlatList, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Text, Chip } from "react-native-paper";
 import Header from "../../../../components/vendor/V-header";
 import { useOrderViewModel } from "../viewmodel/OrderViewModel";
 import OrderItem from "./components/OrderItem";
 import { styles } from "./styles";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, useFocusEffect } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../RootNavigator";
+import { useAppDispatch } from "../../../../services/constants";
+import { fetchOrders } from "../slice/OrderSlice";
 
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Home"
 >;
+
 export default function OrderListScreen() {
   const navigation = useNavigation<ProductScreenNavigationProp>();
+  const dispatch = useAppDispatch();
   const { orders, loading, error, searchQuery, setSearchQuery, selectedFilter, setSelectedFilter } = useOrderViewModel();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchOrders());
+    }, [dispatch])
+  );
 
   if (loading) return <ActivityIndicator size="large" color="#753742" style={{ marginTop: 20 }} />;
   if (error) return <View style={styles.errorContainer}><Text style={{ color: "red" }}>{error}</Text></View>;
