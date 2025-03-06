@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
-import { Text, Button, Card, List, Divider, Menu } from "react-native-paper";
+import { Text, Button, Card, List, Divider, Modal, Portal } from "react-native-paper";
+import { Picker } from '@react-native-picker/picker';
 import { useRoute } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrderById } from "../slice/OrderSlice";
 import { OrderStatus } from "../../../../utils/enums";
+import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 
 export default function OrderDetailScreen() {
   const route = useRoute();
@@ -12,8 +14,8 @@ export default function OrderDetailScreen() {
   const dispatch = useAppDispatch();
   const { selectedOrder, loading } = useAppSelector((state) => state.orders);
 
-  const [statusMenuVisible, setStatusMenuVisible] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus>(OrderStatus.Unknown);
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrderById(orderId));
@@ -35,6 +37,7 @@ export default function OrderDetailScreen() {
 
   const handleStatusChange = (status: OrderStatus) => {
     setSelectedStatus(status);
+    setPickerVisible(false);
   };
 
   return (
@@ -63,30 +66,22 @@ export default function OrderDetailScreen() {
             <Divider />
             <View style={styles.statusContainer}>
               <Text style={styles.statusLabel}>Status:</Text>
-              <Menu
-                visible={statusMenuVisible}
-                onDismiss={() => setStatusMenuVisible(false)}
-                anchor={
-                  <Button
-                    mode="outlined"
-                    onPress={() => setStatusMenuVisible(true)}
-                    style={styles.statusButton}
-                  >
-                    {selectedStatus ?? "Select Status"}
-                  </Button>
-                }
-              >
-                {Object.values(OrderStatus).map((status) => (
-                  <Menu.Item
-                    key={status}
-                    onPress={() => {
-                      handleStatusChange(status);
-                      setStatusMenuVisible(false);
-                    }}
-                    title={status ?? "Unknown"}
-                  />
-                ))}
-              </Menu>
+              <Button onPress={() => setPickerVisible(true)}>{selectedStatus}</Button>
+              <Portal>
+                <Modal visible={pickerVisible} onDismiss={() => setPickerVisible(false)}>
+                  <View style={styles.pickerContainer}>
+                    <Picker
+                      selectedValue={selectedStatus}
+                      onValueChange={(itemValue) => handleStatusChange(itemValue as OrderStatus)}
+                    >
+                      {["Pending", "Awaiting Pickup", "In transit", "Complete", "Cancelled"].map((status) => (
+                        <Picker.Item key={status} label={status} value={status} />
+                      ))}
+                    </Picker>
+                    <Button onPress={() => setPickerVisible(false)}>Close</Button>
+                  </View>
+                </Modal>
+              </Portal>
             </View>
           </List.Section>
         </Card.Content>
@@ -110,22 +105,10 @@ export default function OrderDetailScreen() {
           ))}
         </Card.Content>
       </Card>
-
-      <Button
-        mode="contained"
-        style={styles.button}
-        icon="pencil"
-      >
-        Update Order
-      </Button>
-
-      <Button
-        mode="contained"
-        style={[styles.button, styles.deleteButton]}
-        icon="delete"
-      >
-        Delete Order
-      </Button>
+      <CustomButton
+        label="Update Order"
+        onPress={() => { console.log("Update Order") }}
+      />
     </ScrollView>
   );
 }
@@ -154,21 +137,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   statusLabel: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     marginRight: 10,
   },
-  statusButton: {
-    borderColor: "#888",
+  pickerContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
   },
   price: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
     alignSelf: "center",
-  },
-  button: {
-    marginTop: 15,
-    borderRadius: 8,
   },
   deleteButton: {
     backgroundColor: "#D32F2F",
