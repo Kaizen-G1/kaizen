@@ -6,6 +6,7 @@ interface OrderState {
   orders: Order[];
   selectedOrder: Order | null;
   loading: boolean;
+  updating: boolean;
   error: string | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: OrderState = {
   orders: [],
   selectedOrder: null,
   loading: false,
+  updating: false,
   error: null,
 };
 
@@ -70,11 +72,11 @@ const orderSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(updateOrderStatus.pending, (state) => {
-        state.loading = true;
+        state.updating = true;
         state.error = null;
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
-        state.loading = false;
+        state.updating = false;
         const updatedOrder = action.payload;
         state.orders = state.orders.map((order) =>
           order.id === updatedOrder.id ? updatedOrder : order
@@ -84,7 +86,7 @@ const orderSlice = createSlice({
         }
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
-        state.loading = false;
+        state.updating = false;
         state.error = action.payload as string;
       });
   },
