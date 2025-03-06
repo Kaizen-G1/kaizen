@@ -45,7 +45,6 @@ export default function AllProduct() {
   }, [dispatch, isFocused]);
 
   const products: ProductPayload[] = response?.data.products || [];
-
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );

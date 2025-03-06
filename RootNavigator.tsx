@@ -12,6 +12,7 @@ import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
 import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
 import Category from "./src/screens/category/CategoryPage";
+import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUpdateVendorDetail";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -24,11 +25,13 @@ export type RootStackParamList = {
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
+  AddOrUpdateVendor: { mode: "add" | "update"; initialData?: any };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -93,6 +96,16 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Category"
           component={Category}
+          options={{
+            headerShown: true,
+            title: "",
+            headerBackTitle: "Back",
+          }}
+        />
+        
+        <Stack.Screen
+          name="AddOrUpdateVendor"
+          component={AddOrUpdateVendorDetail}
           options={{
             headerShown: true,
             title: "",
