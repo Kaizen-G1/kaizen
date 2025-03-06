@@ -4,7 +4,7 @@ import { IconButton } from "react-native-paper";
 import AddIcon from "../AddIcon";
 
 const Counter = ({
-  quantity = 1, // Default quantity
+  quantity = 1,
   onChangeQuantity,
   isWish = false,
   onWishPress,
@@ -16,7 +16,6 @@ const Counter = ({
 }) => {
   const [inputValue, setInputValue] = useState(quantity.toString());
 
-  // Sync internal state when quantity changes externally
   useEffect(() => {
     setInputValue(quantity.toString());
   }, [quantity]);

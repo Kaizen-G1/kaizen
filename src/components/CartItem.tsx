@@ -31,7 +31,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const [quantity, setQuantity] = useState(initialQuantity);
 
   useEffect(() => {
-    setQuantity(initialQuantity); // Sync state when `initialQuantity` changes
+    setQuantity(initialQuantity);
   }, [initialQuantity]);
 
   const handleQuantityChange = (newCount: number) => {
@@ -68,7 +68,7 @@ const CartItem: React.FC<CartItemProps> = ({
           <Text style={styles.price}>${price}</Text>
           <Counter
             isWish={isWish}
-            quantity={quantity} // Ensure it's properly passed
+            quantity={quantity}
             onWishPress={onWishPress}
             onChangeQuantity={handleQuantityChange}
           />
