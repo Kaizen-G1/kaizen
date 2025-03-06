@@ -38,6 +38,8 @@
     "react-redux": "^9.2.0",
     "tailwind-rn": "^4.2.0",
     "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git",
+    "expo-image-picker": "~16.0.6",
+    "expo-image-manipulator": "~13.0.6"
     "react-native-svg": "15.8.0"
   },
   "devDependencies": {
