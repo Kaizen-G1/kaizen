@@ -45,7 +45,7 @@ const HomeScreen = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const { data } = await http.get("/api/v1/customer/dashboard");
+        const { data } = await http.get("/api/v1/customers/dashboard");
 
         // Getting active banners
         const activeBanners = data.banners

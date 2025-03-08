@@ -8,6 +8,7 @@ import OTPScreen from "./src/screens/authentication/recovery/Otp";
 import Login from "./src/screens/authentication/login/login";
 import AddProduct from "./src/components/AddOrUpdateProduct";
 import FlashShowAll from "./src/components/flash/FlashShowAll";
+import OrderDetailScreen from "./src/screens/vendors/home/ui/OrderDetailScreen";
 import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
 import { ProductPayload } from "./src/screens/vendors/product/slice/ProductSlice";
@@ -24,6 +25,7 @@ export type RootStackParamList = {
   OTP: { email: string };
   AddProduct: { mode: "add" | "update"; initialData?: any };
   FlashShowAll: undefined;
+  OrderDetail: { orderId: string };
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
@@ -80,6 +82,11 @@ const RootNavigator = () => {
         />
 
         <Stack.Screen
+          name="OrderDetail"
+          component={OrderDetailScreen}
+        />
+
+        <Stack.Screen
           name="AllProduct"
           component={AllProductPage}
           options={{
@@ -108,6 +115,7 @@ const RootNavigator = () => {
             headerBackTitle: "Back",
           }}
         />
+
         <Stack.Screen
           name="AddOrUpdateVendor"
           component={AddOrUpdateVendorDetail}
@@ -116,6 +124,8 @@ const RootNavigator = () => {
             title: "",
             headerBackTitle: "Back",
           }}
+        />
+
         <Stack.Screen
           name="Payment"
           component={PaymentScreen}

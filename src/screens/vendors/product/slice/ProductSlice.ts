@@ -70,9 +70,8 @@ export const getProductThunk = createAsyncThunk(
 
       const baseUrl =
         role?.toLowerCase() === "company"
-          ? `/api/v1/company/products/${vendorId}`
-          : `/api/v1/company/products/productList`;
-
+          ? `/api/v1/companies/products/${vendorId}`
+          : `/api/v1/companies/products/productList`;
       const response = await http.get(baseUrl);
 
       const data = await response.data;
@@ -95,10 +94,9 @@ export const saveProductThunk = createAsyncThunk(
     try {
       const isUpdate = !!payload.id;
       const endpoint = isUpdate
-        ? `/api/v1/company/products/updateProduct/${payload.id}`
-        : `/api/v1/company/products/createProduct`;
+        ? `/api/v1/companies/products/updateProduct/${payload.id}`
+        : `/api/v1/companies/products/createProduct`;
       const method = isUpdate ? "PUT" : "POST";
-
       const formData = new FormData();
       for (const key in payload) {
         if (key === "images" && payload.images && payload.images.length > 0) {
@@ -145,7 +143,7 @@ export const deleteProductThunk = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(
-        `${config.API_URL}/api/v1/company/products/deleteProductById/${productId}`,
+        `${config.API_URL}/api/v1/companies/products/deleteProductById/${productId}`,
         {
           method: "DELETE",
           headers: {
