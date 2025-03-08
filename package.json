@@ -22,6 +22,8 @@
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
     "expo": "~52.0.25",
+    "expo-image-manipulator": "^13.0.6",
+    "expo-image-picker": "^16.0.6",
     "expo-linear-gradient": "^14.0.2",
     "expo-status-bar": "~2.0.1",
     "jwt-decode": "^4.0.0",
@@ -36,7 +38,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
     "tailwind-rn": "^4.2.0",
-    "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git"
+    "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git",
+    "react-native-svg": "15.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

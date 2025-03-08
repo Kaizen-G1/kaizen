@@ -1,15 +1,15 @@
 import React from "react";
 import {
   View,
-  Text,
   Image,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { Divider } from "react-native-paper";
+import { Divider, Icon, Text } from "react-native-paper";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("screen");
 type SplashScreenProps = {
@@ -41,13 +41,14 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
           label="Get Started"
           onPress={() => navigation.navigate("Register")}
         />
+
         <TouchableOpacity
           style={styles.accountButton}
           onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.accountText}>I already have an account</Text>
           <View style={styles.arrowCircle}>
-            <Text style={styles.arrow}>→</Text>
+            <Icon source="arrow-right" size={16} color="white" />
           </View>
         </TouchableOpacity>
       </View>

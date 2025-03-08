@@ -13,14 +13,9 @@ import FlipCard from "../screens/vendors/wallet/Transaction";
 import ProfileScreen from "../screens/vendors/profile/profile";
 import ProfileScreenCustomer from "../screens/profile/Profile";
 import CartScreen from "../screens/cart/Cart";
+import FavouriteScreen from "../screens/favourites/Favourites";
 
 // Placeholder screens for customers
-const FavoritesRoute = () => (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.headerText}>Favorites</Text>
-  </SafeAreaView>
-);
-
 
 const CustomBottomNavigation = ({ isVendor = false }) => {
   const [index, setIndex] = useState(0);
@@ -86,7 +81,7 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
       case "home":
         return <HomeScreen />;
       case "favorites":
-        return <FavoritesRoute />;
+        return <FavouriteScreen />;
       case "cart":
         return <CartScreen />;
       case "profile":

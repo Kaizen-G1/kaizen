@@ -13,9 +13,20 @@ import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
 
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../RootNavigator";
+import { useIsFocused } from "@react-navigation/native";
+import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
+import { useAppDispatch } from "../../services/constants";
+
 const MARGIN_HORIZONTAL = 14;
 
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
 const HomeScreen = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
   const sliderWidth = Dimensions.get("window").width - MARGIN_HORIZONTAL * 2;
 
   const [banners, setBanners] = useState([]);
@@ -23,7 +34,15 @@ const HomeScreen = () => {
   const [topProducts, setTopProducts] = useState([]);
   const [newItems, setNewItems] = useState([]);
 
+  const isFocused = useIsFocused();
+
+  const dispach = useAppDispatch();
+
   useEffect(() => {
+    if (isFocused) {
+      dispach(getWishlistThunk());
+    }
+
     const fetchDashboardData = async () => {
       try {
         const { data } = await http.get("/api/v1/customers/dashboard");
@@ -91,6 +110,7 @@ const HomeScreen = () => {
 
   const handleSeeAllNewItems = () => {
     console.log(`See all new items`);
+    navigation.navigate("AllProduct");
   };
 
   return (

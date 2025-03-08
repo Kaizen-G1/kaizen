@@ -8,7 +8,29 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RootStackParamList } from "../../../RootNavigator";
+
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 const ProfileScreenCustomer = () => {
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  const handleLogout = async () => {
+    // TODO: Implement method on logout event
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("userEmail");
+    await AsyncStorage.removeItem("vendorId");
+    navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
@@ -19,7 +41,7 @@ const ProfileScreenCustomer = () => {
           }}
           style={styles.profileImage}
         />
-        <TouchableOpacity style={styles.activityButton}>
+        <TouchableOpacity style={styles.activityButton} onPress={handleLogout}>
           <Text style={styles.activityText}>Log Out</Text>
         </TouchableOpacity>
       </View>
