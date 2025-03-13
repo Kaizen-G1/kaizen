@@ -4,6 +4,7 @@ import http from "../../../services/httpService";
 import { ProductPayload } from "../../vendors/product/slice/ProductSlice";
 import { handleApiCall } from "../../../services/reducerUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import API_ROUTES from "../../../api/apiRoutes";
 
 export interface WishlistResponseData {
   message: string;
@@ -29,9 +30,7 @@ export const getWishlistThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.get(
-        `/api/v1/customer/wishlist/${customerId}`
-      );
+      const response = await http.get(API_ROUTES.wishlist.getWishlist(`${customerId}`));
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
@@ -50,9 +49,7 @@ export const addToWishlistThunk = createAsyncThunk(
   async (payload: ProductPayload, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.post(
-        `/api/v1/customer/wishlist/${customerId}`,
-        {
+      const response = await http.post(API_ROUTES.wishlist.getWishlist(`${customerId}`), {
           productId: payload.id,
         }
       );
@@ -74,9 +71,7 @@ export const removeFromWishlistThunk = createAsyncThunk(
   async (payload: ProductPayload, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.delete(
-        `/api/v1/customer/wishlist/${customerId}`,
-        {
+      const response = await http.delete(API_ROUTES.wishlist.getWishlist(`${customerId}`),{
           data: { productId: payload.id },
         }
       );

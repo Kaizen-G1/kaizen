@@ -1,9 +1,9 @@
 import { ApiResponse, ExtendedApiState } from "../../../../services/apiState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import config from "../../../../config/config";
 import { handleApiCall } from "../../../../services/reducerUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import http from "../../../../services/httpService";
+import API_ROUTES from "../../../../api/apiRoutes";
 
 export interface VendorProductResponseData {
   message: string;
@@ -70,8 +70,8 @@ export const getProductThunk = createAsyncThunk(
 
       const baseUrl =
         role?.toLowerCase() === "company"
-          ? `/api/v1/companies/products/${vendorId}`
-          : `/api/v1/companies/products/productList`;
+          ? API_ROUTES.products.get(`${vendorId}`)
+          : API_ROUTES.products.getAll;
       const response = await http.get(baseUrl);
 
       const data = await response.data;
@@ -94,8 +94,8 @@ export const saveProductThunk = createAsyncThunk(
     try {
       const isUpdate = !!payload.id;
       const endpoint = isUpdate
-        ? `/api/v1/companies/products/updateProduct/${payload.id}`
-        : `/api/v1/companies/products/createProduct`;
+        ? API_ROUTES.products.update(`${payload.id}`)
+        : API_ROUTES.products.create;
       const method = isUpdate ? "PUT" : "POST";
       const formData = new FormData();
       for (const key in payload) {
@@ -142,9 +142,7 @@ export const deleteProductThunk = createAsyncThunk(
   async (productId: string, { rejectWithValue }) => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
-      const response = await fetch(
-        `${config.API_URL}/api/v1/companies/products/deleteProductById/${productId}`,
-        {
+      const response = await fetch(API_ROUTES.products.delete(productId), {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

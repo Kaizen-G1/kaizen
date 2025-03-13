@@ -1,8 +1,9 @@
-import { ApiResponse, ExtendedApiState } from "../../../../services/apiState";
+import { ExtendedApiState } from "../../../../services/apiState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import config from "../../../../config/config";
 import { handleApiCall } from "../../../../services/reducerUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import API_ROUTES from "../../../../api/apiRoutes";
 
 export interface VendorPayload {
   _id?: string;
@@ -54,9 +55,7 @@ export const getVendorsThunk = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const vendorId = await AsyncStorage.getItem("vendorId");
-      console.log("vendorId", vendorId);
-      const response = await fetch(
-        `${config.API_URL}/api/v1/company/${vendorId}`,
+      const response = await fetch(API_ROUTES.company.get(`${vendorId}`),
         {
           method: "GET",
           headers: {
@@ -95,8 +94,8 @@ export const saveVendorThunk = createAsyncThunk(
       }
 
       const endpoint = isUpdate
-        ? `${config.API_URL}/api/v1/company/${payload._id}`
-        : `${config.API_URL}/api/v1/company/`;
+        ? API_ROUTES.company.update(`${payload._id}`)
+        : API_ROUTES.company.create;
 
       const method = isUpdate ? "PUT" : "POST";
       const token = await AsyncStorage.getItem("accessToken");

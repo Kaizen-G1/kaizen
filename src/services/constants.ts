@@ -6,6 +6,3 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector = <TSelected>(
   selector: (state: RootState) => TSelected
 ) => useSelector(selector);
-
-//base URL
-export const BASE_URL = "http://localhost:3000";
