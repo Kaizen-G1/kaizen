@@ -104,7 +104,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
       product: product,
     };
     dispatch(addToCartThunk(cart));
-    setShowSuccessModal(true);
   };
 
   if (error) {
@@ -218,8 +217,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 50,
   },
   carouselContainer: {
     height: 300,

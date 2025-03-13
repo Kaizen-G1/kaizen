@@ -132,7 +132,7 @@ const WishlistScreen = () => {
 
       <Text style={styles.title}>Wishlist</Text>
 
-      <Text style={styles.subtitle}>Recently viewed</Text>
+      <Text style={styles.subtitle}>Recomended for you</Text>
 
       <View style={styles.recentlyViewedContainer}>
         <FlatList

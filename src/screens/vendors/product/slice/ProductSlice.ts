@@ -65,13 +65,7 @@ export const getProductThunk = createAsyncThunk(
   "products/productList",
   async (_, { rejectWithValue }) => {
     try {
-      const vendorId = await AsyncStorage.getItem("vendorId");
-      const role = await AsyncStorage.getItem("userRole");
-
-      const baseUrl =
-        role?.toLowerCase() === "company"
-          ? API_ROUTES.products.get(`${vendorId}`)
-          : API_ROUTES.products.getAll;
+      const baseUrl = API_ROUTES.products.getAll;
       const response = await http.get(baseUrl);
 
       const data = await response.data;
@@ -112,12 +106,12 @@ export const saveProductThunk = createAsyncThunk(
             }
           });
         } else {
-          if (key === "vendorId") {
-            const vendorId = await AsyncStorage.getItem("vendorId");
-            formData.append(key, String(vendorId));
-          } else {
-            formData.append(key, String((payload as any)[key]));
-          }
+          // if (key === "vendorId") {
+          //   const vendorId = await AsyncStorage.getItem("vendorId");
+          //   formData.append(key, String(vendorId));
+          // } else {
+          formData.append(key, String((payload as any)[key]));
+          // }
         }
       }
 
@@ -143,13 +137,12 @@ export const deleteProductThunk = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await fetch(API_ROUTES.products.delete(productId), {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data: ApiResponse = await response.json();
       console.log(data);

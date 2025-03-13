@@ -64,7 +64,7 @@ const AddOrUpdateVendorDetail: React.FC<Props> = ({ navigation, route }) => {
   return (
     <ScrollView
       style={{
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 20,
         paddingHorizontal: 16,
         backgroundColor: "#fff",
@@ -98,17 +98,30 @@ const AddOrUpdateVendorDetail: React.FC<Props> = ({ navigation, route }) => {
       </Text>
 
       {/* Form Inputs */}
-      {Object.entries(form).map(([key, value]) => (
-        <TextInput
-          key={key}
-          label={key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ")}
-          value={String(value)}
-          onChangeText={(text) => handleChange(key as keyof VendorForm, text)}
-          keyboardType={key.includes("number") ? "numeric" : "default"}
-          mode="outlined"
-          style={{ marginBottom: 12 }}
-        />
-      ))}
+      {Object.entries(form).map(([key, value]) =>
+        key !== "_id" && key !== "customer_id" ? (
+          <TextInput
+            key={key}
+            disabled={
+              (mode === "update" && key === "updated_date") ||
+              key === "created_date"
+            }
+            label={key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ")}
+            autoCapitalize={key === "name" ? "words" : "none"}
+            value={String(value)}
+            onChangeText={(text) => handleChange(key as keyof VendorForm, text)}
+            keyboardType={
+              key.includes("number")
+                ? "numeric"
+                : key === "email"
+                ? "email-address"
+                : "default"
+            }
+            mode="outlined"
+            style={{ marginBottom: 12 }}
+          />
+        ) : null
+      )}
 
       {/* Submit Button */}
       <CustomButton

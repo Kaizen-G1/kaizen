@@ -17,6 +17,12 @@ import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUp
 import PaymentScreen from "./src/screens/payment/Payment";
 import { CartPayload } from "./src/screens/cart/slice/CartSlice";
 
+import { Icon, Text } from "react-native-paper";
+import { Dimensions, Platform, View } from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
+import StripePaymentScreen from "./src/screens/payment/StriveProvider";
+
 export type RootStackParamList = {
   Splash: undefined;
   Home: { isVendor: boolean };
@@ -34,27 +40,68 @@ export type RootStackParamList = {
     cart: CartPayload[];
     subTotal: number;
   };
+  StripePayment: {
+    total: number;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => {
+const SCREEN_WIDTH = Dimensions.get("screen").height;
 
+const RootNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
-          headerTransparent: true,
+          headerTransparent: false,
+          headerTitleAlign: "center",
+          headerBackTitle: "",
+          headerBackImage: () => (
+            <>
+              <View
+                style={{
+                  // flex: 1,
+                  flexDirection: "row",
+                  backgroundColor: "white",
+                  borderRadius: 50,
+                  alignItems: "center",
+                  gap: 2,
+                  marginLeft: 2,
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                }}
+              >
+                <Ionicons
+                  name={"chevron-back"}
+                  size={Platform.OS === "ios" ? 24 : 18}
+                />
+                <Text
+                  style={{
+                    fontSize: Platform.OS === "ios" ? 18 : 14,
+                    fontWeight: "700",
+                    letterSpacing: 1.5,
+                  }}
+                >
+                  Back
+                </Text>
+              </View>
+            </>
+          ),
+          headerStyle: {
+            backgroundColor: "#BC6C25",
+            height:
+              Platform.OS === "ios" ? SCREEN_WIDTH * 0.14 : SCREEN_WIDTH * 0.12,
+          },
           headerTitleStyle: {
             fontWeight: "bold",
-            fontSize: 20,
-            color: "#000",
-            lineHeight: 20,
+            fontSize: Platform.OS === "ios" ? 24 : 20,
+            color: "#fff",
             letterSpacing: 2,
           },
-          animation: "scale_from_center",
+
           cardStyle: { backgroundColor: "#fff" },
         }}
       >
@@ -68,7 +115,6 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
-            headerBackTitle: "Back",
           }}
         />
         <Stack.Screen
@@ -77,14 +123,10 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
-            headerBackTitle: "Back",
           }}
         />
 
-        <Stack.Screen
-          name="OrderDetail"
-          component={OrderDetailScreen}
-        />
+        <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
 
         <Stack.Screen
           name="AllProduct"
@@ -92,8 +134,6 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "New Products",
-
-            headerBackTitle: "Back",
           }}
         />
 
@@ -103,7 +143,6 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "Product Details",
-            headerBackTitle: "Back",
           }}
         />
         <Stack.Screen
@@ -112,7 +151,6 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
-            headerBackTitle: "Back",
           }}
         />
 
@@ -122,14 +160,19 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
-            headerBackTitle: "Back",
           }}
         />
 
         <Stack.Screen
           name="Payment"
           component={PaymentScreen}
-          options={{ headerShown: true, headerBackTitle: "Back" }}
+          options={{ headerShown: true }}
+        />
+
+        <Stack.Screen
+          name="StripePayment"
+          component={StripePaymentScreen}
+          options={{ headerShown: true }}
         />
 
         {/* Home Screen with Bottom Navigation */}

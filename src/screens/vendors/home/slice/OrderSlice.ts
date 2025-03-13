@@ -26,7 +26,8 @@ export const fetchOrders = createAsyncThunk(
     } catch (error) {
       return rejectWithValue("Failed to fetch orders");
     }
-});
+  }
+);
 
 export const fetchOrderById = createAsyncThunk(
   "orders/fetchOrderById",
@@ -36,11 +37,15 @@ export const fetchOrderById = createAsyncThunk(
     } catch (error) {
       return rejectWithValue("Failed to fetch orders");
     }
-});
+  }
+);
 
 export const updateOrderStatus = createAsyncThunk(
   "orders/updateOrderStatus",
-  async ({ orderId, status }: { orderId: string; status: string }, { rejectWithValue }) => {
+  async (
+    { orderId, status }: { orderId: string; status: string },
+    { rejectWithValue }
+  ) => {
     try {
       return await OrderRepository.updateOrderStatus(orderId, status);
     } catch (error) {
@@ -52,7 +57,11 @@ export const updateOrderStatus = createAsyncThunk(
 const orderSlice = createSlice({
   name: "orders",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedOrder(state, action) {
+      state.selectedOrder = initialState.selectedOrder;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrders.fulfilled, (state, action) => {
@@ -91,5 +100,7 @@ const orderSlice = createSlice({
       });
   },
 });
+
+export const { setSelectedOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

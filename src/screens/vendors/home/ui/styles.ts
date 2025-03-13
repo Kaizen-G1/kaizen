@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+
     paddingVertical: 10,
     backgroundColor: "#FFF",
   },
@@ -33,8 +33,8 @@ export const styles = StyleSheet.create({
   },
 });
 
-
-export const getStatusStyle = (status: string) => { // TODO: Create enums for order status
+export const getStatusStyle = (status: string) => {
+  // TODO: Create enums for order status
   switch (status) {
     case "Pending":
       return { backgroundColor: "#315731", textColor: "#FFFFFF" };

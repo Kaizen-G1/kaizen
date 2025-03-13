@@ -16,6 +16,8 @@ import { UserRole } from "../../../utils/enums";
 import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 
+import API_ROUTES from "../../../api/apiRoutes";
+
 type LoginScreenProps = {
   navigation: any;
 };
@@ -31,7 +33,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     }
 
     try {
-      const response = await fetch(`${config.API_URL}/api/v1/auth/login`, {
+      const response = await fetch(API_ROUTES.auth.login, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

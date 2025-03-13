@@ -9,9 +9,12 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import AlertModal from "../../../components/alert/AlertCustomModal";
-import { getVendorsThunk, VendorPayload } from "../vendordetails/slice/VendorSlice";
-import TwoScreen from '../../list/tabs/two';
-import vendorSlice from '../vendordetails/slice/VendorSlice';
+import {
+  getVendorsThunk,
+  VendorPayload,
+} from "../vendordetails/slice/VendorSlice";
+import TwoScreen from "../../list/tabs/two";
+import vendorSlice from "../vendordetails/slice/VendorSlice";
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -25,18 +28,18 @@ const ProfileScreen = () => {
   const { error, response } = useAppSelector(
     (state) => state.vendor.vendorData
   );
-  
-    const isFocused = useIsFocused();
-    useEffect(() => {
-      if (isFocused) {
-        console.log("Fetching vendor details");
-        dispatch(getVendorsThunk());
-      }
-    }, [dispatch, isFocused]);
 
-    const vendorDetails: VendorPayload | undefined = response?.data.vendor;    
-    console.log("vendorDetails", vendorDetails);
-    
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      console.log("Fetching vendor details");
+      dispatch(getVendorsThunk());
+    }
+  }, [dispatch, isFocused]);
+
+  const vendorDetails: VendorPayload | undefined = response?.data.vendor;
+  console.log("vendorDetails", vendorDetails);
+
   const handleLogout = async () => {
     // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
@@ -49,7 +52,6 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      
       {/* {error && (
         <AlertModal
           title="Error"
@@ -69,26 +71,34 @@ const ProfileScreen = () => {
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.profileName}>{vendorDetails ? vendorDetails.name : "Business Name"}</Text>
-          <Text style={styles.profileLocation}>{vendorDetails ? vendorDetails.address : "Business Location"}</Text>
+          <Text style={styles.profileName}>
+            {vendorDetails ? vendorDetails.name : "Business Name"}
+          </Text>
+          <Text style={styles.profileLocation}>
+            {vendorDetails ? vendorDetails.address : "Business Location"}
+          </Text>
         </View>
       </View>
 
       {/* Business Setup Section */}
-      <TouchableOpacity
-        style={[styles.menuItem, vendorDetails ? styles.disabledButton : {}]}
-        disabled={!!vendorDetails} // Disable if vendor is already set up
-        onPress={() => {
-          if (!vendorDetails) {
-            navigation.navigate("AddOrUpdateVendor", { mode: "add" });
-          }
-        }}
-      >
-        <Feather name="home" size={20} color="black" />
-        <Text style={styles.setupText}>
-          {vendorDetails ? "Business Already setup" : "Let's set up your business"}
-        </Text>
-      </TouchableOpacity>
+      {!vendorDetails && (
+        <TouchableOpacity
+          style={[styles.menuItem, vendorDetails ? styles.disabledButton : {}]}
+          disabled={!!vendorDetails} // Disable if vendor is already set up
+          onPress={() => {
+            if (!vendorDetails) {
+              navigation.navigate("AddOrUpdateVendor", { mode: "add" });
+            }
+          }}
+        >
+          <Feather name="home" size={20} color="black" />
+          <Text style={styles.setupText}>
+            {vendorDetails
+              ? "Business Already setup"
+              : "Let's set up your business"}
+          </Text>
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         style={styles.menuItem}
@@ -97,7 +107,10 @@ const ProfileScreen = () => {
             alert("Business is not setup yet"); // Show alert if no vendor exists
             return;
           }
-          navigation.navigate("AddOrUpdateVendor", { mode: "update", initialData: vendorDetails });
+          navigation.navigate("AddOrUpdateVendor", {
+            mode: "update",
+            initialData: vendorDetails,
+          });
         }}
       >
         <Feather name="file-text" size={20} color="black" />
@@ -138,12 +151,12 @@ const styles = StyleSheet.create({
 
   profileName: { fontSize: 18, fontWeight: "bold" },
   profileLocation: { fontSize: 14, color: "gray" },
-  setupText: { fontSize: 16, marginLeft: 15  },
+  setupText: { fontSize: 16, marginLeft: 15 },
   menuItem: { flexDirection: "row", alignItems: "center", paddingVertical: 20 },
   menuText: { fontSize: 16, marginLeft: 15 },
   disabledButton: {
     opacity: 0.5,
-  }
+  },
 });
 
 export default ProfileScreen;

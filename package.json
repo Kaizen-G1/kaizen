@@ -20,6 +20,7 @@
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/stack": "^7.1.1",
     "@reduxjs/toolkit": "^2.5.1",
+    "@stripe/stripe-react-native": "^0.43.0",
     "axios": "^1.7.9",
     "expo": "~52.0.25",
     "expo-image-manipulator": "^13.0.6",
@@ -35,11 +36,12 @@
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.5.0",
+    "react-native-svg": "15.8.0",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
+    "socket.io-client": "^4.8.1",
     "tailwind-rn": "^4.2.0",
-    "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git",
-    "react-native-svg": "15.8.0"
+    "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

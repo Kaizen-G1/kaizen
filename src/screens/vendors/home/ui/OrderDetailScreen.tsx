@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
-import { Text, Button, Card, List, Divider, Modal, Portal } from "react-native-paper";
-import { Picker } from '@react-native-picker/picker';
+import {
+  Text,
+  Button,
+  Card,
+  List,
+  Divider,
+  Modal,
+  Portal,
+} from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrderById, updateOrderStatus } from "../slice/OrderSlice";
@@ -15,7 +23,9 @@ export default function OrderDetailScreen() {
   const dispatch = useAppDispatch();
   const { selectedOrder, loading } = useAppSelector((state) => state.orders);
 
-  const [selectedStatus, setSelectedStatus] = useState<OrderStatus>(OrderStatus.Unknown);
+  const [selectedStatus, setSelectedStatus] = useState<OrderStatus>(
+    OrderStatus.Unknown
+  );
   const [pickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
@@ -24,7 +34,9 @@ export default function OrderDetailScreen() {
 
   useEffect(() => {
     if (selectedOrder) {
-      const validStatus = Object.values(OrderStatus).includes(selectedOrder.status as OrderStatus)
+      const validStatus = Object.values(OrderStatus).includes(
+        selectedOrder.status as OrderStatus
+      )
         ? (selectedOrder.status as OrderStatus)
         : OrderStatus.Unknown;
 
@@ -43,7 +55,9 @@ export default function OrderDetailScreen() {
 
   const handleUpdateOrder = () => {
     if (selectedOrder) {
-      dispatch(updateOrderStatus({ orderId: selectedOrder.id, status: selectedStatus })).then(() => {
+      dispatch(
+        updateOrderStatus({ orderId: selectedOrder.id, status: selectedStatus })
+      ).then(() => {
         navigation.goBack();
       });
     }
@@ -75,19 +89,32 @@ export default function OrderDetailScreen() {
             <Divider />
             <View style={styles.statusContainer}>
               <Text style={styles.statusLabel}>Status:</Text>
-              <Button onPress={() => setPickerVisible(true)}>{selectedStatus}</Button>
+              <Button onPress={() => setPickerVisible(true)}>
+                {selectedStatus}
+              </Button>
               <Portal>
-                <Modal visible={pickerVisible} onDismiss={() => setPickerVisible(false)}>
+                <Modal
+                  visible={pickerVisible}
+                  onDismiss={() => setPickerVisible(false)}
+                >
                   <View style={styles.pickerContainer}>
                     <Picker
                       selectedValue={selectedStatus}
-                      onValueChange={(itemValue) => handleStatusChange(itemValue as OrderStatus)}
+                      onValueChange={(itemValue) =>
+                        handleStatusChange(itemValue as OrderStatus)
+                      }
                     >
                       {Object.values(OrderStatus).map((status) => (
-                        <Picker.Item key={status} label={status} value={status} />
+                        <Picker.Item
+                          key={status}
+                          label={status}
+                          value={status}
+                        />
                       ))}
                     </Picker>
-                    <Button onPress={() => setPickerVisible(false)}>Close</Button>
+                    <Button onPress={() => setPickerVisible(false)}>
+                      Close
+                    </Button>
                   </View>
                 </Modal>
               </Portal>
@@ -114,10 +141,7 @@ export default function OrderDetailScreen() {
           ))}
         </Card.Content>
       </Card>
-      <CustomButton
-        label="Update Order"
-        onPress={handleUpdateOrder}
-      />
+      <CustomButton label="Update Order" onPress={handleUpdateOrder} />
     </ScrollView>
   );
 }
