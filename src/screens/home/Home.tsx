@@ -99,10 +99,12 @@ const HomeScreen = () => {
 
   const handleSelectCategory = (id: string) => {
     console.log(`Selected category ID: ${id}`);
+    navigation.navigate("CategoryProducts", { categoryId: id });
   };
 
   const handleSeeAllCategories = () => {
-    console.log(`See all categories`);
+    console.log(`See all categories`);    
+    navigation.navigate("Category");
   };
 
   const handleSelectProduct = (label: string) => {

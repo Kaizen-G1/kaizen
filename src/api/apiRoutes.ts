@@ -9,6 +9,7 @@ export const API_ROUTES = {
   },
   categories: {
     getAll: `${config.API_URL}/api/v1/categories/`,
+    getWithSubcategories: `${config.API_URL}/api/v1/products/categories/subcategories/`,
     getById: (id: string) => `${config.API_URL}/api/v1/categories/${id}`,
   },
   company: {
