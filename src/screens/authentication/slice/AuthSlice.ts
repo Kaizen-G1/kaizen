@@ -3,6 +3,7 @@ import { handleApiCall } from "../../../services/reducerUtils";
 import { ExtendedApiState, ApiResponse } from "../../../services/apiState";
 import config from "../../../config/config";
 import { RegisterPayload, Verify2FAPayload } from "../authTypes";
+import API_ROUTES from "../../../api/apiRoutes";
 
 export interface RegisterResponseData {
   message: string;
@@ -37,7 +38,7 @@ export const registerUser = createAsyncThunk(
   "auth/register",
   async (payload: RegisterPayload, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${config.API_URL}/api/v1/auth/register`, {
+      const response = await fetch(API_ROUTES.auth.register, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -55,7 +56,7 @@ export const verify2FA = createAsyncThunk(
   "auth/verify2FA",
   async (payload: Verify2FAPayload, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${config.API_URL}/api/v1/auth/verify-2fa`, {
+      const response = await fetch(API_ROUTES.auth.verify2fa, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

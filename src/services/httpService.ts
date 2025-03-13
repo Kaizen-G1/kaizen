@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../config/config";
+import API_ROUTES from "../api/apiRoutes";
 
 const http: AxiosInstance = axios.create({
   baseURL: config.API_URL,
@@ -16,6 +17,7 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log(`${config.method?.toUpperCase()}: ${config.url}`);
     return config;
   },
   (error) => Promise.reject(error)
@@ -61,7 +63,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
       return null;
     }
 
-    const response = await axios.post(`${config.API_URL}/api/v1/auth/refresh`, {
+    const response = await axios.post(API_ROUTES.auth.refreshToken, {
       refreshToken,
     });
 

@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { get } from "mongoose";
 import { ExtendedApiState } from "../../../services/apiState";
 import http from "../../../services/httpService";
 import { handleApiCall } from "../../../services/reducerUtils";
+import API_ROUTES from "../../../api/apiRoutes";
 
 export interface CategoryPayload {
   id: string;
@@ -56,7 +53,7 @@ export const getCategoryThunk = createAsyncThunk(
   "categories/get",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await http.get(`/api/v1/company/categories`);
+      const response = await http.get(API_ROUTES.categories.getAll);
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
@@ -72,7 +69,7 @@ export const getCategoryByIdThunk = createAsyncThunk(
   "categories/getById",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await http.get(`/api/v1/company/categories/${id}`);
+      const response = await http.get(API_ROUTES.categories.getById(id));
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");

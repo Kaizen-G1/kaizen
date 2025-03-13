@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-native";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
-import { BASE_URL } from "../../../services/constants";
 import config from "../../../config/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";

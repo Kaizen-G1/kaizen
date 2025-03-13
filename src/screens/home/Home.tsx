@@ -19,6 +19,7 @@ import { RootStackParamList } from "../../../RootNavigator";
 import { useIsFocused } from "@react-navigation/native";
 import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
 import { useAppDispatch } from "../../services/constants";
+import API_ROUTES from "../../api/apiRoutes";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -45,7 +46,7 @@ const HomeScreen = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const { data } = await http.get("/api/v1/customers/dashboard");
+        const { data } = await http.get(API_ROUTES.dashboard.get);
 
         // Getting active banners
         const activeBanners = data.banners
