@@ -158,20 +158,11 @@ const RootNavigator = () => {
         />
 
         <Stack.Screen
-          name="CategoryProducts"
-          component={CategoryProducts}
-          options={{
-            headerShown: true,
-            title: "Product Details",
-            headerBackTitle: "Back",
-          }}
-        />
-        <Stack.Screen
           name="Category"
           component={Category}
           options={{
             headerShown: true,
-            title: "",
+            title: "Category",
           }}
         />
 

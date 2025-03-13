@@ -1,8 +1,14 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 
-import CategoryCard from 'tenzai-components/components/CategoryCard/CategoryCard';
-import CustomIcon from 'tenzai-components/components/CustomIcon/CustomIcon';
+import CategoryCard from "tenzai-components/components/CategoryCard/CategoryCard";
+import CustomIcon from "tenzai-components/components/CustomIcon/CustomIcon";
 
 type CategoryListProps = {
   title: string;
@@ -17,14 +23,15 @@ type CategoryListProps = {
   maxVisibleCategories?: number;
 };
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 const CategoryList: React.FC<CategoryListProps> = ({
   title,
   categories,
   onSelectCategory,
   onSeeAll,
-  maxVisibleCategories = 4 }) => {
+  maxVisibleCategories = 4,
+}) => {
   const visibleCategories = categories.slice(0, maxVisibleCategories);
 
   return (
@@ -35,7 +42,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
         {categories.length > maxVisibleCategories && (
           <TouchableOpacity onPress={onSeeAll} style={styles.seeAllContainer}>
             <Text style={styles.seeAllText}>See All</Text>
-            <CustomIcon icon='arrow-right' type='circle'/>
+            <CustomIcon icon="arrow-right" type="circle" />
           </TouchableOpacity>
         )}
       </View>
@@ -62,28 +69,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   seeAllContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   seeAllText: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   grid: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
   },
   cardContainer: {
     marginBottom: 5,
