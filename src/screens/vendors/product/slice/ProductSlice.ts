@@ -35,6 +35,7 @@ export interface ProductPayload {
 interface ProductState {
   productSave: ExtendedApiState<VendorProductResponseData>;
   productList: ExtendedApiState<VendorProductListResponseData>;
+  productCategoryList: ExtendedApiState<VendorProductListResponseData>;
   productDelete: ExtendedApiState<{ message: string }>; // Added delete state
 }
 
@@ -47,6 +48,12 @@ const initialState: ProductState = {
     response: null,
   },
   productList: {
+    loading: false,
+    error: null,
+    success: false,
+    response: null,
+  },
+  productCategoryList: {
     loading: false,
     error: null,
     success: false,
@@ -74,6 +81,27 @@ export const getProductThunk = createAsyncThunk(
         throw new Error(data?.message || "Failed to fetch products");
       }
 
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+//Fetch product list by category
+export const getProductsByCategoryThunk = createAsyncThunk(
+  "products/getProductsByCategory",
+  async (categoryId: string, { rejectWithValue }) => {
+    try {
+      const response = await http.get(`/api/v1/products/category/${categoryId}`);
+      const data = response.data;
+
+      console.log(data);
+      if (data.status !== "success") {
+        throw new Error(data?.message || "Failed to fetch products by category");
+      }
+
+      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -169,11 +197,14 @@ const productSlice = createSlice({
     // Reset state for product list
     productListAction: (state) => {
       state.productList = initialState.productList;
+      state.productCategoryList = initialState.productCategoryList;
     },
     // Reset state for product delete
     productDeleteAction: (state) => {
       state.productDelete = initialState.productDelete;
     },
+    // Reset state
+ 
   },
   extraReducers: (builder) => {
     builder
@@ -199,6 +230,17 @@ const productSlice = createSlice({
       })
       .addCase(getProductThunk.rejected, (state, action) => {
         handleApiCall(state.productList, { error: action.payload }, "failed");
+      })
+      
+      .addCase(getProductsByCategoryThunk.pending, (state) => {
+        handleApiCall(state.productCategoryList, {}, "loading");
+      })
+      .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
+        handleApiCall(state.productCategoryList, action, "success");
+        state.productCategoryList.response = action.payload;
+      })
+      .addCase(getProductsByCategoryThunk.rejected, (state, action) => {
+        handleApiCall(state.productCategoryList, { error: action.payload }, "failed");
       })
 
       // Delete Product
