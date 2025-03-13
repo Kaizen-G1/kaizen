@@ -36,7 +36,7 @@ export default function CategoryProducts() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const {loading, error, response } = useAppSelector(
+  const { loading, error, response } = useAppSelector(
     (state) => state.product.productCategoryList
   );
 
@@ -52,7 +52,6 @@ export default function CategoryProducts() {
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
 
   if (loading) {
     return (
@@ -86,34 +85,38 @@ export default function CategoryProducts() {
         outlineStyle={{ borderRadius: 10, borderColor: "#753742" }}
       />
 
-   {loading ? <Text>Loading...</Text> :     <FlatList
-        data={filteredProducts.reverse()}
-        keyExtractor={(item) => item.id!.toString()}
-        renderItem={({ item }) => (
-          <ProductItem
-            title={item.title}
-            price={"$" + item.price.toString()}
-            originalPrice={"$" + item.costPrice.toString()}
-            image={
-              item.images.length > 0
-                ? item.images[0]
-                : "https://images.unsplash.com/photo-1628842456883-f8d529168be9"
-            }
-            isDiscounted={false}
-            discount={"0"}
-            onPress={() =>
-              navigation.navigate("ProductDetails", {
-                productId: item.id?.toString() ?? "",
-                product: item,
-              })
-            }
-          />
-        )}
-        numColumns={2}
-        contentContainerStyle={styles.productList}
-        columnWrapperStyle={styles.columnWrapper}
-        scrollEnabled={false}
-      />}
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={filteredProducts.reverse()}
+          keyExtractor={(item) => item.id!.toString()}
+          renderItem={({ item }) => (
+            <ProductItem
+              title={item.title}
+              price={"$" + item.price.toString()}
+              originalPrice={"$" + item.costPrice.toString()}
+              image={
+                item.images.length > 0
+                  ? item.images[0]
+                  : "https://images.unsplash.com/photo-1628842456883-f8d529168be9"
+              }
+              isDiscounted={false}
+              discount={"0"}
+              onPress={() =>
+                navigation.navigate("ProductDetails", {
+                  productId: item.id?.toString() ?? "",
+                  product: item,
+                })
+              }
+            />
+          )}
+          numColumns={2}
+          contentContainerStyle={styles.productList}
+          columnWrapperStyle={styles.columnWrapper}
+          scrollEnabled={false}
+        />
+      )}
     </ScrollView>
   );
 }
@@ -121,8 +124,7 @@ export default function CategoryProducts() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 45,
+    marginTop: 20,
   },
   header: {
     flexDirection: "row",

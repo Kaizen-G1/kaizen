@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import {
@@ -22,8 +23,12 @@ const Category = () => {
   );
 
   // Local states
-  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
-  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string | null>(null); // Save subcategory ID
+  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(
+    null
+  );
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<
+    string | null
+  >(null); // Save subcategory ID
 
   // Fetch categories when component mounts
   useEffect(() => {
@@ -31,15 +36,22 @@ const Category = () => {
   }, [dispatch]);
 
   // Handle category selection
-  const handleCategorySelect = (subcategory: CategoryWithSubCategoriesPayload) => {
+  const handleCategorySelect = (
+    subcategory: CategoryWithSubCategoriesPayload
+  ) => {
     dispatch(setSelectedSubCategory(subcategory));
 
     // Toggle expansion of the category
-    setExpandedCategoryId((prevId) => (prevId === subcategory.id ? null : subcategory.id));
+    setExpandedCategoryId((prevId) =>
+      prevId === subcategory.id ? null : subcategory.id
+    );
   };
 
   // Handle subcategory selection
-  const handleSubCategorySelect = (subCategory: { id: string; name: string }) => {
+  const handleSubCategorySelect = (subCategory: {
+    id: string;
+    name: string;
+  }) => {
     setSelectedSubCategoryId(subCategory.id); // Save subcategory ID
     dispatch(setSelectedSubCategory(subCategory)); // Dispatch Redux action if needed
   };
@@ -60,13 +72,15 @@ const Category = () => {
   if (categoryWithSubCategoriesList.error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{categoryWithSubCategoriesList.error}</Text>
+        <Text style={styles.errorText}>
+          {categoryWithSubCategoriesList.error}
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {categoryWithSubCategoriesList.response?.data.categories.map(
         (category: CategoryWithSubCategoriesPayload) => (
           <View key={category.id} style={styles.categoryContainer}>
@@ -89,7 +103,8 @@ const Category = () => {
                     key={sub.id}
                     style={[
                       styles.subcategoryButton,
-                      sub.id === selectedSubCategoryId && styles.selectedSubcategoryButton, // Highlight selected subcategory
+                      sub.id === selectedSubCategoryId &&
+                        styles.selectedSubcategoryButton, // Highlight selected subcategory
                     ]}
                     onPress={() => handleSubCategorySelect(sub)}
                   >
@@ -101,13 +116,14 @@ const Category = () => {
           </View>
         )
       )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 18,
   },
   categoryContainer: {
     marginBottom: 10,

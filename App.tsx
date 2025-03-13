@@ -13,13 +13,13 @@ import AddOrUpdateProduct from "./src/components/AddOrUpdateProduct";
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaView style={styles.safeArea}>
-        <SafeAreaProvider>
-          <PaperProvider theme={{ colors: { background: "#FFFFFF" } }}>
-            <RootNavigator />
-          </PaperProvider>
-        </SafeAreaProvider>
-      </SafeAreaView>
+      {/* <SafeAreaView style={styles.safeArea}> */}
+      <SafeAreaProvider>
+        <PaperProvider theme={{ colors: { background: "#FFFFFF" } }}>
+          <RootNavigator />
+        </PaperProvider>
+      </SafeAreaProvider>
+      {/* </SafeAreaView> */}
     </Provider>
   );
 }

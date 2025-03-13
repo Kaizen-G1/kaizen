@@ -114,9 +114,7 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
   );
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, paddingTop: 25, backgroundColor: "#FFFFFF" }}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
       <BottomNavigation
         navigationState={{ index, routes }}
         onIndexChange={setIndex}

@@ -109,8 +109,7 @@ export default function AllProduct() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 45,
+    marginTop: 20,
   },
   header: {
     flexDirection: "row",

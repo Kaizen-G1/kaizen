@@ -1,8 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   SafeAreaView,
   ScrollView,
@@ -11,15 +10,25 @@ import {
   Modal,
   TextInput,
   FlatList,
+  Alert,
 } from "react-native";
-import { Badge, Banner, Icon, IconButton } from "react-native-paper";
+import { Badge, Text, Icon, IconButton } from "react-native-paper";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
 import { RootStackParamList } from "../../../RootNavigator";
-import { set } from "mongoose";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import config from "../../config/config";
+import { Order } from "../vendors/home/data/OrderTypes";
+import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
+
+import { io } from "socket.io-client";
+
+import { useIsFocused } from "@react-navigation/native";
+import http from "../../services/httpService";
 
 type Props = StackScreenProps<RootStackParamList, "Payment">;
 
-const PaymentScreen: React.FC<Props> = ({ route }) => {
+const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   const { cart, subTotal } = route.params;
   // Local states for shipping & contact info
 
@@ -39,6 +48,34 @@ const PaymentScreen: React.FC<Props> = ({ route }) => {
     "standard" | "express"
   >("standard");
 
+  const SOCKET_URL = "http://localhost:3000/api/v1/payments/webhook";
+
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
+
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      const socket = io(SOCKET_URL);
+
+      socket.on("payment-success", (data) => {
+        console.log("Payment successful!", data);
+        setPaymentStatus("Payment Completed!");
+        Alert.alert(
+          "Payment Successful!",
+          `Payment ID: ${data.paymentIntentId}`
+        );
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, []);
+
   // Handlers for shipping selection
   const handleShippingSelect = (option: "standard" | "express") => {
     setSelectedShipping(option);
@@ -46,6 +83,62 @@ const PaymentScreen: React.FC<Props> = ({ route }) => {
       setTotal(subTotal);
     } else if (option === "express") {
       setTotal(subTotal + 12.0);
+    }
+  };
+
+  const createOrder = async (order: Order) => {
+    try {
+      const token = await AsyncStorage.getItem("accessToken");
+      const response = await axios.post(
+        `${config.API_URL}/api/v1/orders/company/orders/`,
+        order,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.data.order;
+    } catch (error) {
+      throw new Error("Failed to create order");
+    }
+  };
+
+  const fetchPaymentIntent = async () => {
+    setLoading(true);
+    try {
+      const response = await http.post(
+        `api/v1/payments/create-payment-intent`,
+        {
+          orderId: "67bea8c61e62ce46ed7efb04",
+          amount: total,
+        }
+      );
+
+      const { clientSecret } = response.data;
+
+      const { error } = await initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        merchantDisplayName: "Kaizen",
+      });
+
+      if (!error) {
+        openPaymentSheet();
+      }
+    } catch (error) {
+      console.error("Error fetching payment intent:", error);
+    }
+    setLoading(false);
+  };
+
+  const openPaymentSheet = async () => {
+    const { error } = await presentPaymentSheet();
+    if (error) {
+      console.log("Payment failed", error);
+    } else {
+      navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+      console.log("Payment successful!");
     }
   };
 
@@ -189,7 +282,14 @@ const PaymentScreen: React.FC<Props> = ({ route }) => {
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalAmount}>${total}</Text>
           </View>
-          <CustomButton label="Pay" type="primary" onPress={() => {}} />
+
+          <StripeProvider publishableKey="pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz">
+            <CustomButton
+              label="Pay"
+              type="primary"
+              onPress={fetchPaymentIntent}
+            />
+          </StripeProvider>
         </View>
       </ScrollView>
 
@@ -275,8 +375,6 @@ export default PaymentScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 50,
   },
   scrollContainer: {
     paddingHorizontal: 16,

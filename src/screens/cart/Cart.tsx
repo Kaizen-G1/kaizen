@@ -37,7 +37,7 @@ export default function CartScreen() {
 
   return (
     <>
-      <ScrollView style={{ flex: 1, paddingVertical: 16 }}>
+      <ScrollView style={{ flex: 1 }}>
         <View
           style={{
             flexDirection: "row",

@@ -185,7 +185,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   return (
     <ScrollView
       style={{
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 20,
         paddingHorizontal: 16,
         backgroundColor: "#fff",
@@ -220,9 +220,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
       >
         {mode === "add" ? "Add Product" : "Update Product"}
       </Text>
-      <Text variant="titleMedium" style={{ marginBottom: 8 }}>
-        Product Images
-      </Text>
+
       {/* Image Upload Section */}
       <View style={{ marginBottom: 16, flexDirection: "row" }}>
         {form.images.length > 0 && (
