@@ -1,4 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { ExtendedApiState } from "../../../services/apiState";
 import http from "../../../services/httpService";
 import { handleApiCall } from "../../../services/reducerUtils";
@@ -11,9 +14,26 @@ export interface CategoryPayload {
   demoImages: string[];
 }
 
+export interface SubCategoryPayload {
+  id: string;
+  name: string;
+}
+
+export interface CategoryWithSubCategoriesPayload {
+  id: string;
+  name: string;
+  count: number;
+  subcategories: SubCategoryPayload[];
+}
+
 export interface CategoryListResponseData {
   message: string;
   categories: CategoryPayload[];
+}
+
+export interface CategoryWithSubCategoriesListResponseData {
+  message: string;
+  categories: CategoryWithSubCategoriesPayload[];
 }
 
 export interface CategoryByIdResponseData {
@@ -23,8 +43,10 @@ export interface CategoryByIdResponseData {
 
 interface CategoryState {
   selectedCategory: CategoryPayload;
+  selectedSubCategory: SubCategoryPayload;
   categoryList: ExtendedApiState<CategoryListResponseData>;
   categoryById: ExtendedApiState<CategoryByIdResponseData>;
+  categoryWithSubCategoriesList: ExtendedApiState<CategoryWithSubCategoriesListResponseData>;
 }
 
 const initialState: CategoryState = {
@@ -34,6 +56,10 @@ const initialState: CategoryState = {
     count: 0,
     demoImages: [],
   },
+  selectedSubCategory: {
+    id: "",
+    name: "",
+  },
   categoryList: {
     loading: false,
     error: null,
@@ -41,6 +67,12 @@ const initialState: CategoryState = {
     response: null,
   },
   categoryById: {
+    loading: false,
+    error: null,
+    success: false,
+    response: null,
+  },
+  categoryWithSubCategoriesList: {
     loading: false,
     error: null,
     success: false,
@@ -61,6 +93,21 @@ export const getCategoryThunk = createAsyncThunk(
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
+    }
+  }
+);
+
+// Thunk to fetch categories with subcategories
+export const getCategoriesWithSubcategoriesThunk = createAsyncThunk(
+  "categories/getWithSubcategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log("Fetching categories with subcategories");
+      const response = await http.get(API_ROUTES.categories.getWithSubcategories);
+      // console.log(response.data.data.categories);
+      return response.data; // Adjusted to match response structure
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
     }
   }
 );
@@ -90,6 +137,9 @@ export const categorySlice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<CategoryPayload>) => {
       state.selectedCategory = action.payload;
     },
+    setSelectedSubCategory: (state, action: PayloadAction<SubCategoryPayload>) => {
+      state.selectedSubCategory = action.payload;
+    },
     resetSelectedCategory: (state) => {
       console.log("resetting selected category");
       state.selectedCategory = initialState.selectedCategory;
@@ -116,6 +166,18 @@ export const categorySlice = createSlice({
         handleApiCall(state.categoryList, { error: action.payload }, "failed");
       })
 
+       // Fetch category list
+       .addCase(getCategoriesWithSubcategoriesThunk.pending, (state) => {
+        handleApiCall(state.categoryWithSubCategoriesList, {}, "loading");
+      })
+      .addCase(getCategoriesWithSubcategoriesThunk.fulfilled, (state, action) => {
+        handleApiCall(state.categoryWithSubCategoriesList, action, "success");
+        state.categoryWithSubCategoriesList.response = action.payload;
+      })
+      .addCase(getCategoriesWithSubcategoriesThunk.rejected, (state, action) => {
+        handleApiCall(state.categoryWithSubCategoriesList, { error: action.payload }, "failed");
+      })
+
       // Fetch category by id
       .addCase(getCategoryByIdThunk.pending, (state) => {
         handleApiCall(state.categoryById, {}, "loading");
@@ -133,6 +195,7 @@ export const categorySlice = createSlice({
 // Export actions
 export const {
   setSelectedCategory,
+  setSelectedSubCategory,
   resetSelectedCategory,
   resetCategoryList,
   resetCategoryById,

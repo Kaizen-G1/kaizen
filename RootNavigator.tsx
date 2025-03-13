@@ -16,6 +16,7 @@ import Category from "./src/screens/category/CategoryPage";
 import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUpdateVendorDetail";
 import PaymentScreen from "./src/screens/payment/Payment";
 import { CartPayload } from "./src/screens/cart/slice/CartSlice";
+import CategoryProducts from './src/screens/product/CategoryProducts';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -34,6 +35,7 @@ export type RootStackParamList = {
     cart: CartPayload[];
     subTotal: number;
   };
+  CategoryProducts: { categoryId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -100,6 +102,16 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ProductDetails"
           component={ProductDetailsPage}
+          options={{
+            headerShown: true,
+            title: "Product Details",
+            headerBackTitle: "Back",
+          }}
+        />
+        
+        <Stack.Screen
+          name="CategoryProducts"
+          component={CategoryProducts}
           options={{
             headerShown: true,
             title: "Product Details",
