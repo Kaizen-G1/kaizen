@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Easing, StyleSheet } from "react-native";
 import { BottomNavigation } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Easing } from "react-native-reanimated";
 
 // Import Screens
 import HomeScreen from "../screens/home/Home"; // Customer Home
