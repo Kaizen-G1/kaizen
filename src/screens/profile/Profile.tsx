@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,14 +19,28 @@ type ProfileScreenNavigationProp = StackNavigationProp<
   "Home"
 >;
 const ProfileScreenCustomer = () => {
+  const [customerName, setCustomerName] = useState<string | null>(null);
+  
+  const [customerEmail, setCustomerEmail] = useState<string | null>(null);
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  useEffect(() => {
+    const fetchCustomerName = async () => {
+      const name = await AsyncStorage.getItem("customerName");
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      setCustomerName(name || "Hello, User!");
+      setCustomerEmail(userEmail || "User Email");
+    };
+    fetchCustomerName();
+  }, []);
 
   const handleLogout = async () => {
     // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
-    await AsyncStorage.removeItem("userRole");
     await AsyncStorage.removeItem("userEmail");
+    await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("customerName");
     await AsyncStorage.removeItem("vendorId");
     navigation.reset({ index: 0, routes: [{ name: "Login" }] });
   };
@@ -46,7 +60,8 @@ const ProfileScreenCustomer = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.greeting}>Hello, Romina!</Text>
+      <Text style={styles.greeting}>Hello, {customerName}</Text>
+      <Text style={styles.emailText}>{customerEmail}</Text>
 
       {/* Announcement Section */}
       <View style={styles.announcement}>
@@ -130,7 +145,13 @@ const styles = StyleSheet.create({
   },
   activityText: { color: "#fff", fontWeight: "bold" },
   greeting: {
-    fontSize: 26,
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginVertical: 10,
+  },
+  emailText: {
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginVertical: 10,

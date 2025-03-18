@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -16,6 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../RootNavigator";
 import { useAppDispatch } from "../../../../services/constants";
 import { fetchOrders } from "../slice/OrderSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -23,6 +24,8 @@ type ProductScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function OrderListScreen() {
+  
+  const [customerName, setCustomerName] = useState("");
   const navigation = useNavigation<ProductScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const {
@@ -40,6 +43,14 @@ export default function OrderListScreen() {
       dispatch(fetchOrders());
     }, [dispatch])
   );
+
+  useEffect(() => {
+      const fetchCustomerName = async () => {
+        const name = await AsyncStorage.getItem("customerName");
+        setCustomerName(name || "Hello, User!");
+      };
+      fetchCustomerName();
+    }, []);
 
   if (loading)
     return (
@@ -59,7 +70,7 @@ export default function OrderListScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Header searchQuery={searchQuery} onSearch={setSearchQuery} />
+        <Header title={customerName} searchQuery={searchQuery} onSearch={setSearchQuery} />
         <View style={styles.filterContainer}>
           <ScrollView
             horizontal

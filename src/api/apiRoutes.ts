@@ -5,6 +5,7 @@ export const API_ROUTES = {
     login: `${config.API_URL}/api/v1/auth/login`,
     register: `${config.API_URL}/api/v1/auth/register`,
     verify2fa: `${config.API_URL}/api/v1/auth/verify-2fa`,
+    getCustomerById: (customer_id: string) => `${config.API_URL}/api/v1/auth/getCustomerById/${customer_id}`,
     refreshToken: `${config.API_URL}/api/v1/auth/refresh-token`,
   },
   categories: {
