@@ -6,6 +6,7 @@ import {
   Alert,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import {
   Text,
@@ -23,6 +24,7 @@ import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrderById, updateOrderStatus } from "../slice/OrderSlice";
 import { OrderStatus } from "../../../../utils/enums";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import ProductItem from "../../../../components/ProductItem";
 
 export default function OrderDetailScreen() {
   const route = useRoute();
@@ -95,7 +97,6 @@ export default function OrderDetailScreen() {
 
   return (
     <>
-      {/* Header con botón de regreso */}
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Order Details" />
@@ -152,7 +153,6 @@ export default function OrderDetailScreen() {
           </Card.Content>
         </Card>
 
-        {/* Estado de la orden */}
         <Card style={styles.card}>
           <Card.Title title="Order Status" />
           <Card.Content>
@@ -185,41 +185,62 @@ export default function OrderDetailScreen() {
           </Card.Content>
         </Card>
 
-        {/* Lista de productos */}
         <Card style={styles.card}>
           <Card.Title title="Products" />
           <Card.Content>
             {selectedOrder.products.length > 0 ? (
-              selectedOrder.products.map((product, index) => (
-                <View key={index} style={styles.productContainer}>
-                  <Text style={styles.productText}>
-                    {product.product_name || product.product_id}
-                  </Text>
-                  <Text>Quantity: {product.quantity}</Text>
-                  <Text style={styles.price}>
-                    ${product.price?.toFixed(2)}
-                  </Text>
-                  <Divider />
-                </View>
-              ))
+              selectedOrder.products.map((product, index) => {
+                const formattedId =
+                  product.product_id && product.product_id.length >= 5
+                    ? product.product_id.slice(-5).toUpperCase()
+                    : "N/A";
+
+                const totalPrice = (product.price ?? 0) * (product.quantity ?? 1);
+
+                return (
+                  <View key={index} style={styles.productItemContainer}>
+                    <Image
+                      // source={{
+                      //   uri:
+                      //     product.image && product.image.length > 0
+                      //       ? product.image
+                      //       : "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
+                      // }}
+                      source={{
+                        uri:
+                          "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
+                      }}
+                      style={styles.productImage}
+                    />
+
+                    <View style={styles.textContainer}>
+                      <Text style={styles.productTitle}>
+                        {product.product_name || "Unknown Product"} (x{product.quantity})
+                      </Text>
+                      <Text style={styles.productId}>ID: {formattedId}</Text>
+                      <Text style={styles.productPrice}>
+                        ${product.price?.toFixed(2) ?? "0.00"} | Total: ${totalPrice.toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })
             ) : (
-              <Text style={styles.noProductsText}>
-                No products in this order.
-              </Text>
+              <Text style={styles.noProductsText}>No products in this order.</Text>
             )}
           </Card.Content>
         </Card>
 
-         <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 5,
-            }}
-          >
-          <CustomButton 
-            label="Update Order" 
-            onPress={handleUpdateOrder} 
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: 5,
+          }}
+        >
+          <CustomButton
+            label="Update Order"
+            onPress={handleUpdateOrder}
           />
         </View>
       </ScrollView>
@@ -253,11 +274,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
   },
-  card: {
-    // marginBottom: 12,
-    borderRadius: 10,
-    // padding: 10,
-  },
   input: {
     marginBottom: 10,
   },
@@ -288,9 +304,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#007bff",
   },
+
+  card: {
+    borderRadius: 10,
+    padding: 10,
+  },
+  productItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  productTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  productPrice: {
+    fontSize: 14,
+    color: "#666",
+  },
   noProductsText: {
     textAlign: "center",
     fontSize: 16,
     color: "#777",
+  },
+  productId: {
+    fontSize: 12,
+    color: "#888",
   },
 });
