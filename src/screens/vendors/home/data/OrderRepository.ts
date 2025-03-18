@@ -2,6 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Order } from "./OrderTypes";
 import API_ROUTES from "../../../../api/apiRoutes";
+import { OrdersResponse } from '../../../../api/interfaces/orders-response';
 
 class OrderRepository {
   async fetchOrders(): Promise<Order[]> {
@@ -17,7 +18,20 @@ class OrderRepository {
           userRole: await AsyncStorage.getItem("userRole"),
         },
       });
-      return response.data.data.orders;
+      const ordersResponse: OrdersResponse = response.data;
+      const orders: Order[] = ordersResponse.data.orders.map((order) => ({
+        id: order.id,
+        customer_id: order.customerId,
+        products: order.products.map((product) => ({
+          product_id: product.id,
+          product_name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+        })), 
+        total_price: order.totalPrice,
+        status: order.status,
+      }));
+      return orders;
     } catch (error) {
       throw new Error("Failed to fetch orders");
     }
