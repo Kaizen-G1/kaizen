@@ -30,6 +30,12 @@ class OrderRepository {
         })), 
         total_price: order.totalPrice,
         status: order.status,
+        createdDate: order.createdDate,
+        updatedDate: order.updatedDate,
+        companyName: order.companyName || "",
+        companyAddress: order.companyAddress || "",
+        customerName: order.customerName || "",
+        customerPhone: order.customerPhone || "",
       }));
       return orders;
     } catch (error) {
