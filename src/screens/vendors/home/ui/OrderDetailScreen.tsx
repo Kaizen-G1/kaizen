@@ -298,7 +298,6 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 10,
-    paddingHorizontal: 10,
   },
   productItemContainer: {
     flexDirection: "row",
