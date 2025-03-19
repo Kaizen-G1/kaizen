@@ -13,7 +13,6 @@ import {
   Button,
   Card,
   TextInput,
-  Divider,
   Modal,
   Portal,
   Appbar,
@@ -24,7 +23,6 @@ import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrderById, updateOrderStatus } from "../slice/OrderSlice";
 import { OrderStatus } from "../../../../utils/enums";
 import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
-import ProductItem from "../../../../components/ProductItem";
 
 export default function OrderDetailScreen() {
   const route = useRoute();
@@ -106,8 +104,6 @@ export default function OrderDetailScreen() {
         style={styles.container}
         contentContainerStyle={styles.scrollContainer}
       >
-        <Text style={styles.headerText}>Order Information</Text>
-
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
@@ -150,38 +146,6 @@ export default function OrderDetailScreen() {
               theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }} // ✅ Cambia color de fondo y borde
               style={styles.input}
             />
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.card}>
-          <Card.Title title="Order Status" />
-          <Card.Content>
-            <TouchableOpacity
-              style={styles.pickerButton}
-              onPress={() => setPickerVisible(true)}
-            >
-              <Text style={styles.pickerButtonText}>{selectedStatus}</Text>
-            </TouchableOpacity>
-
-            <Portal>
-              <Modal
-                visible={pickerVisible}
-                onDismiss={() => setPickerVisible(false)}
-                contentContainerStyle={styles.pickerContainer}
-              >
-                <Picker
-                  selectedValue={selectedStatus}
-                  onValueChange={(itemValue) =>
-                    handleStatusChange(itemValue as OrderStatus)
-                  }
-                >
-                  {Object.values(OrderStatus).map((status) => (
-                    <Picker.Item key={status} label={status} value={status} />
-                  ))}
-                </Picker>
-                <Button onPress={() => setPickerVisible(false)}>Close</Button>
-              </Modal>
-            </Portal>
           </Card.Content>
         </Card>
 
@@ -231,6 +195,38 @@ export default function OrderDetailScreen() {
           </Card.Content>
         </Card>
 
+        <Card style={styles.card}>
+          <Card.Title title="Order Status" />
+          <Card.Content>
+            <TouchableOpacity
+              style={styles.pickerButton}
+              onPress={() => setPickerVisible(true)}
+            >
+              <Text style={styles.pickerButtonText}>{selectedStatus}</Text>
+            </TouchableOpacity>
+
+            <Portal>
+              <Modal
+                visible={pickerVisible}
+                onDismiss={() => setPickerVisible(false)}
+                contentContainerStyle={styles.pickerContainer}
+              >
+                <Picker
+                  selectedValue={selectedStatus}
+                  onValueChange={(itemValue) =>
+                    handleStatusChange(itemValue as OrderStatus)
+                  }
+                >
+                  {Object.values(OrderStatus).map((status) => (
+                    <Picker.Item key={status} label={status} value={status} />
+                  ))}
+                </Picker>
+                <Button onPress={() => setPickerVisible(false)}>Close</Button>
+              </Modal>
+            </Portal>
+          </Card.Content>
+        </Card>
+
         <View
           style={{
             flexDirection: "row",
@@ -252,10 +248,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
   },
   scrollContainer: {
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   loadingContainer: {
     flex: 1,
@@ -266,13 +262,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: "#555",
-  },
-  headerText: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
+    color: "black",
   },
   input: {
     marginBottom: 10,
@@ -281,12 +271,14 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "#ccc",
+    borderColor: "#753742",
     alignItems: "center",
+    backgroundColor: "#753742",
   },
   pickerButtonText: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "white",
   },
   productContainer: {
     marginBottom: 10,
@@ -302,12 +294,11 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: "#007bff",
+    color: "gray",
   },
-
   card: {
     borderRadius: 10,
-    padding: 10,
+    paddingHorizontal: 10,
   },
   productItemContainer: {
     flexDirection: "row",
@@ -326,11 +317,11 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#000",
+    color: "black",
   },
   productPrice: {
     fontSize: 14,
-    color: "#666",
+    color: "gray",
   },
   noProductsText: {
     textAlign: "center",
@@ -339,6 +330,6 @@ const styles = StyleSheet.create({
   },
   productId: {
     fontSize: 12,
-    color: "#888",
+    color: "gray",
   },
 });
