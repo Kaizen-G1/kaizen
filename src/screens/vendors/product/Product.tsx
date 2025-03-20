@@ -24,6 +24,10 @@ import { useIsFocused } from "@react-navigation/native"; // Import useIsFocused
 import { Swipeable } from "react-native-gesture-handler";
 import AlertModal from "../../../components/alert/AlertCustomModal";
 
+import { resetSelectedCategory } from "../../category/slice/CategorySlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 // Use your existing ProductPayload interface
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,6 +39,8 @@ export default function ProductListScreen() {
   const dispatch = useAppDispatch();
 
   const [searchQuery, setSearchQuery] = useState("");
+  
+  const [customerName, setCustomerName] = useState("");
   const [refreshing, setRefreshing] = useState(false); // State to track refreshing status
 
   const { loading, error, response } = useAppSelector(
@@ -48,8 +54,15 @@ export default function ProductListScreen() {
     if (isFocused) {
       dispatch(getProductThunk()); // Fetch products when the screen comes into focus
     }
+    
+    const fetchCustomerName = async () => {
+      const name = await AsyncStorage.getItem("customerName");
+      setCustomerName(name || "Hello, User!");
+    };
+    fetchCustomerName();
   }, [isFocused, dispatch]);
 
+  console.log(customerName);
   const handleRefresh = async () => {
     setRefreshing(true);
     await dispatch(getProductThunk()); // Refresh product list
@@ -89,7 +102,7 @@ export default function ProductListScreen() {
 
   return (
     <View style={styles.container}>
-      <Headers searchQuery={searchQuery} onSearch={setSearchQuery} />
+      <Headers title={customerName} searchQuery={searchQuery} onSearch={setSearchQuery} />
       {error && (
         <AlertModal
           title="Error"

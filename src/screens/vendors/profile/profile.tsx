@@ -28,6 +28,8 @@ const ProfileScreen = () => {
   const { error, response } = useAppSelector(
     (state) => state.vendor.vendorData
   );
+  const vendorDetails: VendorPayload | undefined = response?.data.vendor;
+  console.log("vendorDetails", vendorDetails);
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -37,14 +39,13 @@ const ProfileScreen = () => {
     }
   }, [dispatch, isFocused]);
 
-  const vendorDetails: VendorPayload | undefined = response?.data.vendor;
-  console.log("vendorDetails", vendorDetails);
 
   const handleLogout = async () => {
     // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
     await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("customerName");
     await AsyncStorage.removeItem("userEmail");
     await AsyncStorage.removeItem("vendorId");
     navigation.reset({ index: 0, routes: [{ name: "Login" }] });

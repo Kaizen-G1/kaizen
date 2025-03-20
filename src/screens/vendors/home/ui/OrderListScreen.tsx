@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -16,6 +16,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../RootNavigator";
 import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrders } from "../slice/OrderSlice";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { get } from "mongoose";
 import { getNotificationsThunk } from "../../../notifcations/slice/NotificatiosSlice";
 
@@ -25,6 +27,7 @@ type ProductScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function OrderListScreen() {
+  const [customerName, setCustomerName] = useState("");
   const navigation = useNavigation<ProductScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const {
@@ -49,6 +52,14 @@ export default function OrderListScreen() {
     }, [dispatch])
   );
 
+  useEffect(() => {
+    const fetchCustomerName = async () => {
+      const name = await AsyncStorage.getItem("customerName");
+      setCustomerName(name || "Hello, User!");
+    };
+    fetchCustomerName();
+  }, []);
+
   if (loading)
     return (
       <ActivityIndicator
@@ -68,6 +79,7 @@ export default function OrderListScreen() {
     <ScrollView>
       <View style={styles.container}>
         <Header
+          title={customerName}
           searchQuery={searchQuery}
           onSearch={setSearchQuery}
           notificationCount={totalNotifications}

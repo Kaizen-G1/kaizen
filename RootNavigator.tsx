@@ -23,7 +23,11 @@ import { Dimensions, Platform, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import StripePaymentScreen from "./src/screens/payment/StriveProvider";
 import CategoryProducts from "./src/screens/product/CategoryProducts";
+
 import Notifications from "./src/screens/notifcations/notifications";
+import CustomerOrderList from './src/screens/profile/CustomerOrderListScreen';
+import ProductReview from "./src/screens/productReview/ProductReviewScreen";
+import { Product } from './src/screens/vendors/home/data/OrderTypes';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -46,6 +50,8 @@ export type RootStackParamList = {
     total: number;
   };
   CategoryProducts: { categoryId: string };
+  CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
+  ProductReview: { productId: "" };
   Notifications: undefined;
 };
 
@@ -156,6 +162,24 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "Product Details",
+          }}
+        />
+        
+        <Stack.Screen
+          name="CustomerOrderList"
+          component={CustomerOrderList}
+          options={{
+            headerShown: true,
+            title: "Orders",
+          }}
+        />
+        
+        <Stack.Screen
+          name="ProductReview"
+          component={ProductReview}
+          options={{
+            headerShown: true,
+            title: "Reivews",
           }}
         />
 

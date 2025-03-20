@@ -65,6 +65,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         await AsyncStorage.setItem("refreshToken", refreshToken || "");
         await AsyncStorage.setItem("userRole", decodedToken.role || "");
         await AsyncStorage.setItem("userEmail", decodedToken.email || "");
+        await AsyncStorage.setItem("customerName", decodedToken.name || "");
 
         await AsyncStorage.setItem("vendorId", decodedToken.id || "");
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../RootNavigator";
+
+import { fetchOrders } from "../vendors/home/slice/OrderSlice";
 import { Badge, IconButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
@@ -23,19 +25,68 @@ type ProfileScreenNavigationProp = StackNavigationProp<
   "Home"
 >;
 const ProfileScreenCustomer = () => {
+  const [customerName, setCustomerName] = useState<string | null>(null);
+
+  const [customerEmail, setCustomerEmail] = useState<string | null>(null);
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  const dispatch = useAppDispatch();
+
+  const {
+    orders = [],
+    loading,
+    error,
+  } = useAppSelector((state) => state.orders || { orders: [] });
+
+  console.log("Orders", orders);
+  useEffect(() => {
+    const fetchCustomerName = async () => {
+      const name = await AsyncStorage.getItem("customerName");
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      setCustomerName(name || "Hello, User!");
+      setCustomerEmail(userEmail || "User Email");
+    };
+    fetchCustomerName();
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
+  // Filter orders for ToReceive and ToReview
+  const toReceiveOrders = orders.filter(
+    (order) =>
+      order.status === "Awaiting Pickup" || order.status === "In transit"
+  );
+  const toReviewOrders = orders.filter((order) => order.status === "Complete");
+  const toPayOrders = orders.filter((order) => order.status === "Pending");
+
+  const handleNavigateToOrders = (type: string) => {
+    if (type === "pay") {
+      navigation.navigate("CustomerOrderList", { type, orders: toPayOrders });
+      return;
+    } else if (type === "receive") {
+      navigation.navigate("CustomerOrderList", {
+        type,
+        orders: toReceiveOrders,
+      });
+      return;
+    } else if (type === "review") {
+      navigation.navigate("CustomerOrderList", {
+        type,
+        orders: toReviewOrders,
+      });
+      return;
+    }
+  };
 
   const handleLogout = async () => {
     // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
-    await AsyncStorage.removeItem("userRole");
     await AsyncStorage.removeItem("userEmail");
+    await AsyncStorage.removeItem("userRole");
+    await AsyncStorage.removeItem("customerName");
     await AsyncStorage.removeItem("vendorId");
     navigation.reset({ index: 0, routes: [{ name: "Login" }] });
   };
-
-  const dispatch = useAppDispatch();
 
   const { response } = useAppSelector(
     (state) => state.notifications.notifications
@@ -94,7 +145,8 @@ const ProfileScreenCustomer = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.greeting}>Hello, Romina!</Text>
+      <Text style={styles.greeting}>Hello, {customerName}</Text>
+      <Text style={styles.emailText}>{customerEmail}</Text>
 
       {/* Announcement Section */}
       <View style={styles.announcement}>
@@ -125,13 +177,22 @@ const ProfileScreenCustomer = () => {
       {/* My Orders Section */}
       <Text style={styles.sectionTitle}>My Orders</Text>
       <View style={styles.orderButtons}>
-        <TouchableOpacity style={styles.orderButton}>
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => handleNavigateToOrders("pay")}
+        >
           <Text style={styles.orderText}>To Pay</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButtonActive}>
+        <TouchableOpacity
+          style={styles.orderButtonActive}
+          onPress={() => handleNavigateToOrders("receive")}
+        >
           <Text style={styles.orderText}>To Receive</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButton}>
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => handleNavigateToOrders("review")}
+        >
           <Text style={styles.orderText}>To Review</Text>
         </TouchableOpacity>
       </View>
@@ -178,7 +239,13 @@ const styles = StyleSheet.create({
   },
   activityText: { color: "#fff", fontWeight: "bold" },
   greeting: {
-    fontSize: 26,
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginVertical: 10,
+  },
+  emailText: {
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginVertical: 10,

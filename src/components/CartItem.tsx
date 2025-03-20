@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { IconButton } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 import Counter from "./counter/Counter";
 
 interface CartItemProps {
@@ -10,6 +10,8 @@ interface CartItemProps {
   imageUrl?: string;
   initialQuantity?: number;
   isWish?: boolean;
+  isCompleted?: boolean;
+  buttonLabel?: string;
   onWishPress?: () => void;
   onRemove?: () => void;
   onPress?: () => void;
@@ -20,9 +22,11 @@ const CartItem: React.FC<CartItemProps> = ({
   title = "Lorem ipsum dolor sit amet consectetur.",
   description = "Pink, Size M",
   price = 17.0,
-  imageUrl = "https://via.placeholder.com/100",
+  imageUrl = "https://www.bigfootdigital.co.uk/wp-content/uploads/2020/07/image-optimisation-scaled.jpg",
   initialQuantity = 1,
   isWish = false,
+  isCompleted = false,
+  buttonLabel = "Add to cart",
   onRemove,
   onPress,
   onQuantityChange,
@@ -44,14 +48,17 @@ const CartItem: React.FC<CartItemProps> = ({
       <TouchableOpacity onPress={onPress}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: imageUrl }} style={styles.productImage} />
-          <IconButton
-            icon="trash-can-outline"
-            size={20}
-            onPress={onRemove}
-            style={styles.trashButton}
-            iconColor="#753742"
-            borderless
-          />
+
+          {!isCompleted && (
+            <IconButton
+              icon="trash-can-outline"
+              size={20}
+              onPress={onRemove}
+              style={styles.trashButton}
+              iconColor="#753742"
+              borderless
+            />
+          )}
         </View>
       </TouchableOpacity>
       <View style={styles.infoContainer}>
@@ -66,12 +73,22 @@ const CartItem: React.FC<CartItemProps> = ({
 
         <View style={styles.bottomRow}>
           <Text style={styles.price}>${price}</Text>
-          <Counter
+          {isCompleted ? (
+            <Button
+            mode="outlined"
+            style={{ borderRadius: 5, margin: 5 }}
+            onPress={onWishPress}
+            >
+              {buttonLabel}
+              </Button> 
+            ) : (
+            <Counter
             isWish={isWish}
             quantity={quantity}
             onWishPress={onWishPress}
             onChangeQuantity={handleQuantityChange}
-          />
+            />
+          )}
         </View>
       </View>
     </View>
@@ -85,6 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     backgroundColor: "#fff",
+    marginHorizontal: 10,
   },
   imageContainer: {
     width: 129,
