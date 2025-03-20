@@ -66,7 +66,7 @@ export default function CartScreen() {
           showsHorizontalScrollIndicator={false}
           data={cartItems}
           style={{ paddingHorizontal: 18, paddingVertical: 16 }}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id!.toString()}
           renderItem={({ item }) => (
             <View style={{ paddingVertical: 5 }}>
               <CartItem

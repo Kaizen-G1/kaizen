@@ -2,13 +2,9 @@ import React from "react";
 import RootNavigator from "./RootNavigator";
 import { Provider } from "react-redux";
 import { store } from "./src/store/store";
-
 import { StyleSheet } from "react-native";
-
 import { PaperProvider } from "react-native-paper";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import BottomNav from "./src/navigation/BottomNavigation";
-import AddOrUpdateProduct from "./src/components/AddOrUpdateProduct";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   return (
