@@ -13,6 +13,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../RootNavigator";
+import { useAppDispatch, useAppSelector } from "../../services/constants";
+import { fetchOrders } from "../vendors/home/slice/OrderSlice";
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -23,7 +25,12 @@ const ProfileScreenCustomer = () => {
   
   const [customerEmail, setCustomerEmail] = useState<string | null>(null);
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  
+  const dispatch = useAppDispatch();
+  
+  const { orders = [], loading, error } = useAppSelector((state) => state.orders || { orders: [] });
 
+  console.log("Orders", orders);
   useEffect(() => {
     const fetchCustomerName = async () => {
       const name = await AsyncStorage.getItem("customerName");
@@ -32,7 +39,27 @@ const ProfileScreenCustomer = () => {
       setCustomerEmail(userEmail || "User Email");
     };
     fetchCustomerName();
-  }, []);
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
+
+  // Filter orders for ToReceive and ToReview
+  const toReceiveOrders = orders.filter((order) => order.status === "Awaiting Pickup" || order.status === "In transit");
+  const toReviewOrders = orders.filter((order) => order.status === "Complete");
+  const toPayOrders = orders.filter((order) => order.status === "Pending");
+
+   const handleNavigateToOrders = (type: string) => {
+    if (type === "pay") {
+      navigation.navigate("CustomerOrderList", { type, orders: toPayOrders });
+      return;
+    }else if (type === "receive") {
+      navigation.navigate("CustomerOrderList", { type, orders: toReceiveOrders });
+      return;
+    }else if (type === "review") {
+      navigation.navigate("CustomerOrderList", { type, orders: toReviewOrders });
+      return;
+    }
+  };
 
   const handleLogout = async () => {
     // TODO: Implement method on logout event
@@ -92,13 +119,13 @@ const ProfileScreenCustomer = () => {
       {/* My Orders Section */}
       <Text style={styles.sectionTitle}>My Orders</Text>
       <View style={styles.orderButtons}>
-        <TouchableOpacity style={styles.orderButton}>
+        <TouchableOpacity style={styles.orderButton} onPress={() => handleNavigateToOrders("pay")}>
           <Text style={styles.orderText}>To Pay</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButtonActive}>
+        <TouchableOpacity style={styles.orderButtonActive} onPress={() => handleNavigateToOrders("receive")}>
           <Text style={styles.orderText}>To Receive</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButton}>
+        <TouchableOpacity style={styles.orderButton} onPress={() => handleNavigateToOrders("review")}>
           <Text style={styles.orderText}>To Review</Text>
         </TouchableOpacity>
       </View>
