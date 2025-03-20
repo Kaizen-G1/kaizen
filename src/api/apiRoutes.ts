@@ -51,8 +51,16 @@ export const API_ROUTES = {
   wishlist: {
     addToWishlist: (id: string) => `${config.API_URL}/api/v1/wishlist/${id}`,
     getWishlist: (id: string) => `${config.API_URL}/api/v1/wishlist/${id}`,
-    removeFromWishlist: (id: string) => `${config.API_URL}/api/v1/wishlist/${id}`,
+    removeFromWishlist: (id: string) =>
+      `${config.API_URL}/api/v1/wishlist/${id}`,
     clearWishlist: (id: string) => `${config.API_URL}/api/v1/wishlist/${id}`,
+  },
+  notifcation: {
+    getAll: `${config.API_URL}/api/v1/notifications`,
+    getById: (id: string) => `${config.API_URL}/api/v1/notifications/${id}`,
+    create: `${config.API_URL}/api/v1/notifications/`,
+    markAsRead: (id: string) => `${config.API_URL}/api/v1/notifications/${id}`,
+    delete: (id: string) => `${config.API_URL}/api/v1/notifications/${id}`,
   },
 };
 

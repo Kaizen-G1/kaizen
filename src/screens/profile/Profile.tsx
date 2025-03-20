@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../RootNavigator";
+import { Badge, IconButton } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useAppDispatch, useAppSelector } from "../../services/constants";
+import { getNotificationsThunk } from "../notifcations/slice/NotificatiosSlice";
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,16 +35,67 @@ const ProfileScreenCustomer = () => {
     navigation.reset({ index: 0, routes: [{ name: "Login" }] });
   };
 
+  const dispatch = useAppDispatch();
+
+  const { response } = useAppSelector(
+    (state) => state.notifications.notifications
+  );
+
+  const totalNotifications = response?.data.notifications.length;
+
+  useEffect(() => {
+    dispatch(getNotificationsThunk());
+  }, [dispatch]);
+
+  const notificationCount = totalNotifications || 0;
+
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-          }}
-          style={styles.profileImage}
-        />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            source={{
+              uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+            }}
+            style={styles.profileImage}
+          />
+          {/* <IconButton
+            icon="bell-outline"
+            size={35}
+            style={{ marginLeft: 10 }}
+            onPress={() => {
+              navigation.navigate("Notifications");
+            }}
+          /> */}
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <IconButton
+              icon={() => (
+                <Icon name="bell-outline" size={30} color="#753742" />
+              )}
+              onPress={() => {
+                navigation.navigate("Notifications");
+              }}
+            />
+            {notificationCount > 0 && (
+              <Badge
+                size={20}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: -2,
+                  fontSize: 12,
+                  fontWeight: "900",
+                  color: "#fff",
+                  backgroundColor: "#9B2C2D",
+                }}
+              >
+                {notificationCount}
+              </Badge>
+            )}
+          </View>
+        </View>
+
         <TouchableOpacity style={styles.activityButton} onPress={handleLogout}>
           <Text style={styles.activityText}>Log Out</Text>
         </TouchableOpacity>
@@ -77,8 +132,13 @@ const ProfileScreenCustomer = () => {
       {/* My Orders Section */}
       <Text style={styles.sectionTitle}>My Orders</Text>
       <View style={styles.orderButtons}>
-        <TouchableOpacity style={styles.orderButton}>
-          <Text style={styles.orderText}>To Pay</Text>
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => {
+            navigation.navigate("Notifications");
+          }}
+        >
+          <Text style={styles.orderText}>Notifications</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.orderButtonActive}>
           <Text style={styles.orderText}>To Receive</Text>

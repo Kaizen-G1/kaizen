@@ -14,8 +14,10 @@ import { styles } from "./styles";
 import { useNavigation, useFocusEffect } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../RootNavigator";
-import { useAppDispatch } from "../../../../services/constants";
+import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrders } from "../slice/OrderSlice";
+import { get } from "mongoose";
+import { getNotificationsThunk } from "../../../notifcations/slice/NotificatiosSlice";
 
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -34,6 +36,12 @@ export default function OrderListScreen() {
     selectedFilter,
     setSelectedFilter,
   } = useOrderViewModel();
+
+  const { response } = useAppSelector(
+    (state) => state.notifications.notifications
+  );
+
+  const totalNotifications = response?.data.notifications.length;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -59,7 +67,14 @@ export default function OrderListScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Header searchQuery={searchQuery} onSearch={setSearchQuery} />
+        <Header
+          searchQuery={searchQuery}
+          onSearch={setSearchQuery}
+          notificationCount={totalNotifications}
+          onNotificationPress={() => {
+            navigation.navigate("Notifications");
+          }}
+        />
         <View style={styles.filterContainer}>
           <ScrollView
             horizontal
