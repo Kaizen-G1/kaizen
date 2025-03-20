@@ -116,7 +116,7 @@ export default function OrderDetailScreen() {
           <Card.Content>
           <TextInput
               label="Order ID"
-              value={selectedOrder.id.slice(-5).toUpperCase()} // ✅ Últimos 5 dígitos en uppercase
+              value={selectedOrder.id.slice(-5).toUpperCase()}
               mode="outlined"
               disabled
               theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }}
@@ -126,7 +126,7 @@ export default function OrderDetailScreen() {
               label="Customer Name"
               value={form.customerName}
               disabled
-              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }} // ✅ Cambia color de fondo y borde
+              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }}
               onChangeText={(text) =>
                 setForm((prev) => ({ ...prev, customerName: text }))
               }
@@ -137,7 +137,7 @@ export default function OrderDetailScreen() {
               label="Customer Phone"
               value={form.customerPhone}
               disabled
-              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }} // ✅ Cambia color de fondo y borde
+              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }}
               onChangeText={(text) =>
                 setForm((prev) => ({ ...prev, customerPhone: text }))
               }
@@ -151,7 +151,7 @@ export default function OrderDetailScreen() {
               mode="outlined"
               keyboardType="numeric"
               disabled
-              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }} // ✅ Cambia color de fondo y borde
+              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }}
               style={styles.input}
             />
           </Card.Content>
