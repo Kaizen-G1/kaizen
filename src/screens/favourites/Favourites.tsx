@@ -9,7 +9,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import AddIcon from "../../components/AddIcon";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import {
   getWishlistThunk,
@@ -49,45 +48,6 @@ const recentlyViewed = [
   {
     id: "5",
     image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-];
-
-const wishlistItems = [
-  {
-    id: "1",
-    image: "https://via.placeholder.com/80",
-    title: "Lorem ipsum dolor sit amet consectetur.",
-    price: "$17,00",
-    oldPrice: null,
-    color: "Pink",
-    size: "M",
-  },
-  {
-    id: "2",
-    image: "https://via.placeholder.com/80",
-    title: "Lorem ipsum dolor sit amet consectetur.",
-    price: "$12,00",
-    oldPrice: "$17,00",
-    color: "Pink",
-    size: "M",
-  },
-  {
-    id: "3",
-    image: "https://via.placeholder.com/80",
-    title: "Lorem ipsum dolor sit amet consectetur.",
-    price: "$27,00",
-    oldPrice: null,
-    color: "Pink",
-    size: "M",
-  },
-  {
-    id: "4",
-    image: "https://via.placeholder.com/80",
-    title: "Lorem ipsum dolor sit amet consectetur.",
-    price: "$19,00",
-    oldPrice: null,
-    color: "Pink",
-    size: "M",
   },
 ];
 
