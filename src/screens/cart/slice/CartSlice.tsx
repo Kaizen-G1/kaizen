@@ -7,7 +7,7 @@ import { ProductPayload } from "../../vendors/product/slice/ProductSlice";
 import API_ROUTES from "../../../api/apiRoutes";
 
 export interface CartPayload {
-  id: string;
+  id?: string;
   customerId: string;
   productId: string;
   quantity: number;
@@ -62,10 +62,9 @@ export const getCartThunk = createAsyncThunk(
       const queryParams = {
         customerId: await AsyncStorage.getItem("vendorId"),
       };
-      const response = await http.get(API_ROUTES.shoppingCart.getCartList,{
-          params: queryParams,
-        }
-      );
+      const response = await http.get(API_ROUTES.shoppingCart.getCartList, {
+        params: queryParams,
+      });
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
@@ -83,16 +82,14 @@ export const addToCartThunk = createAsyncThunk(
   "cart/add",
   async (payload: CartPayload, { rejectWithValue }) => {
     try {
-
-      console.log('ADD_SHPPING_CAT_URL');
+      console.log("ADD_SHPPING_CAT_URL");
       console.log(API_ROUTES.shoppingCart.addToCart);
 
       const response = await http.post(API_ROUTES.shoppingCart.addToCart, {
-          customerId: payload.customerId,
-          productId: payload.productId,
-          quantity: payload.quantity,
-        }
-      );
+        customerId: payload.customerId,
+        productId: payload.productId,
+        quantity: payload.quantity,
+      });
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to add to cart");
@@ -110,7 +107,9 @@ export const deleteFromCartThunk = createAsyncThunk(
   "cart/delete",
   async (payload: CartPayload, { rejectWithValue }) => {
     try {
-      const response = await http.delete(API_ROUTES.shoppingCart.delete(payload.id));
+      const response = await http.delete(
+        API_ROUTES.shoppingCart.delete(payload.id || "")
+      );
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to delete from cart");

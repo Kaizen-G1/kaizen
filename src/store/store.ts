@@ -4,8 +4,10 @@ import productReducer from "../screens/vendors/product/slice/ProductSlice";
 import orderReducer from "../screens/vendors/home/slice/OrderSlice";
 import categoryReducer from "../screens/category/slice/CategorySlice";
 import wishlistReducer from "../screens/favourites/slice/WishlistSlice";
-import vendorSlice from '../screens/vendors/vendordetails/slice/VendorSlice';
+import vendorSlice from "../screens/vendors/vendordetails/slice/VendorSlice";
 import cartReducer from "../screens/cart/slice/CartSlice";
+
+import notificationReducer from "../screens/notifcations/slice/NotificatiosSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,7 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     vendor: vendorSlice,
     cart: cartReducer,
+    notifications: notificationReducer,
   },
 });
 

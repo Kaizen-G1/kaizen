@@ -96,7 +96,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   const handleAddToCart = async () => {
     const customerId = await AsyncStorage.getItem("vendorId");
     const cart: CartPayload = {
-      id: "",
       customerId: customerId || "",
       productId: product.id || "",
       quantity: 1,

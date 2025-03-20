@@ -30,7 +30,9 @@ export const getWishlistThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.get(API_ROUTES.wishlist.getWishlist(`${customerId}`));
+      const response = await http.get(
+        API_ROUTES.wishlist.getWishlist(`${customerId}`)
+      );
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
@@ -49,7 +51,9 @@ export const addToWishlistThunk = createAsyncThunk(
   async (payload: ProductPayload, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.post(API_ROUTES.wishlist.getWishlist(`${customerId}`), {
+      const response = await http.post(
+        API_ROUTES.wishlist.getWishlist(`${customerId}`),
+        {
           productId: payload.id,
         }
       );
@@ -71,7 +75,9 @@ export const removeFromWishlistThunk = createAsyncThunk(
   async (payload: ProductPayload, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.delete(API_ROUTES.wishlist.getWishlist(`${customerId}`),{
+      const response = await http.delete(
+        API_ROUTES.wishlist.getWishlist(`${customerId}`),
+        {
           data: { productId: payload.id },
         }
       );

@@ -39,7 +39,6 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   const [form, setForm] = useState<ProductPayload>({
-    id: "",
     title: "",
     description: "",
     inStock: 0,

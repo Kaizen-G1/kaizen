@@ -14,9 +14,12 @@ import { styles } from "./styles";
 import { useNavigation, useFocusEffect } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../RootNavigator";
-import { useAppDispatch } from "../../../../services/constants";
+import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrders } from "../slice/OrderSlice";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { get } from "mongoose";
+import { getNotificationsThunk } from "../../../notifcations/slice/NotificatiosSlice";
 
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -37,6 +40,12 @@ export default function OrderListScreen() {
     selectedFilter,
     setSelectedFilter,
   } = useOrderViewModel();
+
+  const { response } = useAppSelector(
+    (state) => state.notifications.notifications
+  );
+
+  const totalNotifications = response?.data.notifications.length;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -70,7 +79,15 @@ export default function OrderListScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Header title={customerName} searchQuery={searchQuery} onSearch={setSearchQuery} />
+        <Header
+          title={customerName}
+          searchQuery={searchQuery}
+          onSearch={setSearchQuery}
+          notificationCount={totalNotifications}
+          onNotificationPress={() => {
+            navigation.navigate("Notifications");
+          }}
+        />
         <View style={styles.filterContainer}>
           <ScrollView
             horizontal
@@ -105,22 +122,29 @@ export default function OrderListScreen() {
             ))}
           </ScrollView>
         </View>
-
-        <FlatList
-          scrollEnabled={false}
-          data={orders}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContainer}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("OrderDetail", { orderId: item.id })
-              }
-            >
-              <OrderItem order={item} />
-            </TouchableOpacity>
-          )}
-        />
+        {Array.isArray(orders) && orders.length > 0 ? (
+          <FlatList
+            scrollEnabled={false}
+            data={orders}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContainer}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("OrderDetail", { orderId: item.id })
+                }
+              >
+                <OrderItem order={item} />
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={{ textAlign: "center", marginTop: 20 }}>
+              No orders available
+            </Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

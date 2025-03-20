@@ -23,8 +23,10 @@ import {
 import { useIsFocused } from "@react-navigation/native"; // Import useIsFocused
 import { Swipeable } from "react-native-gesture-handler";
 import AlertModal from "../../../components/alert/AlertCustomModal";
+
 import { resetSelectedCategory } from "../../category/slice/CategorySlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 // Use your existing ProductPayload interface
 type ProductScreenNavigationProp = StackNavigationProp<

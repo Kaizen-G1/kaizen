@@ -23,6 +23,8 @@ import { Dimensions, Platform, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import StripePaymentScreen from "./src/screens/payment/StriveProvider";
 import CategoryProducts from "./src/screens/product/CategoryProducts";
+
+import Notifications from "./src/screens/notifcations/notifications";
 import CustomerOrderList from './src/screens/profile/CustomerOrderListScreen';
 import ProductReview from "./src/screens/productReview/ProductReviewScreen";
 import { Product } from './src/screens/vendors/home/data/OrderTypes';
@@ -50,6 +52,7 @@ export type RootStackParamList = {
   CategoryProducts: { categoryId: string };
   CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
   ProductReview: { productId: "" };
+  Notifications: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -207,6 +210,12 @@ const RootNavigator = () => {
         <Stack.Screen
           name="StripePayment"
           component={StripePaymentScreen}
+          options={{ headerShown: true }}
+        />
+
+        <Stack.Screen
+          name="Notifications"
+          component={Notifications}
           options={{ headerShown: true }}
         />
 

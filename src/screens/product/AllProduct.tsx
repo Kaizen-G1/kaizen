@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, FlatList, ScrollView } from "react-native";
 
 import { Text } from "react-native-paper";
 import ProductItem from "../../components/ProductItem";
