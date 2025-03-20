@@ -46,6 +46,12 @@ export default function OrderDetailScreen() {
   }, [dispatch, orderId]);
 
   useEffect(() => {
+      if (selectedOrder) {
+          console.log("Fetched Order Data:", selectedOrder);
+      }
+  }, [selectedOrder]);
+
+  useEffect(() => {
     if (selectedOrder) {
       setForm({
         customerName: selectedOrder.customerName || "",
@@ -164,19 +170,14 @@ export default function OrderDetailScreen() {
                 return (
                   <View key={index} style={styles.productItemContainer}>
                     <Image
-                      // source={{
-                      //   uri:
-                      //     product.image && product.image.length > 0
-                      //       ? product.image
-                      //       : "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
-                      // }}
                       source={{
                         uri:
-                          "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
+                          product.image && product.image.length > 0
+                            ? product.image
+                            : "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
                       }}
                       style={styles.productImage}
                     />
-
                     <View style={styles.textContainer}>
                       <Text style={styles.productTitle}>
                         {product.product_name || "Unknown Product"} (x{product.quantity})

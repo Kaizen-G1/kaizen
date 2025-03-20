@@ -27,6 +27,7 @@ class OrderRepository {
           product_name: product.name,
           price: product.price,
           quantity: product.quantity,
+          image: product.image,
         })), 
         total_price: order.totalPrice,
         status: order.status,
@@ -55,7 +56,27 @@ class OrderRepository {
           },
         }
       );
-      return response.data.data.order;
+      const orderResponse: OrdersResponse = response.data;
+      const order: Order[] = orderResponse.data.orders.map((order) => ({
+        id: order.id,
+        customer_id: order.customerId,
+        products: order.products.map((product) => ({
+          product_id: product.id,
+          product_name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          image: product.image,
+        })), 
+        total_price: order.totalPrice,
+        status: order.status,
+        createdDate: order.createdDate,
+        updatedDate: order.updatedDate,
+        companyName: order.companyName || "",
+        companyAddress: order.companyAddress || "",
+        customerName: order.customerName || "",
+        customerPhone: order.customerPhone || "",
+      }));
+      return order[0];
     } catch (error) {
       throw new Error("Failed to fetch order details");
     }
