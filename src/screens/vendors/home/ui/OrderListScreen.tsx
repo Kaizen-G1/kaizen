@@ -27,7 +27,6 @@ type ProductScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function OrderListScreen() {
-  
   const [customerName, setCustomerName] = useState("");
   const navigation = useNavigation<ProductScreenNavigationProp>();
   const dispatch = useAppDispatch();
@@ -54,12 +53,12 @@ export default function OrderListScreen() {
   );
 
   useEffect(() => {
-      const fetchCustomerName = async () => {
-        const name = await AsyncStorage.getItem("customerName");
-        setCustomerName(name || "Hello, User!");
-      };
-      fetchCustomerName();
-    }, []);
+    const fetchCustomerName = async () => {
+      const name = await AsyncStorage.getItem("customerName");
+      setCustomerName(name || "Hello, User!");
+    };
+    fetchCustomerName();
+  }, []);
 
   if (loading)
     return (

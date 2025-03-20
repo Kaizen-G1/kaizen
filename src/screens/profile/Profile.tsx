@@ -26,13 +26,17 @@ type ProfileScreenNavigationProp = StackNavigationProp<
 >;
 const ProfileScreenCustomer = () => {
   const [customerName, setCustomerName] = useState<string | null>(null);
-  
+
   const [customerEmail, setCustomerEmail] = useState<string | null>(null);
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  
+
   const dispatch = useAppDispatch();
-  
-  const { orders = [], loading, error } = useAppSelector((state) => state.orders || { orders: [] });
+
+  const {
+    orders = [],
+    loading,
+    error,
+  } = useAppSelector((state) => state.orders || { orders: [] });
 
   console.log("Orders", orders);
   useEffect(() => {
@@ -46,21 +50,29 @@ const ProfileScreenCustomer = () => {
     dispatch(fetchOrders());
   }, [dispatch]);
 
-
   // Filter orders for ToReceive and ToReview
-  const toReceiveOrders = orders.filter((order) => order.status === "Awaiting Pickup" || order.status === "In transit");
+  const toReceiveOrders = orders.filter(
+    (order) =>
+      order.status === "Awaiting Pickup" || order.status === "In transit"
+  );
   const toReviewOrders = orders.filter((order) => order.status === "Complete");
   const toPayOrders = orders.filter((order) => order.status === "Pending");
 
-   const handleNavigateToOrders = (type: string) => {
+  const handleNavigateToOrders = (type: string) => {
     if (type === "pay") {
       navigation.navigate("CustomerOrderList", { type, orders: toPayOrders });
       return;
-    }else if (type === "receive") {
-      navigation.navigate("CustomerOrderList", { type, orders: toReceiveOrders });
+    } else if (type === "receive") {
+      navigation.navigate("CustomerOrderList", {
+        type,
+        orders: toReceiveOrders,
+      });
       return;
-    }else if (type === "review") {
-      navigation.navigate("CustomerOrderList", { type, orders: toReviewOrders });
+    } else if (type === "review") {
+      navigation.navigate("CustomerOrderList", {
+        type,
+        orders: toReviewOrders,
+      });
       return;
     }
   };
@@ -75,8 +87,6 @@ const ProfileScreenCustomer = () => {
     await AsyncStorage.removeItem("vendorId");
     navigation.reset({ index: 0, routes: [{ name: "Login" }] });
   };
-
-  const dispatch = useAppDispatch();
 
   const { response } = useAppSelector(
     (state) => state.notifications.notifications
@@ -167,13 +177,22 @@ const ProfileScreenCustomer = () => {
       {/* My Orders Section */}
       <Text style={styles.sectionTitle}>My Orders</Text>
       <View style={styles.orderButtons}>
-        <TouchableOpacity style={styles.orderButton} onPress={() => handleNavigateToOrders("pay")}>
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => handleNavigateToOrders("pay")}
+        >
           <Text style={styles.orderText}>To Pay</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButtonActive} onPress={() => handleNavigateToOrders("receive")}>
+        <TouchableOpacity
+          style={styles.orderButtonActive}
+          onPress={() => handleNavigateToOrders("receive")}
+        >
           <Text style={styles.orderText}>To Receive</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.orderButton} onPress={() => handleNavigateToOrders("review")}>
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => handleNavigateToOrders("review")}
+        >
           <Text style={styles.orderText}>To Review</Text>
         </TouchableOpacity>
       </View>
