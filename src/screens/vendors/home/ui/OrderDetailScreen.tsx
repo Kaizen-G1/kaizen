@@ -114,12 +114,12 @@ export default function OrderDetailScreen() {
       >
         <Card style={styles.card}>
           <Card.Content>
-            <TextInput
+          <TextInput
               label="Order ID"
-              value={selectedOrder.id}
+              value={selectedOrder.id.slice(-5).toUpperCase()} // ✅ Últimos 5 dígitos en uppercase
               mode="outlined"
               disabled
-              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }} // ✅ Cambia color de fondo y borde
+              theme={{ colors: { background: "#f0f0f0", primary: "#aaa" } }}
               style={styles.input}
             />
             <TextInput
