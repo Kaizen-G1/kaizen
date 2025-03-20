@@ -60,14 +60,7 @@ const ProfileScreenCustomer = () => {
             }}
             style={styles.profileImage}
           />
-          {/* <IconButton
-            icon="bell-outline"
-            size={35}
-            style={{ marginLeft: 10 }}
-            onPress={() => {
-              navigation.navigate("Notifications");
-            }}
-          /> */}
+
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <IconButton
               icon={() => (
@@ -132,13 +125,8 @@ const ProfileScreenCustomer = () => {
       {/* My Orders Section */}
       <Text style={styles.sectionTitle}>My Orders</Text>
       <View style={styles.orderButtons}>
-        <TouchableOpacity
-          style={styles.orderButton}
-          onPress={() => {
-            navigation.navigate("Notifications");
-          }}
-        >
-          <Text style={styles.orderText}>Notifications</Text>
+        <TouchableOpacity style={styles.orderButton}>
+          <Text style={styles.orderText}>To Pay</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.orderButtonActive}>
           <Text style={styles.orderText}>To Receive</Text>
