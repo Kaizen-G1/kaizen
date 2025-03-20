@@ -94,22 +94,29 @@ export default function OrderListScreen() {
             ))}
           </ScrollView>
         </View>
-
-        <FlatList
-          scrollEnabled={false}
-          data={orders}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContainer}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("OrderDetail", { orderId: item.id })
-              }
-            >
-              <OrderItem order={item} />
-            </TouchableOpacity>
-          )}
-        />
+        {Array.isArray(orders) && orders.length > 0 ? (
+          <FlatList
+            scrollEnabled={false}
+            data={orders}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContainer}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("OrderDetail", { orderId: item.id })
+                }
+              >
+                <OrderItem order={item} />
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={{ textAlign: "center", marginTop: 20 }}>
+              No orders available
+            </Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

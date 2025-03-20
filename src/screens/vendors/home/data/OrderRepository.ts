@@ -2,6 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Order } from "./OrderTypes";
 import API_ROUTES from "../../../../api/apiRoutes";
+import { OrdersResponse } from '../../../../api/interfaces/orders-response';
 
 class OrderRepository {
   async fetchOrders(): Promise<Order[]> {
@@ -17,7 +18,27 @@ class OrderRepository {
           userRole: await AsyncStorage.getItem("userRole"),
         },
       });
-      return response.data.data.orders;
+      const ordersResponse: OrdersResponse = response.data;
+      const orders: Order[] = ordersResponse.data.orders.map((order) => ({
+        id: order.id,
+        customer_id: order.customerId,
+        products: order.products.map((product) => ({
+          product_id: product.id,
+          product_name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          image: product.image,
+        })), 
+        total_price: order.totalPrice,
+        status: order.status,
+        createdDate: order.createdDate,
+        updatedDate: order.updatedDate,
+        companyName: order.companyName || "",
+        companyAddress: order.companyAddress || "",
+        customerName: order.customerName || "",
+        customerPhone: order.customerPhone || "",
+      }));
+      return orders;
     } catch (error) {
       throw new Error("Failed to fetch orders");
     }
@@ -35,8 +56,27 @@ class OrderRepository {
           },
         }
       );
-      console.log(response.data.data.order);
-      return response.data.data.orders;
+      const orderResponse: OrdersResponse = response.data;
+      const order: Order[] = orderResponse.data.orders.map((order) => ({
+        id: order.id,
+        customer_id: order.customerId,
+        products: order.products.map((product) => ({
+          product_id: product.id,
+          product_name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          image: product.image,
+        })), 
+        total_price: order.totalPrice,
+        status: order.status,
+        createdDate: order.createdDate,
+        updatedDate: order.updatedDate,
+        companyName: order.companyName || "",
+        companyAddress: order.companyAddress || "",
+        customerName: order.customerName || "",
+        customerPhone: order.customerPhone || "",
+      }));
+      return order[0];
     } catch (error) {
       throw new Error("Failed to fetch order details");
     }
