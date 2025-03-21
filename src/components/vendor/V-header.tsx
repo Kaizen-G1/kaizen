@@ -1,7 +1,8 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Avatar, IconButton, Text, TextInput, Badge } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useAppSelector } from "../../services/constants";
 
 interface HeaderProps {
   title?: string;
@@ -22,6 +23,8 @@ const Header: React.FC<HeaderProps> = ({
   onSearch,
   onNotificationPress,
 }) => {
+  const { userDetails } = useAppSelector((state) => state.auth);
+
   return (
     <View>
       <View style={styles.header}>
@@ -32,8 +35,14 @@ const Header: React.FC<HeaderProps> = ({
             style={{ backgroundColor: "gray" }}
           />
           <View style={styles.headerText}>
-            <Text variant="titleMedium"> {title}</Text>
-            <Text variant="bodySmall"> {subtitle}</Text>
+            <Text variant="titleMedium">
+              {userDetails !== null ? userDetails.userName : title}
+            </Text>
+            <Text variant="bodySmall">
+              {userDetails !== null
+                ? `${userDetails.userEmail}\nLets make sales today`
+                : subtitle}
+            </Text>
           </View>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>

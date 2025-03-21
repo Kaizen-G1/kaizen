@@ -12,6 +12,7 @@ export interface CategoryPayload {
   name: string;
   count: number;
   demoImages: string[];
+  subcategories?: SubCategoryPayload[];
 }
 
 export interface SubCategoryPayload {
@@ -103,7 +104,9 @@ export const getCategoriesWithSubcategoriesThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       console.log("Fetching categories with subcategories");
-      const response = await http.get(API_ROUTES.categories.getWithSubcategories);
+      const response = await http.get(
+        API_ROUTES.categories.getWithSubcategories
+      );
       // console.log(response.data.data.categories);
       return response.data; // Adjusted to match response structure
     } catch (error: any) {
@@ -137,12 +140,16 @@ export const categorySlice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<CategoryPayload>) => {
       state.selectedCategory = action.payload;
     },
-    setSelectedSubCategory: (state, action: PayloadAction<SubCategoryPayload>) => {
+    setSelectedSubCategory: (
+      state,
+      action: PayloadAction<SubCategoryPayload>
+    ) => {
       state.selectedSubCategory = action.payload;
     },
     resetSelectedCategory: (state) => {
       console.log("resetting selected category");
       state.selectedCategory = initialState.selectedCategory;
+      state.selectedSubCategory = initialState.selectedSubCategory;
       console.log(state.selectedCategory);
     },
     resetCategoryList: (state) => {
@@ -166,17 +173,27 @@ export const categorySlice = createSlice({
         handleApiCall(state.categoryList, { error: action.payload }, "failed");
       })
 
-       // Fetch category list
-       .addCase(getCategoriesWithSubcategoriesThunk.pending, (state) => {
+      // Fetch category list
+      .addCase(getCategoriesWithSubcategoriesThunk.pending, (state) => {
         handleApiCall(state.categoryWithSubCategoriesList, {}, "loading");
       })
-      .addCase(getCategoriesWithSubcategoriesThunk.fulfilled, (state, action) => {
-        handleApiCall(state.categoryWithSubCategoriesList, action, "success");
-        state.categoryWithSubCategoriesList.response = action.payload;
-      })
-      .addCase(getCategoriesWithSubcategoriesThunk.rejected, (state, action) => {
-        handleApiCall(state.categoryWithSubCategoriesList, { error: action.payload }, "failed");
-      })
+      .addCase(
+        getCategoriesWithSubcategoriesThunk.fulfilled,
+        (state, action) => {
+          handleApiCall(state.categoryWithSubCategoriesList, action, "success");
+          state.categoryWithSubCategoriesList.response = action.payload;
+        }
+      )
+      .addCase(
+        getCategoriesWithSubcategoriesThunk.rejected,
+        (state, action) => {
+          handleApiCall(
+            state.categoryWithSubCategoriesList,
+            { error: action.payload },
+            "failed"
+          );
+        }
+      )
 
       // Fetch category by id
       .addCase(getCategoryByIdThunk.pending, (state) => {

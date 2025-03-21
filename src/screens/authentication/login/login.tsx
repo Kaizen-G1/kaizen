@@ -17,6 +17,8 @@ import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 
 import API_ROUTES from "../../../api/apiRoutes";
+import { useAppDispatch, useAppSelector } from "../../../services/constants";
+import { setUserDetails, UserDetails } from "../slice/AuthSlice";
 
 type LoginScreenProps = {
   navigation: any;
@@ -25,6 +27,10 @@ type LoginScreenProps = {
 const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const { userDetails } = useAppSelector((state) => state.auth);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -69,8 +75,19 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
         await AsyncStorage.setItem("vendorId", decodedToken.id || "");
 
+        const userDetials: UserDetails = {
+          userId: decodedToken.id,
+          userRole: decodedToken.role,
+          userName: decodedToken.name,
+          userEmail: decodedToken.email,
+        };
+        dispatch(setUserDetails(userDetials));
+
         const isVendor = decodedToken.role === UserRole.COMPANY;
-        navigation.navigate("Home", { isVendor });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home", params: { isVendor } }],
+        });
       } else {
         console.error("Login failed:", data);
         Alert.alert("Error", data.error || "Something went wrong.");
@@ -79,16 +96,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       console.error("Error during login request:", error);
       Alert.alert("Error", "Failed to connect to the server.");
     }
-  };
-
-  const handleLogout = async () => {
-    // TODO: Implement method on logout event
-    await AsyncStorage.removeItem("accessToken");
-    await AsyncStorage.removeItem("refreshToken");
-    await AsyncStorage.removeItem("userRole");
-    await AsyncStorage.removeItem("userEmail");
-    await AsyncStorage.removeItem("vendorId");
-    navigation.replace("Login");
   };
 
   return (
@@ -142,7 +149,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           // paddingHorizontal={140}
         />
 
-        <TouchableOpacity onPress={() => navigation.navigate("Splash")}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Splash");
+          }}
+        >
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
       </View>

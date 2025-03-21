@@ -20,15 +20,12 @@ import {
   getProductThunk,
   ProductPayload,
 } from "./slice/ProductSlice";
-import { useIsFocused } from "@react-navigation/native"; // Import useIsFocused
+import { useIsFocused } from "@react-navigation/native";
 import { Swipeable } from "react-native-gesture-handler";
 import AlertModal from "../../../components/alert/AlertCustomModal";
 
 import { resetSelectedCategory } from "../../category/slice/CategorySlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-// Use your existing ProductPayload interface
 type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Home"
@@ -39,46 +36,43 @@ export default function ProductListScreen() {
   const dispatch = useAppDispatch();
 
   const [searchQuery, setSearchQuery] = useState("");
-  
-  const [customerName, setCustomerName] = useState("");
-  const [refreshing, setRefreshing] = useState(false); // State to track refreshing status
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const { loading, error, response } = useAppSelector(
     (state) => state.product.productList
   );
 
-  // Check if the screen is focused (when navigating back)
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused) {
-      dispatch(getProductThunk()); // Fetch products when the screen comes into focus
-    }
-    
-    const fetchCustomerName = async () => {
-      const name = await AsyncStorage.getItem("customerName");
-      setCustomerName(name || "Hello, User!");
-    };
-    fetchCustomerName();
-  }, [isFocused, dispatch]);
+    dispatch(getProductThunk());
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (isFocused) {
+        dispatch(getProductThunk());
+      }
+    });
 
-  console.log(customerName);
+    //on unmount
+    dispatch(resetSelectedCategory());
+    return unsubscribe;
+  }, [dispatch, isFocused, navigation]);
+
   const handleRefresh = async () => {
     setRefreshing(true);
-    await dispatch(getProductThunk()); // Refresh product list
-    setRefreshing(false); // Stop the refreshing spinner
+    await dispatch(getProductThunk());
+    setRefreshing(false);
   };
 
   const handleDelete = async (id: string) => {
-    await dispatch(deleteProductThunk(id)); // Dispatch delete action
-    dispatch(getProductThunk()); // Refresh list after deletion
+    await dispatch(deleteProductThunk(id));
+    dispatch(getProductThunk());
   };
 
-  // Explicitly type response as { products: ProductPayload[] }
-  const products: ProductPayload[] = response?.data.products || []; // Use ProductPayload interface
+  const products: ProductPayload[] = response?.data.products || [];
 
-  const filteredProducts = products.filter(
-    (product) => product.title.toLowerCase().includes(searchQuery.toLowerCase()) // Update to 'title' instead of 'name'
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading && !refreshing) {
@@ -102,7 +96,11 @@ export default function ProductListScreen() {
 
   return (
     <View style={styles.container}>
-      <Headers title={customerName} searchQuery={searchQuery} onSearch={setSearchQuery} />
+      <Headers
+        title={"sd"}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+      />
       {error && (
         <AlertModal
           title="Error"
@@ -174,15 +172,15 @@ export default function ProductListScreen() {
             </TouchableOpacity>
           </Swipeable>
         )}
-        refreshing={refreshing} // Show pull-to-refresh spinner
-        onRefresh={handleRefresh} // Trigger the refresh
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={["#753742"]} // You can change the color of the refresh indicator
-            progressBackgroundColor="#fff" // Background color for the spinner
-            tintColor="#753742" // Spinner color
+            colors={["#753742"]}
+            progressBackgroundColor="#fff"
+            tintColor="#753742"
           />
         }
       />

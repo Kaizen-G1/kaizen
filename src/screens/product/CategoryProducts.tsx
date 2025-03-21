@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { useIsFocused, useRoute } from "@react-navigation/native";
 import {
   getProductsByCategoryThunk,
-  getProductThunk,
   ProductPayload,
 } from "../vendors/product/slice/ProductSlice";
 import { TextInput } from "react-native-paper";

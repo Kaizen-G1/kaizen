@@ -6,6 +6,7 @@ import { RootStackParamList } from "../../RootNavigator";
 import { useAppDispatch, useAppSelector } from "../services/constants";
 import {
   deleteProductThunk,
+  getProductThunk,
   ProductPayload,
   saveProductThunk,
 } from "../screens/vendors/product/slice/ProductSlice";
@@ -32,9 +33,8 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   const { loading, success } = useAppSelector(
     (state) => state.product.productSave
   );
-  const { selectedCategory, selectedSubCategory, categoryById } = useAppSelector(
-    (state) => state.category
-  );
+  const { selectedCategory, selectedSubCategory, categoryById } =
+    useAppSelector((state) => state.category);
 
   const isFocused = useIsFocused();
 
@@ -53,34 +53,25 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   });
 
   useEffect(() => {
-    if (isFocused && initialData?.subCategoryId) {
-      dispatch(getCategoryByIdThunk(initialData.subCategoryId));
-    }
-  }, [isFocused, initialData, dispatch]);
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (mode === "update" && initialData) {
+        console.log(initialData.subCategoryId?.toString());
+        setForm({
+          ...initialData,
+          subCategoryId: initialData.subCategoryId?.toString() || "",
+          images: initialData.images || [],
+        });
+      }
+      if (selectedSubCategory?.id) {
+        setForm((prev) => ({
+          ...prev,
+          subCategoryId: selectedSubCategory.id,
+        }));
+      }
+    });
 
-  useEffect(() => {
-    if (categoryById.response?.data) {
-      dispatch(setSelectedCategory(categoryById.response.data.category));
-    }
-  }, [categoryById.response, dispatch]);
-
-  useEffect(() => {
-    if (selectedSubCategory?.id) {
-      setForm((prev) => ({
-        ...prev,
-        subCategoryId: selectedSubCategory.id,
-      }));
-    }
-  }, [selectedSubCategory]);
-
-  useEffect(() => {
-    if (mode === "update" && initialData) {
-      setForm({
-        ...initialData,
-        images: initialData.images || [],
-      });
-    }
-  }, [mode, initialData]);
+    return unsubscribe;
+  }, [mode, initialData, selectedSubCategory, navigation]);
 
   const handleChange = (key: keyof ProductPayload, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -165,7 +156,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
 
     setShowSuccessModal(true);
     dispatch(saveProductThunk(form));
-    dispatch(resetSelectedCategory());
+    await dispatch(getProductThunk());
   };
 
   const handleDeleteImage = (index: number) => {
@@ -305,7 +296,11 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
         onPress={() => navigation.navigate("Category")}
       >
         <Text style={{ fontSize: 16, color: "#333" }}>
-          {selectedSubCategory.name || "Select Category"}
+          {selectedSubCategory.name !== ""
+            ? selectedSubCategory.name
+            : initialData !== undefined && initialData.subCategoryId !== ""
+            ? initialData.subCategoryId
+            : "Select Category"}
         </Text>
       </TouchableOpacity>
 
