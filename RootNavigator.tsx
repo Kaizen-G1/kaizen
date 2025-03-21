@@ -25,9 +25,8 @@ import StripePaymentScreen from "./src/screens/payment/StriveProvider";
 import CategoryProducts from "./src/screens/product/CategoryProducts";
 
 import Notifications from "./src/screens/notifcations/notifications";
-import CustomerOrderList from './src/screens/profile/CustomerOrderListScreen';
+import CustomerOrderList from "./src/screens/profile/CustomerOrderListScreen";
 import ProductReview from "./src/screens/productReview/ProductReviewScreen";
-import { Product } from './src/screens/vendors/home/data/OrderTypes';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -164,7 +163,7 @@ const RootNavigator = () => {
             title: "Product Details",
           }}
         />
-        
+
         <Stack.Screen
           name="CustomerOrderList"
           component={CustomerOrderList}
@@ -173,7 +172,7 @@ const RootNavigator = () => {
             title: "Orders",
           }}
         />
-        
+
         <Stack.Screen
           name="ProductReview"
           component={ProductReview}

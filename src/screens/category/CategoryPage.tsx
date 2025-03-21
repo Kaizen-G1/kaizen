@@ -1,185 +1,141 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  ScrollView,
-} from "react-native";
+import { Text } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
+import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import Collapsible from "react-native-collapsible";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+
 import {
-  getCategoriesWithSubcategoriesThunk,
-  CategoryWithSubCategoriesPayload,
+  CategoryPayload,
+  getCategoryThunk,
   setSelectedSubCategory,
-} from "../../screens/category/slice/CategorySlice";
+  SubCategoryPayload,
+} from "./slice/CategorySlice";
 
-const Category = () => {
+import { RootStackParamList } from "../../../RootNavigator";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type NavigationProp = StackNavigationProp<RootStackParamList, "Category">;
+
+export default function Category() {
+  const navigation = useNavigation<NavigationProp>();
+
   const dispatch = useAppDispatch();
+  const [openCategoryId, setOpenCategoryId] = useState(null);
 
-  // Get category state from Redux
-  const { selectedCategory, categoryWithSubCategoriesList } = useAppSelector(
+  const handleToggle = (categoryId: any) => {
+    // If the same category is tapped, close it; otherwise, open the tapped category
+    setOpenCategoryId((prevId) => (prevId === categoryId ? null : categoryId));
+  };
+  const { categoryList, selectedSubCategory } = useAppSelector(
     (state) => state.category
   );
+  const { userDetails } = useAppSelector((state) => state.auth);
 
-  // Local states
-  const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(
-    null
-  );
-  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<
-    string | null
-  >(null); // Save subcategory ID
-
-  // Fetch categories when component mounts
   useEffect(() => {
-    dispatch(getCategoriesWithSubcategoriesThunk());
-  }, [dispatch]);
+    dispatch(getCategoryThunk());
+    const unsubscribe = navigation.addListener("focus", () => {
+      console.log("Screen is focused or backed into view");
+      // Call your function here
+    });
 
-  // Handle category selection
-  const handleCategorySelect = (
-    subcategory: CategoryWithSubCategoriesPayload
-  ) => {
-    dispatch(setSelectedSubCategory(subcategory));
+    // Clean up the listener on unmount
+    return unsubscribe;
+  }, [selectedSubCategory, navigation]);
 
-    // Toggle expansion of the category
-    setExpandedCategoryId((prevId) =>
-      prevId === subcategory.id ? null : subcategory.id
-    );
-  };
-
-  // Handle subcategory selection
-  const handleSubCategorySelect = (subCategory: {
-    id: string;
-    name: string;
-  }) => {
-    setSelectedSubCategoryId(subCategory.id); // Save subcategory ID
-    dispatch(setSelectedSubCategory(subCategory)); // Dispatch Redux action if needed
-  };
-
-  console.log("Selected Subcategory ID:", selectedSubCategoryId);
-
-  // Show loading indicator while fetching
-  if (categoryWithSubCategoriesList.loading) {
+  if (categoryList.loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading categories...</Text>
-        <ActivityIndicator size="large" color="#9C7875" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Loading...</Text>
       </View>
     );
   }
-
-  // Show error if the fetch failed
-  if (categoryWithSubCategoriesList.error) {
+  if (categoryList.error) {
     return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          {categoryWithSubCategoriesList.error}
-        </Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error: {categoryList.error}</Text>
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container}>
-      {categoryWithSubCategoriesList.response?.data.categories.map(
-        (category: CategoryWithSubCategoriesPayload) => (
-          <View key={category.id} style={styles.categoryContainer}>
-            {/* Category Button */}
-            <TouchableOpacity
-              style={[
-                styles.button,
-                category.id === selectedCategory?.id && styles.selectedButton, // Highlight selected category
-              ]}
-              onPress={() => handleCategorySelect(category)}
-            >
-              <Text style={styles.text}>{category.name}</Text>
-            </TouchableOpacity>
-
-            {/* Show Subcategories if Expanded */}
-            {expandedCategoryId === category.id && category.subcategories && (
-              <View style={styles.subcategoryContainer}>
-                {category.subcategories.map((sub) => (
-                  <TouchableOpacity
-                    key={sub.id}
-                    style={[
-                      styles.subcategoryButton,
-                      sub.id === selectedSubCategoryId &&
-                        styles.selectedSubcategoryButton, // Highlight selected subcategory
-                    ]}
-                    onPress={() => handleSubCategorySelect(sub)}
-                  >
-                    <Text style={styles.subcategoryText}>{sub.name}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-          </View>
-        )
-      )}
+      {categoryList.success &&
+        categoryList.response?.data &&
+        categoryList.response.data.categories.map((category) => (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            isOpen={openCategoryId === category.id}
+            onToggle={handleToggle}
+            onSubToggle={(sub) => {
+              if (userDetails?.userRole === "customer") {
+                navigation.replace("CategoryProducts", {
+                  categoryId: category.id,
+                });
+              } else {
+                dispatch(setSelectedSubCategory(sub));
+                console.log(sub);
+                navigation.goBack();
+              }
+            }}
+          />
+        ))}
     </ScrollView>
   );
-};
+}
+
+const CategoryItem = ({
+  category,
+  isOpen,
+  onToggle,
+  onSubToggle,
+}: {
+  category: CategoryPayload;
+  isOpen: any;
+  onToggle: any;
+  onSubToggle: (sub: SubCategoryPayload) => void;
+}) => (
+  <View style={styles.categoryContainer}>
+    <TouchableOpacity onPress={() => onToggle(category.id)}>
+      <Text style={styles.header}>{category.name}</Text>
+    </TouchableOpacity>
+    <Collapsible collapsed={!isOpen}>
+      {category.subcategories && category.subcategories.length > 0 ? (
+        <View style={styles.subcategories}>
+          {category.subcategories.map((sub: any) => (
+            <TouchableOpacity key={sub.id} onPress={() => onSubToggle(sub)}>
+              <Text style={styles.subcategoryText}>{sub.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      ) : (
+        <Text>No subcategories found</Text>
+      )}
+    </Collapsible>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 18,
+    padding: 10,
   },
   categoryContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingBottom: 10,
   },
-  button: {
-    width: "100%",
-    paddingVertical: 15,
-    borderWidth: 2,
-    borderColor: "#9C7875",
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  selectedButton: {
-    backgroundColor: "#f7ebeb", // Highlight color for the selected category
-    borderColor: "#693B39",
-  },
-  text: {
-    fontSize: 16,
-    color: "#693B39",
+  header: {
+    fontSize: 18,
     fontWeight: "bold",
   },
-  subcategoryContainer: {
-    marginTop: 5,
+  subcategories: {
+    marginTop: 10,
     paddingLeft: 20,
   },
-  subcategoryButton: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#9C7875",
-  },
-  selectedSubcategoryButton: {
-    backgroundColor: "#f7ebeb", // Highlight color for the selected subcategory
-  },
   subcategoryText: {
-    fontSize: 14,
-    color: "#693B39",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
     fontSize: 16,
-    color: "#9C7875",
-    marginBottom: 10,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  errorText: {
-    color: "red",
-    fontSize: 18,
+    marginVertical: 3,
   },
 });
-
-export default Category;

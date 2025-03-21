@@ -5,6 +5,7 @@ import config from "../../../config/config";
 import { RegisterPayload, Verify2FAPayload } from "../authTypes";
 import API_ROUTES from "../../../api/apiRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { set } from "mongoose";
 
 export interface RegisterResponseData {
   message: string;
@@ -15,9 +16,17 @@ export interface Verify2FAResponseData {
   message: string;
 }
 
+export interface UserDetails {
+  userId: string;
+  userRole: string;
+  userName: string;
+  userEmail: string;
+}
+
 interface AuthState {
   register: ExtendedApiState<RegisterResponseData>;
   verify2FA: ExtendedApiState<Verify2FAResponseData>;
+  userDetails: UserDetails | null;
 }
 
 const initialState: AuthState = {
@@ -33,6 +42,7 @@ const initialState: AuthState = {
     success: false,
     response: null,
   },
+  userDetails: null,
 };
 
 export const registerUser = createAsyncThunk(
@@ -75,18 +85,21 @@ export const getCustomerById = createAsyncThunk(
   "auth/getCustomerById",
   async (_, { rejectWithValue }) => {
     try {
-      
       const customer_id = await AsyncStorage.getItem("vendorId");
       const token = await AsyncStorage.getItem("accessToken");
-      const response = await fetch(API_ROUTES.auth.getCustomerById(`${customer_id}`), {
-        method: "GET",
-        headers: { 
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-         },
-      });
+      const response = await fetch(
+        API_ROUTES.auth.getCustomerById(`${customer_id}`),
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await response.json();
-      if (!response.ok) throw new Error(data.data || "Failed to get customer details");
+      if (!response.ok)
+        throw new Error(data.data || "Failed to get customer details");
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -101,6 +114,10 @@ const authSlice = createSlice({
     resetAuthState: (state) => {
       state.register = initialState.register;
       state.verify2FA = initialState.verify2FA;
+    },
+
+    setUserDetails: (state, action) => {
+      state.userDetails = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -131,5 +148,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetAuthState } = authSlice.actions;
+export const { resetAuthState, setUserDetails } = authSlice.actions;
 export default authSlice.reducer;
