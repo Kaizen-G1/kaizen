@@ -13,8 +13,14 @@ import {
   CategoryWithSubCategoriesPayload,
   setSelectedSubCategory,
 } from "../../screens/category/slice/CategorySlice";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../../RootNavigator"; // Adjust the path as necessary
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SubCategoryPayload } from './slice/CategorySlice';
 
 const Category = () => {
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
 
   // Get category state from Redux
@@ -40,13 +46,25 @@ const Category = () => {
     subcategory: CategoryWithSubCategoriesPayload
   ) => {
     dispatch(setSelectedSubCategory(subcategory));
-
     // Toggle expansion of the category
     setExpandedCategoryId((prevId) =>
       prevId === subcategory.id ? null : subcategory.id
     );
   };
 
+  const handleNavigateToAddProduct =  async (subcategory: SubCategoryPayload) => {
+    console.log("Selected Subcategory valeus:", subcategory);
+
+    
+    dispatch(setSelectedSubCategory(subcategory));
+    // const UserRole = await AsyncStorage.getItem("userRole");
+
+    // if (UserRole === "customer") {
+    //   navigation.navigate("CategoryProducts", { categoryId: categoryId.toString() }); 
+    // }else{
+    //   navigation.navigate("AddProduct", { mode: "add", initialData: { selectedSubCategoryId: subCategoryId, selectedSubCategory: subCategory } });
+    // }
+  }
   // Handle subcategory selection
   const handleSubCategorySelect = (subCategory: {
     id: string;
@@ -55,7 +73,7 @@ const Category = () => {
     setSelectedSubCategoryId(subCategory.id); // Save subcategory ID
     dispatch(setSelectedSubCategory(subCategory)); // Dispatch Redux action if needed
   };
-
+  
   console.log("Selected Subcategory ID:", selectedSubCategoryId);
 
   // Show loading indicator while fetching
@@ -106,7 +124,7 @@ const Category = () => {
                       sub.id === selectedSubCategoryId &&
                         styles.selectedSubcategoryButton, // Highlight selected subcategory
                     ]}
-                    onPress={() => handleSubCategorySelect(sub)}
+                    onPress={() =>  handleNavigateToAddProduct(sub)}
                   >
                     <Text style={styles.subcategoryText}>{sub.name}</Text>
                   </TouchableOpacity>

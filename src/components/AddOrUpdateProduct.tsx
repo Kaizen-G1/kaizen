@@ -25,14 +25,14 @@ import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 type Props = StackScreenProps<RootStackParamList, "AddProduct">;
 
 const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
-  const { mode, initialData } = route.params;
+  const { mode, initialData } = route.params || {};
   const dispatch = useAppDispatch();
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { loading, success } = useAppSelector(
     (state) => state.product.productSave
   );
-  const { selectedCategory, categoryById } = useAppSelector(
+  const { selectedCategory, selectedSubCategory, categoryById } = useAppSelector(
     (state) => state.category
   );
 
@@ -65,13 +65,13 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   }, [categoryById.response, dispatch]);
 
   useEffect(() => {
-    if (selectedCategory?.id) {
+    if (selectedSubCategory?.id) {
       setForm((prev) => ({
         ...prev,
-        subCategoryId: selectedCategory.id,
+        subCategoryId: selectedSubCategory.id,
       }));
     }
-  }, [selectedCategory]);
+  }, [selectedSubCategory]);
 
   useEffect(() => {
     if (mode === "update" && initialData) {
@@ -305,7 +305,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
         onPress={() => navigation.navigate("Category")}
       >
         <Text style={{ fontSize: 16, color: "#333" }}>
-          {selectedCategory?.name || "Select Category"}
+          {selectedSubCategory.name || "Select Category"}
         </Text>
       </TouchableOpacity>
 
