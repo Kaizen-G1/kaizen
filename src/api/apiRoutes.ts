@@ -5,11 +5,13 @@ export const API_ROUTES = {
     login: `${config.API_URL}/api/v1/auth/login`,
     register: `${config.API_URL}/api/v1/auth/register`,
     verify2fa: `${config.API_URL}/api/v1/auth/verify-2fa`,
-    getCustomerById: (customer_id: string) => `${config.API_URL}/api/v1/auth/getCustomerById/${customer_id}`,
+    getCustomerById: (customer_id: string) =>
+      `${config.API_URL}/api/v1/auth/getCustomerById/${customer_id}`,
     refreshToken: `${config.API_URL}/api/v1/auth/refresh-token`,
   },
   categories: {
     getAll: `${config.API_URL}/api/v1/categories/`,
+    getAllSubcategories: `${config.API_URL}/api/v1/categories/subcategories`,
     getWithSubcategories: `${config.API_URL}/api/v1/products/categories/subcategories/`,
     getById: (id: string) => `${config.API_URL}/api/v1/categories/${id}`,
   },
@@ -62,6 +64,10 @@ export const API_ROUTES = {
     create: `${config.API_URL}/api/v1/notifications/`,
     markAsRead: (id: string) => `${config.API_URL}/api/v1/notifications/${id}`,
     delete: (id: string) => `${config.API_URL}/api/v1/notifications/${id}`,
+  },
+
+  search: {
+    getAll: `${config.API_URL}/api/v1/search`,
   },
 };
 

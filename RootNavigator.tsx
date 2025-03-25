@@ -27,6 +27,8 @@ import CategoryProducts from "./src/screens/product/CategoryProducts";
 import Notifications from "./src/screens/notifcations/notifications";
 import CustomerOrderList from "./src/screens/profile/CustomerOrderListScreen";
 import ProductReview from "./src/screens/productReview/ProductReviewScreen";
+import SearchList from "./src/screens/search/ui/SearchList";
+import { SearchPayload } from "./src/screens/search/slice/SearchSlice";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -52,6 +54,7 @@ export type RootStackParamList = {
   CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
   ProductReview: { productId: "" };
   Notifications: undefined;
+  SearchList: { query: SearchPayload };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -216,6 +219,17 @@ const RootNavigator = () => {
           name="Notifications"
           component={Notifications}
           options={{ headerShown: true }}
+        />
+
+        <Stack.Screen
+          name="SearchList"
+          component={SearchList}
+          options={{
+            headerShown: true,
+            title: "",
+            headerTransparent: true,
+            headerStyle: { backgroundColor: "transparent" },
+          }}
         />
 
         {/* Home Screen with Bottom Navigation */}
