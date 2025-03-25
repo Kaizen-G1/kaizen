@@ -133,9 +133,10 @@ jobs:
           groups: testers
           file: builds/app-release.apk
 
-      # - name: Upload to Firebase App Distribution (iOS)
-      #   run: firebase appdistribution:distribute builds/*.ipa \
-      #     --app ${{ secrets.FIREBASE_APP_ID_IOS }} \
-      #     --groups testers \
-      #     --token ${{ secrets.FIREBASE_TOKEN }}
-      # --project ${{ secrets.FIREBASE_PROJECT_ID }}
+      - name: Upload to Firebase App Distribution (iOS)
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.5.1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: builds/*.ipa
