@@ -19,7 +19,8 @@
         "gradleCommand": ":app:assembleRelease"
       },
       "ios": {
-        "simulator": true
+        "simulator": false,
+        "buildType": "release"
       },
       "env": {
         "API_URL": "$API_URL_PRODUCTION",
