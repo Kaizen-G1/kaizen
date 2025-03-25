@@ -6,7 +6,7 @@ import { RootStackParamList } from "../../../../RootNavigator";
 
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import { saveVendorThunk } from "./slice/VendorSlice";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 import AlertModal from "../../../components/alert/AlertCustomModal";
 
 type Props = StackScreenProps<RootStackParamList, "AddOrUpdateVendor">;

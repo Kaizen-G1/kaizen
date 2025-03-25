@@ -10,7 +10,7 @@ import {
   ProductPayload,
   saveProductThunk,
 } from "../screens/vendors/product/slice/ProductSlice";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 import AlertModal from "./alert/AlertCustomModal";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";

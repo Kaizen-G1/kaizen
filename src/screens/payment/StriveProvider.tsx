@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Button, Text, Alert } from "react-native";
-import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
+// import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import axios from "axios";
 
 import { io } from "socket.io-client";
@@ -15,7 +15,7 @@ const SOCKET_URL = "http://localhost:3000/api/v1/payments/webhook";
 type Props = StackScreenProps<RootStackParamList, "StripePayment">;
 
 const StripePaymentScreen: React.FC<Props> = ({ route }) => {
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  // const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
 
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
@@ -56,40 +56,41 @@ const StripePaymentScreen: React.FC<Props> = ({ route }) => {
 
       const { clientSecret } = response.data;
 
-      const { error } = await initPaymentSheet({
-        paymentIntentClientSecret: clientSecret,
-        merchantDisplayName: "Kaizen",
-      });
+      // const { error } = await initPaymentSheet({
+      //   paymentIntentClientSecret: clientSecret,
+      //   merchantDisplayName: "Kaizen",
+      // });
 
-      if (!error) {
-        openPaymentSheet();
-      }
+      // if (!error) {
+      //   openPaymentSheet();
+      // }
     } catch (error) {
       console.error("Error fetching payment intent:", error);
     }
     setLoading(false);
   };
 
-  const openPaymentSheet = async () => {
-    const { error } = await presentPaymentSheet();
-    if (error) {
-      console.log("Payment failed", error);
-    } else {
-      console.log("Payment successful!");
-    }
-  };
+  // const openPaymentSheet = async () => {
+  //   const { error } = await presentPaymentSheet();
+  //   if (error) {
+  //     console.log("Payment failed", error);
+  //   } else {
+  //     console.log("Payment successful!");
+  //   }
+  // };
 
   return (
-    <StripeProvider publishableKey="pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz">
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Stripe Payment</Text>
-        <Button
-          title="Pay Now"
-          onPress={fetchPaymentIntent}
-          disabled={loading}
-        />
-      </View>
-    </StripeProvider>
+    // <StripeProvider publishableKey="pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz">
+    //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    //     <Text>Stripe Payment</Text>
+    //     <Button
+    //       title="Pay Now"
+    //       onPress={fetchPaymentIntent}
+    //       disabled={loading}
+    //     />
+    //   </View>
+    // </StripeProvider>
+    <></>
   );
 };
 

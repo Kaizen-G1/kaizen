@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import { verify2FA } from "../slice/AuthSlice";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 type Props = {
   navigation: any;

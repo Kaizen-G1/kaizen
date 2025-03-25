@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card } from "react-native-paper";
-import CustomIcon from "tenzai-components/components/CustomIcon/CustomIcon";
+import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
 
 type Product = {
   id: string;

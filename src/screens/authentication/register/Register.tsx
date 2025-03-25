@@ -8,7 +8,7 @@ import {
   Text,
   PaperProvider,
 } from "react-native-paper";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import { registerUser } from "../slice/AuthSlice";

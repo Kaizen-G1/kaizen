@@ -22,7 +22,7 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrderById, updateOrderStatus } from "../slice/OrderSlice";
 import { OrderStatus } from "../../../../utils/enums";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 export default function OrderDetailScreen() {
   const route = useRoute();

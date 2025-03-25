@@ -9,4 +9,5 @@ export enum OrderStatus {
   InTransit = "In transit",
   Complete = "Complete",
   Cancelled = "Cancelled",
+  Unknown = "Unknown",
 }

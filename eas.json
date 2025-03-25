@@ -1,0 +1,30 @@
+{
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "API_URL": "$API_URL_DEVELOPMENT",
+        "DEBUG_MODE": "$DEBUG_MODE_DEVELOPMENT"
+      }
+    },
+    "production": {
+      "distribution": "store",
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "API_URL": "$API_URL_PRODUCTION",
+        "DEBUG_MODE": "$DEBUG_MODE_PRODUCTION"
+      }
+    }
+  }
+}

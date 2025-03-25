@@ -7,8 +7,8 @@ import {
   Dimensions,
 } from "react-native";
 
-import CategoryCard from "tenzai-components/components/CategoryCard/CategoryCard";
-import CustomIcon from "tenzai-components/components/CustomIcon/CustomIcon";
+import CategoryCard from 'kaizen-components/components/CategoryCard/CategoryCard';
+import CustomIcon from 'kaizen-components/components/CustomIcon/CustomIcon';
 
 type CategoryListProps = {
   title: string;

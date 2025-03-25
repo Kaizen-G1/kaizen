@@ -8,8 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Divider, Icon, Text } from "react-native-paper";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
-import { Ionicons } from "@expo/vector-icons";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 const { width } = Dimensions.get("screen");
 type SplashScreenProps = {

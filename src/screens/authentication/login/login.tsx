@@ -8,7 +8,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 import config from "../../../config/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
