@@ -82,6 +82,29 @@ jobs:
       - name: Build iOS App
         run: export API_URL_PRODUCTION="$API_URL_PRODUCTION" && export DEBUG_MODE_PRODUCTION="$DEBUG_MODE_PRODUCTION" && eas build -p ios --profile production --non-interactive
 
+      - name: Get iOS Build URL
+        id: get_ios_build_url
+        run: |
+          IOS_BUILD_URL=$(eas build:list --platform ios --status finished --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "::set-output name=url::$IOS_BUILD_URL"
+
+      - name: Download IPA from EAS
+        run: |
+          if [[ -z "${{ steps.get_ios_build_url.outputs.url }}" ]]; then
+            echo "Error: No iOS build URL found. Exiting."
+            exit 1
+          fi
+          echo "Downloading IPA from: ${{ steps.get_ios_build_url.outputs.url }}"
+          mkdir -p builds
+          curl -L -o builds/app-release.ipa "${{ steps.get_ios_build_url.outputs.url }}"
+
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: builds/app-release.ipa
+
+
   deploy:
     name: Deploy to Firebase App Distribution
     needs: build
@@ -133,10 +156,13 @@ jobs:
           groups: testers
           file: builds/app-release.apk
 
+      - name: Check IPA File
+        run: ls -lh builds/app-release.ipa
+
       - name: Upload to Firebase App Distribution (iOS)
         uses: wzieba/Firebase-Distribution-Github-Action@v1.5.1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID_IOS }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
-          file: builds/*.ipa
+          file: builds/app-release.ipa
