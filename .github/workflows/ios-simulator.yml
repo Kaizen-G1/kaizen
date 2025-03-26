@@ -1,0 +1,60 @@
+name: iOS Build (Simulator)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS (Simulator)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install Dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.R_ACCESS_TOKEN }}
+
+      - name: Build iOS App (Simulator)
+        env:
+          API_URL_PRODUCTION: ${{ secrets.API_URL_PRODUCTION }}
+          DEBUG_MODE_PRODUCTION: ${{ secrets.DEBUG_MODE_PRODUCTION }}
+          NODE_ENV: development
+        run: export API_URL_PRODUCTION="$API_URL_PRODUCTION" && export DEBUG_MODE_PRODUCTION="$DEBUG_MODE_PRODUCTION" && eas build -p ios --profile development --non-interactive
+
+      - name: Get iOS Build URL
+        id: get_ios_build_url
+        run: |
+          IOS_BUILD_URL=$(eas build:list --platform ios --status finished --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "::set-output name=url::$IOS_BUILD_URL"
+
+      - name: Download IPA from EAS
+        run: |
+          if [[ -z "${{ steps.get_ios_build_url.outputs.url }}" ]]; then
+            echo "Error: No iOS build URL found. Exiting."
+            exit 1
+          fi
+          echo "Downloading IPA from: ${{ steps.get_ios_build_url.outputs.url }}"
+          mkdir -p builds
+          curl -L -o builds/app-simulator.ipa "${{ steps.get_ios_build_url.outputs.url }}"
+
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-artifact
+          path: builds/app-simulator.ipa
