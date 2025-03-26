@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import {
   getNotificationsThunk,
+  markAsReadThunk,
   NotificationPayload,
 } from "./slice/NotificatiosSlice";
 import { ActivityIndicator, Text } from "react-native-paper";
@@ -32,7 +33,8 @@ export default function Notifications() {
     }
   }, [dispach, isFocused]);
 
-  const notificationList = response?.data?.notifications || [];
+  const notificationList =
+    (response && response.data && response.data.notifications) || [];
 
   if (loading) {
     return (
@@ -61,37 +63,40 @@ export default function Notifications() {
 
   return (
     <>
-      {notificationList.length > 0 ? (
-        <FlatList<NotificationPayload>
-          data={notificationList}
-          keyExtractor={(item, index) =>
-            item.id ? item.id.toString() : index.toString()
-          }
-          renderItem={({ item }) => (
-            <View style={{ paddingVertical: 10, paddingHorizontal: 16 }}>
-              <NotifyCard
-                key={item.id}
-                title={item.title}
-                message={item.message}
-                time={item.createdDate}
-                onPress={() => {
-                  const data = item.data;
-                  if (data && data.product.id) {
-                    const product = data.product;
-                    navigation.replace("ProductDetails", {
-                      productId: product.id ?? "",
-                      product: product,
-                    });
-                  }
-                }}
-              />
-            </View>
-          )}
-          scrollEnabled={false}
-        />
-      ) : (
-        <Text>No notifications found</Text>
-      )}
+      <FlatList<NotificationPayload>
+        data={notificationList}
+        ListEmptyComponent={
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text>No Notifications</Text>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <View style={{ paddingVertical: 10, paddingHorizontal: 16 }}>
+            <NotifyCard
+              key={item.id}
+              title={item.title}
+              message={item.message}
+              isRead={item.isRead}
+              time={item.createdDate}
+              onPress={async () => {
+                await dispach(markAsReadThunk(item)).then(() => {
+                  dispach(getNotificationsThunk());
+                });
+                const data = item.data;
+                if (data && data.product.id) {
+                  const product = data.product;
+                  navigation.replace("ProductDetails", {
+                    productId: product.id ?? "",
+                    product: product,
+                  });
+                }
+              }}
+            />
+          </View>
+        )}
+      />
     </>
   );
 }
