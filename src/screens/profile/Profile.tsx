@@ -92,13 +92,11 @@ const ProfileScreenCustomer = () => {
     (state) => state.notifications.notifications
   );
 
-  const totalNotifications = response?.data.notifications.length;
+  const notificationCount = response?.data?.count || 0;
 
   useEffect(() => {
     dispatch(getNotificationsThunk());
   }, [dispatch]);
-
-  const notificationCount = totalNotifications || 0;
 
   return (
     <ScrollView style={styles.container}>

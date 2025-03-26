@@ -24,6 +24,7 @@ export interface DataObject {
 export interface NotificationResponseData {
   message: string;
   notifications: NotificationPayload[];
+  count: number;
 }
 
 export interface NotificationState {

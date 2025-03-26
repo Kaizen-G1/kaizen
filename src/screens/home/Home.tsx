@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { PaperProvider } from "react-native-paper";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  Keyboard,
+} from "react-native";
+import { PaperProvider, Searchbar, Text } from "react-native-paper";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 // services
@@ -20,6 +26,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
 import { useAppDispatch } from "../../services/constants";
 import API_ROUTES from "../../api/apiRoutes";
+import { SearchBar } from "react-native-screens";
+import { set } from "mongoose";
+import { SearchPayload, searchQueryAction } from "../search/slice/SearchSlice";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -29,6 +38,8 @@ const HomeScreen = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const sliderWidth = Dimensions.get("window").width - MARGIN_HORIZONTAL * 2;
+
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -91,7 +102,7 @@ const HomeScreen = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [isFocused]);
 
   const handleImagePress = (id: string) => {
     console.log(`Selected image ID: ${id}`);
@@ -103,7 +114,7 @@ const HomeScreen = () => {
   };
 
   const handleSeeAllCategories = () => {
-    console.log(`See all categories`);    
+    console.log(`See all categories`);
     navigation.navigate("Category");
   };
 
@@ -119,6 +130,47 @@ const HomeScreen = () => {
   return (
     <>
       <PaperProvider>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginHorizontal: MARGIN_HORIZONTAL,
+            marginVertical: 16,
+            gap: 15,
+          }}
+        >
+          <Text style={{ fontSize: 30, letterSpacing: 2, fontWeight: "bold" }}>
+            Kaizen
+          </Text>
+          <Searchbar
+            style={{
+              flex: 1,
+              backgroundColor: "#F8F8F8",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 5 },
+              shadowOpacity: 0.102,
+              shadowRadius: 10,
+              elevation: 5,
+            }}
+            placeholder="Search"
+            onChangeText={(searchQuery) => {
+              setSearchQuery(searchQuery);
+            }} // Updates the search query
+            value={searchQuery} // Controls the value of the search bar
+            returnKeyType="done"
+            onSubmitEditing={() => {
+              if (searchQuery !== "") {
+                const search: SearchPayload = {
+                  query: searchQuery,
+                };
+                dispach(searchQueryAction(search));
+                navigation.navigate("SearchList", { query: search });
+                Keyboard.dismiss();
+                setSearchQuery("");
+              }
+            }}
+          />
+        </View>
         <ScrollView>
           <View style={styles.sliderContainer}>
             <ImageSlider

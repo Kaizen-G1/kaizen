@@ -32,7 +32,7 @@ export default function OrderDetailScreen() {
   const { selectedOrder, loading } = useAppSelector((state) => state.orders);
 
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus>(
-    OrderStatus.Unknown
+    OrderStatus.Pending
   );
   const [pickerVisible, setPickerVisible] = useState(false);
   const [form, setForm] = useState({
@@ -46,9 +46,9 @@ export default function OrderDetailScreen() {
   }, [dispatch, orderId]);
 
   useEffect(() => {
-      if (selectedOrder) {
-          console.log("Fetched Order Data:", selectedOrder);
-      }
+    if (selectedOrder) {
+      console.log("Fetched Order Data:", selectedOrder);
+    }
   }, [selectedOrder]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function OrderDetailScreen() {
         selectedOrder.status as OrderStatus
       )
         ? (selectedOrder.status as OrderStatus)
-        : OrderStatus.Unknown;
+        : OrderStatus.Pending;
 
       setSelectedStatus(validStatus);
     }
@@ -114,7 +114,7 @@ export default function OrderDetailScreen() {
       >
         <Card style={styles.card}>
           <Card.Content>
-          <TextInput
+            <TextInput
               label="Order ID"
               value={selectedOrder.id.slice(-5).toUpperCase()}
               mode="outlined"
@@ -167,7 +167,8 @@ export default function OrderDetailScreen() {
                     ? product.product_id.slice(-5).toUpperCase()
                     : "N/A";
 
-                const totalPrice = (product.price ?? 0) * (product.quantity ?? 1);
+                const totalPrice =
+                  (product.price ?? 0) * (product.quantity ?? 1);
 
                 return (
                   <View key={index} style={styles.productItemContainer}>
@@ -182,18 +183,22 @@ export default function OrderDetailScreen() {
                     />
                     <View style={styles.textContainer}>
                       <Text style={styles.productTitle}>
-                        {product.product_name || "Unknown Product"} (x{product.quantity})
+                        {product.product_name || "Unknown Product"} (x
+                        {product.quantity})
                       </Text>
                       <Text style={styles.productId}>ID: {formattedId}</Text>
                       <Text style={styles.productPrice}>
-                        ${product.price?.toFixed(2) ?? "0.00"} | Total: ${totalPrice.toFixed(2)}
+                        ${product.price?.toFixed(2) ?? "0.00"} | Total: $
+                        {totalPrice.toFixed(2)}
                       </Text>
                     </View>
                   </View>
                 );
               })
             ) : (
-              <Text style={styles.noProductsText}>No products in this order.</Text>
+              <Text style={styles.noProductsText}>
+                No products in this order.
+              </Text>
             )}
           </Card.Content>
         </Card>
@@ -237,10 +242,7 @@ export default function OrderDetailScreen() {
             marginTop: 5,
           }}
         >
-          <CustomButton
-            label="Update Order"
-            onPress={handleUpdateOrder}
-          />
+          <CustomButton label="Update Order" onPress={handleUpdateOrder} />
         </View>
       </ScrollView>
     </>

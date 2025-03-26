@@ -32,6 +32,11 @@ export interface CategoryListResponseData {
   categories: CategoryPayload[];
 }
 
+export interface SubCategoryListResponseData {
+  message: string;
+  categories: SubCategoryPayload[];
+}
+
 export interface CategoryWithSubCategoriesListResponseData {
   message: string;
   categories: CategoryWithSubCategoriesPayload[];
@@ -46,6 +51,7 @@ interface CategoryState {
   selectedCategory: CategoryPayload;
   selectedSubCategory: SubCategoryPayload;
   categoryList: ExtendedApiState<CategoryListResponseData>;
+  subCategoryList: ExtendedApiState<SubCategoryListResponseData>;
   categoryById: ExtendedApiState<CategoryByIdResponseData>;
   categoryWithSubCategoriesList: ExtendedApiState<CategoryWithSubCategoriesListResponseData>;
 }
@@ -79,6 +85,12 @@ const initialState: CategoryState = {
     success: false,
     response: null,
   },
+  subCategoryList: {
+    loading: false,
+    error: null,
+    success: false,
+    response: null,
+  },
 };
 
 // Fetch category list
@@ -91,6 +103,26 @@ export const getCategoryThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
       }
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// Fetch subcategory list
+export const getAllSubcategoriesThunk = createAsyncThunk(
+  "subcategories/get",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await http.get(
+        API_ROUTES.categories.getAllSubcategories
+      );
+      const data = await response.data;
+      if (data.status !== "success") {
+        throw new Error(data?.message || "Failed to fetch subcategories");
+      }
+      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -173,7 +205,22 @@ export const categorySlice = createSlice({
         handleApiCall(state.categoryList, { error: action.payload }, "failed");
       })
 
-      // Fetch category list
+      // Fetch subcategory list
+      .addCase(getAllSubcategoriesThunk.pending, (state) => {
+        handleApiCall(state.subCategoryList, {}, "loading");
+      })
+      .addCase(getAllSubcategoriesThunk.fulfilled, (state, action) => {
+        handleApiCall(state.subCategoryList, action, "success");
+        state.subCategoryList.response = action.payload;
+      })
+      .addCase(getAllSubcategoriesThunk.rejected, (state, action) => {
+        handleApiCall(
+          state.subCategoryList,
+          { error: action.payload },
+          "failed"
+        );
+      })
+
       .addCase(getCategoriesWithSubcategoriesThunk.pending, (state) => {
         handleApiCall(state.categoryWithSubCategoriesList, {}, "loading");
       })
