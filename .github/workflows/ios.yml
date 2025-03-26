@@ -1,9 +1,10 @@
 name: iOS Build & Deploy
 
 on:
-  push:
-    branches:
-      - main
+  # launch manually ultil finish certificate's build config
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
