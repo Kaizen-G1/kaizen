@@ -6,6 +6,7 @@ interface NotifyCardProps {
   title?: string;
   time?: string;
   message?: string;
+  isRead?: boolean;
   onPress?: () => void;
 }
 
@@ -13,6 +14,7 @@ export default function NotifyCard({
   title,
   time,
   message,
+  isRead = false,
   onPress,
 }: NotifyCardProps) {
   function timeAgo(date: Date): string {
@@ -70,9 +72,28 @@ export default function NotifyCard({
               marginBottom: 5,
             }}
           >
-            <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-              {title ?? "Title not found"}
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                {title ?? "Title not found"}
+              </Text>
+
+              {!isRead && (
+                <View
+                  style={{
+                    backgroundColor: "red",
+                    borderRadius: 5,
+                    padding: 4,
+                  }}
+                >
+                  <Text
+                    style={{ fontWeight: "bold", fontSize: 12, color: "white" }}
+                  >
+                    {" "}
+                    Unread
+                  </Text>
+                </View>
+              )}
+            </View>
             <Text
               style={{ fontWeight: "semibold", fontSize: 12, color: "gray" }}
             >
