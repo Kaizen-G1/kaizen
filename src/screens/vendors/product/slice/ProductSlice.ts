@@ -15,6 +15,11 @@ export interface VendorProductListResponseData {
   products: ProductPayload[];
 }
 
+export interface SearchProductResponseData {
+  message: string;
+  products: ProductPayload[];
+}
+
 // Product type for the slice state
 export interface ProductPayload {
   id?: string;
@@ -35,6 +40,7 @@ export interface ProductPayload {
 interface ProductState {
   productSave: ExtendedApiState<VendorProductResponseData>;
   productList: ExtendedApiState<VendorProductListResponseData>;
+  searchProduct: ExtendedApiState<SearchProductResponseData>;
   productCategoryList: ExtendedApiState<VendorProductListResponseData>;
   productDelete: ExtendedApiState<{ message: string }>; // Added delete state
 }
@@ -48,6 +54,12 @@ const initialState: ProductState = {
     response: null,
   },
   productList: {
+    loading: false,
+    error: null,
+    success: false,
+    response: null,
+  },
+  searchProduct: {
     loading: false,
     error: null,
     success: false,
@@ -99,6 +111,32 @@ export const getProductsByCategoryThunk = createAsyncThunk(
       console.log(data);
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch products by category");
+      }
+
+      console.log(data);
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+//search product list 
+export const searchProducts = createAsyncThunk(
+  "products/searchProducts",
+  async (subCategoryId: string, { rejectWithValue }) => {
+    try {      
+      const queryParams = {
+        subCategoryId: subCategoryId,
+        page: 1,
+        limit: 10,
+      };
+      const response = await http.get(`/api/v1/search`, { params: queryParams });
+      const data = response.data;
+
+      console.log(data);
+      if (data.status !== "success") {
+        throw new Error(data?.message || "Failed to fetch products by sub category id");
       }
 
       console.log(data);
@@ -197,6 +235,7 @@ const productSlice = createSlice({
     // Reset state for product list
     productListAction: (state) => {
       state.productList = initialState.productList;
+      state.searchProduct = initialState.searchProduct;
       state.productCategoryList = initialState.productCategoryList;
     },
     // Reset state for product delete
@@ -230,6 +269,18 @@ const productSlice = createSlice({
       })
       .addCase(getProductThunk.rejected, (state, action) => {
         handleApiCall(state.productList, { error: action.payload }, "failed");
+      })
+
+      //search product list
+      .addCase(searchProducts.pending, (state) => {
+        handleApiCall(state.searchProduct, {}, "loading");
+      })
+      .addCase(searchProducts.fulfilled, (state, action) => {
+        handleApiCall(state.searchProduct, action, "success");
+        state.searchProduct.response = action.payload;  
+      })
+      .addCase(searchProducts.rejected, (state, action) => {
+        handleApiCall(state.searchProduct, { error: action.payload }, "failed");
       })
       
       .addCase(getProductsByCategoryThunk.pending, (state) => {

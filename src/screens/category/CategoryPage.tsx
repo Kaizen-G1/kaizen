@@ -72,6 +72,7 @@ export default function Category() {
               if (userDetails?.userRole === "customer") {
                 navigation.replace("CategoryProducts", {
                   categoryId: category.id,
+                  subcategoryId: sub.id,
                 });
               } else {
                 dispatch(setSelectedSubCategory(sub));

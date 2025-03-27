@@ -32,7 +32,7 @@ export default function OrderDetailScreen() {
   const { selectedOrder, loading } = useAppSelector((state) => state.orders);
 
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus>(
-    OrderStatus.Unknown
+    OrderStatus.Pending
   );
   const [pickerVisible, setPickerVisible] = useState(false);
   const [form, setForm] = useState({
@@ -63,7 +63,7 @@ export default function OrderDetailScreen() {
         selectedOrder.status as OrderStatus
       )
         ? (selectedOrder.status as OrderStatus)
-        : OrderStatus.Unknown;
+        : OrderStatus.Pending;
 
       setSelectedStatus(validStatus);
     }
