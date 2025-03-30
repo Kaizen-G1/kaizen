@@ -110,7 +110,10 @@ const HomeScreen = () => {
 
   const handleSelectCategory = (id: string) => {
     console.log(`Selected category ID: ${id}`);
-    navigation.navigate("CategoryProducts", { categoryId: id });
+    navigation.navigate("CategoryProducts", {
+      categoryId: id,
+      subcategoryId: null, // ✅ Pass null to avoid undefined
+    });
   };
 
   const handleSeeAllCategories = () => {

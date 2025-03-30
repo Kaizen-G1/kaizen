@@ -18,7 +18,6 @@ import { useAppDispatch, useAppSelector } from "../../../../services/constants";
 import { fetchOrders } from "../slice/OrderSlice";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get } from "mongoose";
 import { getNotificationsThunk } from "../../../notifcations/slice/NotificatiosSlice";
 
 type ProductScreenNavigationProp = StackNavigationProp<

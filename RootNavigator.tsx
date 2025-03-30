@@ -50,7 +50,7 @@ export type RootStackParamList = {
   StripePayment: {
     total: number;
   };
-  CategoryProducts: { categoryId: string };
+  CategoryProducts: { categoryId: string; subcategoryId?: string | null };
   CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
   ProductReview: { productId: "" };
   Notifications: undefined;

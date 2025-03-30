@@ -15,6 +15,7 @@ import { useIsFocused, useRoute } from "@react-navigation/native";
 import {
   getProductsByCategoryThunk,
   ProductPayload,
+  searchProducts,
 } from "../vendors/product/slice/ProductSlice";
 import { TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -28,7 +29,10 @@ type AllProductNavigationProps = StackNavigationProp<
 
 export default function CategoryProducts() {
   const route = useRoute();
-  const { categoryId } = route.params as { categoryId: string };
+  const { categoryId, subcategoryId } = route.params as {
+    categoryId: string;
+    subcategoryId?: string | null;
+  };
   const navigation = useNavigation<AllProductNavigationProps>();
 
   const dispatch = useAppDispatch();
@@ -36,14 +40,22 @@ export default function CategoryProducts() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { loading, error, response } = useAppSelector(
-    (state) => state.product.productCategoryList
+    (state) => subcategoryId !== null ? state.product.searchProduct : state.product.productCategoryList
+    
   );
 
   const isFocused = useIsFocused();
   useEffect(() => {
     if (isFocused) {
-      dispatch(getProductsByCategoryThunk(categoryId)); // Fetch products by category());
+      
+      if (subcategoryId) {
+        dispatch(searchProducts(subcategoryId)); // ✅ Fetch by subcategory if available
+      } else {
+        dispatch(getProductsByCategoryThunk(categoryId)); // ✅ Otherwise, fetch by category
+      }
     }
+    
+    console.log("Category Product Screen is focused or backed into view");
   }, [dispatch, isFocused]);
 
   console.log("response", response);
