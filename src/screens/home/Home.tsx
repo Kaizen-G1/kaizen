@@ -14,7 +14,7 @@ import http from "../../services/httpService";
 
 // Components
 import FlashSaleScreen from "../../components/flash-sale/FlashSale";
-import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
+import ImageSlider from "kaizen-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";

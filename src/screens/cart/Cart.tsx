@@ -11,7 +11,7 @@ import {
   updateSubTotal,
 } from "./slice/CartSlice";
 import CartItem from "../../components/CartItem";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 type CartItemProps = StackNavigationProp<RootStackParamList, "Home">;
 

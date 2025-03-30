@@ -14,9 +14,13 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.kaizen"
+      "bundleIdentifier": "com.app.kaizen",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.app.kaizen",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,6 +32,12 @@
     "assetBundlePatterns": [
       "**/*",
       "./assets/fonts/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "494f071b-6f58-4f34-9d01-897d7a12af2e"
+      }
+    },
+    "owner": "kaizen-app"
   }
 }

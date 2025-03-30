@@ -7,7 +7,7 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 export default function NewPasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
