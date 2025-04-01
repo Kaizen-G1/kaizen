@@ -21,8 +21,6 @@ import config from "../../config/config";
 import { Order } from "../vendors/home/data/OrderTypes";
 // import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 
-import { io } from "socket.io-client";
-
 import { useIsFocused } from "@react-navigation/native";
 import http from "../../services/httpService";
 
@@ -56,25 +54,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
   const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (isFocused) {
-      const socket = io(SOCKET_URL);
-
-      socket.on("payment-success", (data) => {
-        console.log("Payment successful!", data);
-        setPaymentStatus("Payment Completed!");
-        Alert.alert(
-          "Payment Successful!",
-          `Payment ID: ${data.paymentIntentId}`
-        );
-      });
-
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, []);
 
   // Handlers for shipping selection
   const handleShippingSelect = (option: "standard" | "express") => {

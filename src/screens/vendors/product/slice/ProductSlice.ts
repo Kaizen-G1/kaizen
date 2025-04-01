@@ -34,6 +34,10 @@ export interface ProductPayload {
   subCategoryId?: string;
   unit: string;
   vendorId: string;
+  flashSaleStartDate?: Date;
+  flashSaleEndDate?: Date;
+  flashSalePrice?: number;
+  flashSaleStock?: number;
 }
 
 // Product slice state interface
@@ -105,12 +109,16 @@ export const getProductsByCategoryThunk = createAsyncThunk(
   "products/getProductsByCategory",
   async (categoryId: string, { rejectWithValue }) => {
     try {
-      const response = await http.get(`/api/v1/products/category/${categoryId}`);
+      const response = await http.get(
+        `/api/v1/products/category/${categoryId}`
+      );
       const data = response.data;
 
       console.log(data);
       if (data.status !== "success") {
-        throw new Error(data?.message || "Failed to fetch products by category");
+        throw new Error(
+          data?.message || "Failed to fetch products by category"
+        );
       }
 
       console.log(data);
@@ -121,22 +129,26 @@ export const getProductsByCategoryThunk = createAsyncThunk(
   }
 );
 
-//search product list 
+//search product list
 export const searchProducts = createAsyncThunk(
   "products/searchProducts",
   async (subCategoryId: string, { rejectWithValue }) => {
-    try {      
+    try {
       const queryParams = {
         subCategoryId: subCategoryId,
         page: 1,
         limit: 10,
       };
-      const response = await http.get(`/api/v1/search`, { params: queryParams });
+      const response = await http.get(`/api/v1/search`, {
+        params: queryParams,
+      });
       const data = response.data;
 
       console.log(data);
       if (data.status !== "success") {
-        throw new Error(data?.message || "Failed to fetch products by sub category id");
+        throw new Error(
+          data?.message || "Failed to fetch products by sub category id"
+        );
       }
 
       console.log(data);
@@ -243,7 +255,6 @@ const productSlice = createSlice({
       state.productDelete = initialState.productDelete;
     },
     // Reset state
- 
   },
   extraReducers: (builder) => {
     builder
@@ -277,12 +288,12 @@ const productSlice = createSlice({
       })
       .addCase(searchProducts.fulfilled, (state, action) => {
         handleApiCall(state.searchProduct, action, "success");
-        state.searchProduct.response = action.payload;  
+        state.searchProduct.response = action.payload;
       })
       .addCase(searchProducts.rejected, (state, action) => {
         handleApiCall(state.searchProduct, { error: action.payload }, "failed");
       })
-      
+
       .addCase(getProductsByCategoryThunk.pending, (state) => {
         handleApiCall(state.productCategoryList, {}, "loading");
       })
@@ -291,7 +302,11 @@ const productSlice = createSlice({
         state.productCategoryList.response = action.payload;
       })
       .addCase(getProductsByCategoryThunk.rejected, (state, action) => {
-        handleApiCall(state.productCategoryList, { error: action.payload }, "failed");
+        handleApiCall(
+          state.productCategoryList,
+          { error: action.payload },
+          "failed"
+        );
       })
 
       // Delete Product

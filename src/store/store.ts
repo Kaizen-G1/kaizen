@@ -8,6 +8,7 @@ import vendorSlice from "../screens/vendors/vendordetails/slice/VendorSlice";
 import cartReducer from "../screens/cart/slice/CartSlice";
 import notificationReducer from "../screens/notifcations/slice/NotificatiosSlice";
 import searchReducer from "../screens/search/slice/SearchSlice";
+import flashReducer from "../screens/flash-sale/slice/FlashSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     cart: cartReducer,
     notifications: notificationReducer,
     search: searchReducer,
+    flash: flashReducer,
   },
 });
 

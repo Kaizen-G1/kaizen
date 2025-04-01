@@ -69,6 +69,12 @@ export const API_ROUTES = {
   search: {
     getAll: `${config.API_URL}/api/v1/search`,
   },
+
+  flashSale: {
+    enable: (id: string) => `${config.API_URL}/api/v1/flash/enable/${id}`,
+    disable: (id: string) => `${config.API_URL}/api/v1/flash/disable/${id}`,
+    getAll: `${config.API_URL}/api/v1/flash/active`,
+  },
 };
 
 export default API_ROUTES;

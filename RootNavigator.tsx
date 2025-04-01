@@ -7,7 +7,7 @@ import SplashScreen from "./src/screens/authentication/Splash";
 import OTPScreen from "./src/screens/authentication/recovery/Otp";
 import Login from "./src/screens/authentication/login/login";
 import AddProduct from "./src/components/AddOrUpdateProduct";
-import FlashShowAll from "./src/components/flash/FlashShowAll";
+import FlashShowAll from "./src/screens/flash-sale/ui/FlashShowAll";
 import OrderDetailScreen from "./src/screens/vendors/home/ui/OrderDetailScreen";
 import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
@@ -37,7 +37,7 @@ export type RootStackParamList = {
   Register: undefined;
   OTP: { email: string };
   AddProduct: { mode: "add" | "update"; initialData?: any };
-  FlashShowAll: undefined;
+  FlashShowAll: { products: ProductPayload[]; timeLeftSale: number };
   OrderDetail: { orderId: string };
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
@@ -127,6 +127,8 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
+            headerTransparent: true,
+            headerStyle: { backgroundColor: "transparent" },
           }}
         />
         <Stack.Screen
