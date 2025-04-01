@@ -8,45 +8,41 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import WalletCard from "./WalletCard";
-
-const transactions = [
-  {
-    id: "1",
-    type: "Order Payment",
-    amount: 50000,
-    date: "November 25th, 2023",
-  },
-  {
-    id: "2",
-    type: "Order Payment",
-    amount: 50000,
-    date: "November 25th, 2023",
-  },
-  { id: "3", type: "Withdrawal", amount: -200000, date: "November 25th, 2023" },
-  {
-    id: "4",
-    type: "Order Payment",
-    amount: 50000,
-    date: "November 25th, 2023",
-  },
-  { id: "5", type: "Withdrawal", amount: -20000, date: "November 25th, 2023" },
-  {
-    id: "6",
-    type: "Order Payment",
-    amount: 170000,
-    date: "November 25th, 2023",
-  },
-];
+import { useAppSelector } from "../../../services/constants";
 
 const TransactionScreen = () => {
   const [walletBalance, setWalletBalance] = useState(55000);
+
+   // ✅ Get orders from Redux store
+   const { orders } = useAppSelector((state) => state.orders);
+
+   console.log("orders", orders.filter((order) => order.status === "Complete"));
+   
+   // ✅ Filter only completed transactions
+   const completedTransactions = orders
+    .filter((order) => order.status === "Complete")
+    .map((order) => ({ 
+      id: order.id, 
+      type: "Order Payment", 
+      amount: order.total_price, 
+      date: new Date(order.updated_date).toLocaleDateString("en-US", { 
+        year: "numeric", 
+        month: "long", 
+        day: "numeric", 
+      }), 
+      updated_date: new Date(order.updated_date), // ✅ Add this for sorting
+    }))
+    .sort((a, b) => b.updated_date.getTime() - a.updated_date.getTime()); // ✅ Sort DESC by date
+    ;
 
   return (
     <View style={styles.container}>
       <WalletCard />
       <Text style={styles.sectionTitle}>Recent Transactions</Text>
+
+      {completedTransactions.length > 0 ? (
       <FlatList
-        data={transactions}
+        data={completedTransactions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.transactionItem}>
@@ -55,16 +51,27 @@ const TransactionScreen = () => {
               size={20}
               color={item.amount > 0 ? "green" : "red"}
             />
+
             <View style={styles.transactionDetails}>
               <Text style={styles.transactionText}>{item.type}</Text>
               <Text style={styles.transactionDate}>{item.date}</Text>
             </View>
+
             <Text style={styles.transactionAmount}>
-              {item.amount.toLocaleString()}
+              ${item.amount.toLocaleString()}
             </Text>
           </View>
         )}
       />
+
+      ) : (
+      <View style={styles.emptyContainer}>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
+          No completed transactions available
+        </Text>
+      </View>
+      )}
+      
     </View>
   );
 };
@@ -98,6 +105,7 @@ const styles = StyleSheet.create({
   transactionText: { fontSize: 16, fontWeight: "bold" },
   transactionDate: { fontSize: 12, color: "gray" },
   transactionAmount: { fontSize: 16, fontWeight: "bold" },
+  emptyContainer: { marginTop: 20, alignItems: "center" },
 });
 
 export default TransactionScreen;

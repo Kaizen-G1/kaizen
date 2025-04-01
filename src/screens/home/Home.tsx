@@ -14,7 +14,7 @@ import http from "../../services/httpService";
 
 // Components
 import FlashSaleScreen from "../flash-sale/ui/FlashSale";
-import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
+import ImageSlider from "kaizen-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
 import HorizontalProductList from "../../components/HorizontalProducList";
@@ -112,7 +112,10 @@ const HomeScreen = () => {
 
   const handleSelectCategory = (id: string) => {
     console.log(`Selected category ID: ${id}`);
-    navigation.navigate("CategoryProducts", { categoryId: id });
+    navigation.navigate("CategoryProducts", {
+      categoryId: id,
+      subcategoryId: null, // ✅ Pass null to avoid undefined
+    });
   };
 
   const handleSeeAllCategories = () => {

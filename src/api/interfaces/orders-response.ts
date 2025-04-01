@@ -14,8 +14,8 @@ interface Orders {
   products: Products[];
   totalPrice: number;
   status: "Pending" | "Awaiting Pickup" | "In transit" | "Complete" | "Cancelled";
-  createdDate: Date;
-  updatedDate: Date;
+  created_date: Date;
+  updated_date: Date;
   companyName?: string;
   companyAddress?: string;
   customerName?: string;

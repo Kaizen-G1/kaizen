@@ -31,8 +31,8 @@ class OrderRepository {
         })), 
         total_price: order.totalPrice,
         status: order.status,
-        createdDate: order.createdDate,
-        updatedDate: order.updatedDate,
+        created_date: order.created_date,
+        updated_date: order.updated_date,
         companyName: order.companyName || "",
         companyAddress: order.companyAddress || "",
         customerName: order.customerName || "",
@@ -69,8 +69,8 @@ class OrderRepository {
         })), 
         total_price: order.totalPrice,
         status: order.status,
-        createdDate: order.createdDate,
-        updatedDate: order.updatedDate,
+        created_date: order.created_date,
+        updated_date: order.updated_date,
         companyName: order.companyName || "",
         companyAddress: order.companyAddress || "",
         customerName: order.customerName || "",
@@ -107,7 +107,9 @@ class OrderRepository {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.put(
         API_ROUTES.orders.getOrderById(orderId),
-        { status },
+        { status,
+          updated_date: new Date().toISOString(),
+         },
         {
           headers: {
             "Content-Type": "application/json",

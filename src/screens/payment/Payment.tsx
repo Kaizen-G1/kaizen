@@ -13,13 +13,13 @@ import {
   Alert,
 } from "react-native";
 import { Badge, Text, Icon, IconButton } from "react-native-paper";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 import { RootStackParamList } from "../../../RootNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import config from "../../config/config";
 import { Order } from "../vendors/home/data/OrderTypes";
-import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
+// import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 
 import { useIsFocused } from "@react-navigation/native";
 import http from "../../services/httpService";
@@ -48,7 +48,7 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const SOCKET_URL = "http://localhost:3000/api/v1/payments/webhook";
 
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  // const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
 
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
@@ -97,14 +97,14 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
 
       const { clientSecret } = response.data;
 
-      const { error } = await initPaymentSheet({
-        paymentIntentClientSecret: clientSecret,
-        merchantDisplayName: "Kaizen",
-      });
+      // const { error } = await initPaymentSheet({
+      //   paymentIntentClientSecret: clientSecret,
+      //   merchantDisplayName: "Kaizen",
+      // });
 
-      if (!error) {
-        openPaymentSheet();
-      }
+      // if (!error) {
+      //   openPaymentSheet();
+      // }
     } catch (error) {
       console.error("Error fetching payment intent:", error);
     }
@@ -112,13 +112,13 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const openPaymentSheet = async () => {
-    const { error } = await presentPaymentSheet();
-    if (error) {
-      console.log("Payment failed", error);
-    } else {
-      navigation.reset({ index: 0, routes: [{ name: "Home" }] });
-      console.log("Payment successful!");
-    }
+    // const { error } = await presentPaymentSheet();
+    // if (error) {
+    //   console.log("Payment failed", error);
+    // } else {
+    //   navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+    //   console.log("Payment successful!");
+    // }
   };
 
   return (
@@ -262,13 +262,13 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
             <Text style={styles.totalAmount}>${total}</Text>
           </View>
 
-          <StripeProvider publishableKey="pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz">
+          {/* <StripeProvider publishableKey="pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz">
             <CustomButton
               label="Pay"
               type="primary"
               onPress={fetchPaymentIntent}
             />
-          </StripeProvider>
+          </StripeProvider> */}
         </View>
       </ScrollView>
 

@@ -12,7 +12,7 @@ import Animated, {
   useAnimatedStyle,
   runOnJS,
 } from "react-native-reanimated";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 const OnboardingScreen = () => {
   const [currentPage, setCurrentPage] = useState(0);
