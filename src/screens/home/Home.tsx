@@ -13,7 +13,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import http from "../../services/httpService";
 
 // Components
-import FlashSaleScreen from "../../components/flash-sale/FlashSale";
+import FlashSaleScreen from "../flash-sale/ui/FlashSale";
 import ImageSlider from "tenzai-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
@@ -29,6 +29,7 @@ import API_ROUTES from "../../api/apiRoutes";
 import { SearchBar } from "react-native-screens";
 import { set } from "mongoose";
 import { SearchPayload, searchQueryAction } from "../search/slice/SearchSlice";
+import { getFlashSaleListThunk } from "../flash-sale/slice/FlashSlice";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -54,6 +55,7 @@ const HomeScreen = () => {
     if (isFocused) {
       dispach(getWishlistThunk());
     }
+    dispach(getFlashSaleListThunk());
 
     const fetchDashboardData = async () => {
       try {

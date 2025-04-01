@@ -41,7 +41,6 @@
     "react-native-svg": "15.8.0",
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
-    "socket.io-client": "^4.8.1",
     "tailwind-rn": "^4.2.0",
     "tenzai-components": "git+ssh://git@github.com/RajanGrg1998/Kaizen-UI-Components.git"
   },
