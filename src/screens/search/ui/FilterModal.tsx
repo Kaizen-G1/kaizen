@@ -1,16 +1,14 @@
-// FilterModal.tsx
 import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
   TextInput,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import CustomButton from "tenzai-components/components/CustomButton/CustomButton";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 export interface FilterData {
   minPrice: number;
