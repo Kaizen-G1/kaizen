@@ -122,7 +122,6 @@ export const getAllSubcategoriesThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch subcategories");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -135,7 +134,6 @@ export const getCategoriesWithSubcategoriesThunk = createAsyncThunk(
   "categories/getWithSubcategories",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching categories with subcategories");
       const response = await http.get(
         API_ROUTES.categories.getWithSubcategories
       );
@@ -156,8 +154,6 @@ export const getCategoryByIdThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
       }
-
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -179,10 +175,8 @@ export const categorySlice = createSlice({
       state.selectedSubCategory = action.payload;
     },
     resetSelectedCategory: (state) => {
-      console.log("resetting selected category");
       state.selectedCategory = initialState.selectedCategory;
       state.selectedSubCategory = initialState.selectedSubCategory;
-      console.log(state.selectedCategory);
     },
     resetCategoryList: (state) => {
       state.categoryList = initialState.categoryList;

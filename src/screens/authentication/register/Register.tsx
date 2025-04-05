@@ -53,7 +53,6 @@ function CreateAccountScreen({ navigation }: RegisterProps) {
 
   const handleSubmit = () => {
     dispatch(registerUser(formData));
-    console.log(formData);
   };
 
   const handleCancel = () => {

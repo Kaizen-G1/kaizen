@@ -49,7 +49,6 @@ export const getNotificationsThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch notifcation");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -66,7 +65,6 @@ export const getNotificationsByUserIdThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch notifcation");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);

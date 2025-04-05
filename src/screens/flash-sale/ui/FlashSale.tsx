@@ -48,7 +48,6 @@ export default function FlashSaleScreen() {
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      console.log("Timer reached 0");
       setIsTimerActive(false);
       return;
     }
@@ -86,7 +85,7 @@ export default function FlashSaleScreen() {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          console.log(flashSaleList.response?.data.timeLeft);
+          // console.log(flashSaleList.response?.data.timeLeft);
         }}
       >
         <FlashSaleHeader

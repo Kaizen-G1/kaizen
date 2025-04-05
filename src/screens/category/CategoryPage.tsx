@@ -35,7 +35,7 @@ export default function Category() {
   useEffect(() => {
     dispatch(getCategoryThunk());
     const unsubscribe = navigation.addListener("focus", () => {
-      console.log("Screen is focused or backed into view");
+      // console.log("Screen is focused or backed into view");
       // Call your function here
     });
 
@@ -76,7 +76,6 @@ export default function Category() {
                 });
               } else {
                 dispatch(setSelectedSubCategory(sub));
-                console.log(sub);
                 navigation.goBack();
               }
             }}

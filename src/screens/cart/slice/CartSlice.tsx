@@ -69,7 +69,6 @@ export const getCartThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch categories");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -82,9 +81,6 @@ export const addToCartThunk = createAsyncThunk(
   "cart/add",
   async (payload: CartPayload, { rejectWithValue }) => {
     try {
-      console.log("ADD_SHPPING_CAT_URL");
-      console.log(API_ROUTES.shoppingCart.addToCart);
-
       const response = await http.post(API_ROUTES.shoppingCart.addToCart, {
         customerId: payload.customerId,
         productId: payload.productId,
@@ -94,7 +90,6 @@ export const addToCartThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to add to cart");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -114,7 +109,6 @@ export const deleteFromCartThunk = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to delete from cart");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);

@@ -1,7 +1,10 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logger } from 'react-native-logs';
 import config from "../config/config";
 import API_ROUTES from "../api/apiRoutes";
+
+const log = logger.createLogger();
 
 const http: AxiosInstance = axios.create({
   baseURL: config.API_URL,
@@ -17,7 +20,7 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(`${config.method?.toUpperCase()}: ${config.url}`);
+    log.debug(`${config.method?.toUpperCase()}: ${config.url}`);
     return config;
   },
   (error) => Promise.reject(error)
@@ -27,15 +30,19 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    console.error("API Error:", error.message);
+    log.error("API Error:", error.message);
+
+    if (error.config)  {
+      log.error("Error URL:", error.config.url);
+    }
 
     if (error.response) {
-      console.error(`Error Status: ${error.response.status}`);
-      console.error("Error Data:", error.response.data);
+      log.error(`Error Status: ${error.response.status}`);
+      log.error("Error Data:", error.response.data);
 
       // Si el token ha expirado, intentar refrescarlo
       if (error.response.status === 401) {
-        console.log("Token expired, attempting to refresh...");
+        log.debug("Token expired, attempting to refresh...");
         const newToken = await refreshAccessToken();
         
         if (newToken && error.config) {  // Asegurar que error.config existe
@@ -46,7 +53,7 @@ http.interceptors.response.use(
         }
       }
     } else if (error.request) {
-      console.error("No response received:", error.request);
+      log.error("No response received:", error.request);
     }
 
     return Promise.reject(error);
@@ -59,7 +66,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");
     if (!refreshToken) {
-      console.error("No refresh token found.");
+      log.error("No refresh token found.");
       return null;
     }
 
@@ -73,7 +80,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
       return accessToken;
     }
   } catch (error) {
-    console.error("Failed to refresh access token:", error);
+    log.error("Failed to refresh access token:", error);
   }
 
   return null;

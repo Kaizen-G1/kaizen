@@ -35,7 +35,7 @@ const WalletCard = () => {
             letterSpacing: 2,
           }}
           style={{ borderRadius: 5 }}
-          onPress={() => console.log("Withdraw")}
+          // onPress={() => console.log("Withdraw")}
           accessibilityLabel="Withdraw balance"
         >
           Withdraw

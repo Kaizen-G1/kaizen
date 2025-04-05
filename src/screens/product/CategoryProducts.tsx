@@ -49,16 +49,13 @@ export default function CategoryProducts() {
     if (isFocused) {
       
       if (subcategoryId) {
-        dispatch(searchProducts(subcategoryId)); // ✅ Fetch by subcategory if available
+        dispatch(searchProducts(subcategoryId));
       } else {
-        dispatch(getProductsByCategoryThunk(categoryId)); // ✅ Otherwise, fetch by category
+        dispatch(getProductsByCategoryThunk(categoryId));
       }
     }
-    
-    console.log("Category Product Screen is focused or backed into view");
   }, [dispatch, isFocused]);
 
-  console.log("response", response);
   const products: ProductPayload[] = response?.data.products || [];
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())

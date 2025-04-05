@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
-import config from "../../../config/config";
+import { logger } from "react-native-logs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { UserRole } from "../../../utils/enums";
@@ -19,6 +19,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import API_ROUTES from "../../../api/apiRoutes";
 import { useAppDispatch, useAppSelector } from "../../../services/constants";
 import { setUserDetails, UserDetails } from "../slice/AuthSlice";
+
+const log = logger.createLogger();
 
 type LoginScreenProps = {
   navigation: any;
@@ -47,24 +49,21 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("Connecting to Login API");
-
       const data = await response.json();
-      console.log("Parsed response:", data);
 
       if (response.ok) {
         const accessToken = data.data?.accessToken;
         const refreshToken = data.data?.refreshToken;
 
         if (!accessToken || typeof accessToken !== "string") {
-          console.error("Invalid accessToken:", accessToken);
+          log.error("Invalid accessToken:", accessToken);
           Alert.alert("Error", "Invalid token received from the server.");
           return;
         }
 
         // Decodificar el JWT
         const decodedToken: any = jwtDecode(accessToken);
-        console.log("Decoded JWT:", decodedToken);
+        log.debug("Decoded JWT:", decodedToken);
 
         // Guardar tokens en AsyncStorage
         await AsyncStorage.setItem("accessToken", accessToken);
@@ -89,11 +88,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           routes: [{ name: "Home", params: { isVendor } }],
         });
       } else {
-        console.error("Login failed:", data);
+        log.error("Login failed:", data);
         Alert.alert("Error", data.error || "Something went wrong.");
       }
     } catch (error) {
-      console.error("Error during login request:", error);
+      log.error("Error during login request:", error);
       Alert.alert("Error", "Failed to connect to the server.");
     }
   };
