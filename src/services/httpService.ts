@@ -32,7 +32,7 @@ http.interceptors.response.use(
   async (error: AxiosError) => {
     log.error("API Error:", error.message);
 
-    if (error.config)  {
+    if (error.config) {
       log.error("Error URL:", error.config.url);
     }
 
@@ -40,12 +40,21 @@ http.interceptors.response.use(
       log.error(`Error Status: ${error.response.status}`);
       log.error("Error Data:", error.response.data);
 
-      // Si el token ha expirado, intentar refrescarlo
+      // Resfresh token if 401 Unauthorized
       if (error.response.status === 401) {
-        log.debug("Token expired, attempting to refresh...");
+        log.debug("Token expired, checking if JWT exists");
+
+        // No JWT found. User is not logged in
+        const token = await AsyncStorage.getItem("accessToken");
+        if (!token) {
+          log.error("No access token found. User is not logged in.");
+          return
+        }
+
+        // Attempting to refresh token
         const newToken = await refreshAccessToken();
-        
-        if (newToken && error.config) {  // Asegurar que error.config existe
+
+        if (newToken && error.config) { // Asegurar que error.config existe
           error.config.headers = error.config.headers || {}; // Asegurar que headers existe
           error.config.headers.Authorization = `Bearer ${newToken}`;
 
@@ -75,7 +84,8 @@ const refreshAccessToken = async (): Promise<string | null> => {
     });
 
     if (response.status === 200) {
-      const { accessToken } = response.data;
+      const { accessToken } = response.data.data;
+      log.debug("New access token received:", accessToken);
       await AsyncStorage.setItem("accessToken", accessToken);
       return accessToken;
     }

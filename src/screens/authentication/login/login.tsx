@@ -64,6 +64,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         // Decodificar el JWT
         const decodedToken: any = jwtDecode(accessToken);
         log.debug("Decoded JWT:", decodedToken);
+        log.debug("RefreshToken:", refreshToken);
 
         // Guardar tokens en AsyncStorage
         await AsyncStorage.setItem("accessToken", accessToken);
