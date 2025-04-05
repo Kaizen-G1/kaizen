@@ -7,7 +7,7 @@ import API_ROUTES from "../api/apiRoutes";
 const log = logger.createLogger();
 
 const http: AxiosInstance = axios.create({
-  baseURL: config.API_URL,
+  baseURL: config.EXPO_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
