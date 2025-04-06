@@ -39,7 +39,7 @@ export const API_ROUTES = {
   },
   reviews: {
     create: `${config.API_URL}/api/v1/reviews`,
-    get: (id: string) => `${config.API_URL}/api/v1/reviews/${id}`,
+    get: (id: string) => `${config.API_URL}/api/v1/reviews/product/${id}`,
     getAll: (id: string) => `${config.API_URL}/api/v1/reviews/${id}`,
     update: (id: string) => `${config.API_URL}/api/v1/reviews/${id}`,
     delete: (id: string) => `${config.API_URL}/api/v1/reviews/${id}`,

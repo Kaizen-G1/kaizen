@@ -27,7 +27,6 @@ import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
 import { useAppDispatch } from "../../services/constants";
 import API_ROUTES from "../../api/apiRoutes";
 import { SearchBar } from "react-native-screens";
-import { set } from "mongoose";
 import { SearchPayload, searchQueryAction } from "../search/slice/SearchSlice";
 import { getFlashSaleListThunk } from "../flash-sale/slice/FlashSlice";
 
