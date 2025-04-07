@@ -42,7 +42,6 @@ const FlashShowAll: React.FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      console.log("Timer reached 0");
       setIsTimerActive(false);
       return;
     }

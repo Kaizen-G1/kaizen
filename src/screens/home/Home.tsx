@@ -107,11 +107,10 @@ const HomeScreen = () => {
   }, [isFocused]);
 
   const handleImagePress = (id: string) => {
-    console.log(`Selected image ID: ${id}`);
+    // console.log(`Selected image ID: ${id}`);
   };
 
   const handleSelectCategory = (id: string) => {
-    console.log(`Selected category ID: ${id}`);
     navigation.navigate("CategoryProducts", {
       categoryId: id,
       subcategoryId: null, // ✅ Pass null to avoid undefined
@@ -119,16 +118,14 @@ const HomeScreen = () => {
   };
 
   const handleSeeAllCategories = () => {
-    console.log(`See all categories`);
     navigation.navigate("Category");
   };
 
   const handleSelectProduct = (label: string) => {
-    console.log(`Pressed: ${label}`);
+    // console.log(`Pressed: ${label}`);
   };
 
   const handleSeeAllNewItems = () => {
-    console.log(`See all new items`);
     navigation.navigate("AllProduct");
   };
 

@@ -58,8 +58,6 @@ export default function SearchList() {
     setSearchQuery(updatedQuery);
 
     dispatch(searchListThunk(updatedQuery));
-
-    console.log("Applied Filters:", filterData);
   };
 
   return (

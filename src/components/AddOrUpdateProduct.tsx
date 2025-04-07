@@ -55,7 +55,6 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (mode === "update" && initialData) {
-        console.log(initialData.subCategoryId?.toString());
         setForm({
           ...initialData,
           subCategoryId: initialData.subCategoryId?.toString() || "",
@@ -320,7 +319,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
             label="Delete Product"
             type="primary"
             onPress={() => {
-              console.log(form.subCategoryId);
+              // console.log(form.subCategoryId);
             }}
           />
         )}

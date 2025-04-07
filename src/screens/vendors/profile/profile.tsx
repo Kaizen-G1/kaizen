@@ -29,12 +29,10 @@ const ProfileScreen = () => {
     (state) => state.vendor.vendorData
   );
   const vendorDetails: VendorPayload | undefined = response?.data.vendor;
-  console.log("vendorDetails", vendorDetails);
 
   const isFocused = useIsFocused();
   useEffect(() => {
     if (isFocused) {
-      console.log("Fetching vendor details");
       dispatch(getVendorsThunk());
     }
   }, [dispatch, isFocused]);

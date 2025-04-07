@@ -113,15 +113,11 @@ export const getProductsByCategoryThunk = createAsyncThunk(
         `/api/v1/products/category/${categoryId}`
       );
       const data = response.data;
-
-      console.log(data);
       if (data.status !== "success") {
         throw new Error(
           data?.message || "Failed to fetch products by category"
         );
       }
-
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -143,15 +139,11 @@ export const searchProducts = createAsyncThunk(
         params: queryParams,
       });
       const data = response.data;
-
-      console.log(data);
       if (data.status !== "success") {
         throw new Error(
           data?.message || "Failed to fetch products by sub category id"
         );
       }
-
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -223,7 +215,6 @@ export const deleteProductThunk = createAsyncThunk(
       });
 
       const data: ApiResponse = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         throw new Error(data?.message || "Failed to delete product");

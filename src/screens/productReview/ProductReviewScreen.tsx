@@ -18,7 +18,7 @@ const ProductReviewScreen = () => {
 
   // Fetch reviews by product_id
   const fetchReviews = async () => {
-    console.log("Fetching reviews for Order Id:", productId);
+    // console.log("Fetching reviews for Order Id:", productId);
   };
 
   useEffect(() => {
