@@ -38,7 +38,6 @@ const ProfileScreenCustomer = () => {
     error,
   } = useAppSelector((state) => state.orders || { orders: [] });
 
-  console.log("Orders", orders);
   useEffect(() => {
     const fetchCustomerName = async () => {
       const name = await AsyncStorage.getItem("customerName");

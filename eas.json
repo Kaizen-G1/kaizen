@@ -9,8 +9,8 @@
         "simulator": true
       },
       "env": {
-        "API_URL": "$API_URL_DEVELOPMENT",
-        "DEBUG_MODE": "$DEBUG_MODE_DEVELOPMENT"
+        "EXPO_PUBLIC_API_URL": "$API_URL_DEVELOPMENT",
+        "EXPO_PUBLIC_DEBUG_MODE": "$DEBUG_MODE_DEVELOPMENT"
       }
     },
     "production": {
@@ -22,8 +22,8 @@
         "simulator": false
       },
       "env": {
-        "API_URL": "$API_URL_PRODUCTION",
-        "DEBUG_MODE": "$DEBUG_MODE_PRODUCTION"
+        "EXPO_PUBLIC_API_URL": "$API_URL_PRODUCTION",
+        "EXPO_PUBLIC_DEBUG_MODE": "$DEBUG_MODE_PRODUCTION"
       }
     }
   }

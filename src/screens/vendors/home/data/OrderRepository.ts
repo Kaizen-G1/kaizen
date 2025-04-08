@@ -24,15 +24,15 @@ class OrderRepository {
         customer_id: order.customerId,
         products: order.products.map((product) => ({
           product_id: product.id,
-          product_name: product.name,
+          product_name: product.title,
           price: product.price,
           quantity: product.quantity,
-          image: product.image,
+          images: product.images || "https://example.com/image.jpg", // Placeholder image URL
         })), 
         total_price: order.totalPrice,
         status: order.status,
-        createdDate: order.createdDate,
-        updatedDate: order.updatedDate,
+        created_date: order.created_date,
+        updated_date: order.updated_date,
         companyName: order.companyName || "",
         companyAddress: order.companyAddress || "",
         customerName: order.customerName || "",
@@ -62,15 +62,15 @@ class OrderRepository {
         customer_id: order.customerId,
         products: order.products.map((product) => ({
           product_id: product.id,
-          product_name: product.name,
+          product_name: product.title,
           price: product.price,
           quantity: product.quantity,
-          image: product.image,
+          images: product.images,
         })), 
         total_price: order.totalPrice,
         status: order.status,
-        createdDate: order.createdDate,
-        updatedDate: order.updatedDate,
+        created_date: order.created_date,
+        updated_date: order.updated_date,
         companyName: order.companyName || "",
         companyAddress: order.companyAddress || "",
         customerName: order.customerName || "",
@@ -86,7 +86,7 @@ class OrderRepository {
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.post(
-        // `${config.API_URL}/api/v1/orders/company/orders/`,
+        // `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/company/orders/`,
         API_ROUTES.orders.create,
         order,
         {
@@ -107,7 +107,9 @@ class OrderRepository {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.put(
         API_ROUTES.orders.getOrderById(orderId),
-        { status },
+        { status,
+          updated_date: new Date().toISOString(),
+         },
         {
           headers: {
             "Content-Type": "application/json",

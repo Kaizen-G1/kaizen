@@ -35,7 +35,7 @@ export default function Category() {
   useEffect(() => {
     dispatch(getCategoryThunk());
     const unsubscribe = navigation.addListener("focus", () => {
-      console.log("Screen is focused or backed into view");
+      // console.log("Screen is focused or backed into view");
       // Call your function here
     });
 
@@ -72,10 +72,10 @@ export default function Category() {
               if (userDetails?.userRole === "customer") {
                 navigation.replace("CategoryProducts", {
                   categoryId: category.id,
+                  subcategoryId: sub.id,
                 });
               } else {
                 dispatch(setSelectedSubCategory(sub));
-                console.log(sub);
                 navigation.goBack();
               }
             }}

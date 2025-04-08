@@ -3,7 +3,7 @@ export interface Product {
   product_name?: string;
   price?: number;
   quantity: number;
-  image: string;
+  images: string[];
 }
 
 export interface Order {
@@ -12,8 +12,8 @@ export interface Order {
   products: Product[];
   total_price: number;
   status: "Pending" | "Awaiting Pickup" | "In transit" | "Complete" | "Cancelled";
-  createdDate: Date;
-  updatedDate: Date;
+  created_date: Date;
+  updated_date: Date;
   companyName: string;
   companyAddress: string;
   customerName: string;

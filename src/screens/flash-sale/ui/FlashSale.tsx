@@ -8,15 +8,16 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import { Card } from "react-native-paper";
+import { ActivityIndicator, Card } from "react-native-paper";
 
 import { LinearGradient } from "expo-linear-gradient";
-import FlashSaleHeader from "../FlashSaleHeader";
+import FlashSaleHeader from "../../../components/FlashSaleHeader";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../RootNavigator";
+import { RootStackParamList } from "../../../../RootNavigator";
+import { useAppDispatch, useAppSelector } from "../../../services/constants";
+import { getFlashSaleListThunk } from "../slice/FlashSlice";
 
 const { width } = Dimensions.get("screen");
 
@@ -25,24 +26,28 @@ type FlashSaleScreenNavigationProp = StackNavigationProp<
   "FlashShowAll"
 >;
 
-const DUMMY_DATA = [
-  { id: "1", image: require("../../../assets/two.jpg") },
-  { id: "2", image: require("../../../assets/junko.jpg") },
-  { id: "3", image: require("../../../assets/five.jpeg") },
-  { id: "4", image: require("../../../assets/five.jpeg") },
-  { id: "5", image: require("../../../assets/two.jpg") },
-  { id: "6", image: require("../../../assets/junko.jpg") },
-];
-
 export default function FlashSaleScreen() {
   const navigation = useNavigation<FlashSaleScreenNavigationProp>();
+  const dispatch = useAppDispatch();
 
-  const [timeLeft, setTimeLeft] = useState(3600);
+  const { flashSaleList } = useAppSelector((state) => state.flash);
+
+  const [timeLeft, setTimeLeft] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(true);
 
   useEffect(() => {
+    dispatch(getFlashSaleListThunk());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (flashSaleList.response?.data?.timeLeft) {
+      setTimeLeft(flashSaleList.response.data.timeLeft);
+      setIsTimerActive(true);
+    }
+  }, [flashSaleList.response]);
+
+  useEffect(() => {
     if (timeLeft <= 0) {
-      console.log("Timer reached 0");
       setIsTimerActive(false);
       return;
     }
@@ -55,6 +60,12 @@ export default function FlashSaleScreen() {
       return () => clearInterval(intervalId);
     }
   }, [timeLeft, isTimerActive]);
+
+  const AllFlashSale = flashSaleList.response?.data.products;
+
+  if (flashSaleList.loading) {
+    return <ActivityIndicator />;
+  }
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600)
@@ -72,34 +83,47 @@ export default function FlashSaleScreen() {
 
   return (
     <View style={styles.container}>
-      <FlashSaleHeader
-        hours={hours}
-        minutes={minutes}
-        remainingSeconds={remainingSeconds}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          // console.log(flashSaleList.response?.data.timeLeft);
+        }}
+      >
+        <FlashSaleHeader
+          hours={hours}
+          minutes={minutes}
+          remainingSeconds={remainingSeconds}
+        />
+      </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate("FlashShowAll")}
+        onPress={() =>
+          navigation.navigate("FlashShowAll", {
+            products: AllFlashSale || [],
+            timeLeftSale: timeLeft,
+          })
+        }
       >
         <FlatList
           style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-          data={DUMMY_DATA}
+          data={AllFlashSale?.slice(0, 6)}
           scrollEnabled={false}
-          keyExtractor={(item) => item.id}
           numColumns={3}
           renderItem={({ item }) => (
             <Card style={styles.itemContainer}>
               <View style={styles.imageWrapper}>
-                <Image source={item.image} style={styles.itemImage} />
+                <Image
+                  source={{ uri: item.images[0] }}
+                  style={styles.itemImage}
+                />
               </View>
 
               <LinearGradient
                 colors={["#FF5790", "#F81140"]}
                 style={styles.discountBadge}
-                start={[1, 1]} // Start the gradient at the left (0%)
-                end={[0, 0]} // End the gradient at the right (100%)
+                start={[1, 1]}
+                end={[0, 0]}
               >
-                <Text style={styles.discountText}>-20%</Text>
+                <Text style={styles.discountText}>-{item.discount}%</Text>
               </LinearGradient>
             </Card>
           )}
@@ -139,7 +163,6 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 20,
     backgroundColor: "#753742",
-    // opacity: 0.75,
     fontWeight: "bold",
     borderRadius: 7,
     color: "#FFFFFF",
@@ -157,7 +180,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
     borderRadius: 9,
     backgroundColor: "#FFFFFF",
-    // Drop shadow properties
+
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.102,
@@ -176,7 +199,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 9,
   },
-
   discountBadge: {
     position: "absolute",
     top: 5,
@@ -195,6 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   columnWrapper: {
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    gap: 5,
   },
 });

@@ -2,10 +2,16 @@ import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Button } from "react-native-paper";
+import { useAppSelector } from "../../../services/constants";
 
 const { width } = Dimensions.get("window");
 
 const WalletCard = () => {
+  // Get totalCompletedAmount directly from Redux
+  const totalCompletedAmount = useAppSelector(
+    (state) => state.orders.totalCompletedAmount
+  );
+  
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -14,7 +20,9 @@ const WalletCard = () => {
       </View>
 
       <Text style={styles.balanceLabel}>Your Wallet Balance</Text>
-      <Text style={styles.cardNumber}>$55,000</Text>
+      <Text style={styles.cardNumber}>
+        ${totalCompletedAmount.toLocaleString()}
+      </Text>
 
       <View style={styles.footer}>
         <Button
@@ -27,7 +35,7 @@ const WalletCard = () => {
             letterSpacing: 2,
           }}
           style={{ borderRadius: 5 }}
-          onPress={() => console.log("Withdraw")}
+          // onPress={() => console.log("Withdraw")}
           accessibilityLabel="Withdraw balance"
         >
           Withdraw

@@ -13,7 +13,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import http from "../../services/httpService";
 
 // Components
-import FlashSaleScreen from "../../components/flash-sale/FlashSale";
+import FlashSaleScreen from "../flash-sale/ui/FlashSale";
 import ImageSlider from "kaizen-components/components/ImageSlider/ImageSlider";
 import CategoryList from "../../components/CategoryList";
 import TopProducts from "../../components/TopProducts";
@@ -27,8 +27,8 @@ import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
 import { useAppDispatch } from "../../services/constants";
 import API_ROUTES from "../../api/apiRoutes";
 import { SearchBar } from "react-native-screens";
-import { set } from "mongoose";
 import { SearchPayload, searchQueryAction } from "../search/slice/SearchSlice";
+import { getFlashSaleListThunk } from "../flash-sale/slice/FlashSlice";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -54,6 +54,7 @@ const HomeScreen = () => {
     if (isFocused) {
       dispach(getWishlistThunk());
     }
+    dispach(getFlashSaleListThunk());
 
     const fetchDashboardData = async () => {
       try {
@@ -105,25 +106,25 @@ const HomeScreen = () => {
   }, [isFocused]);
 
   const handleImagePress = (id: string) => {
-    console.log(`Selected image ID: ${id}`);
+    // console.log(`Selected image ID: ${id}`);
   };
 
   const handleSelectCategory = (id: string) => {
-    console.log(`Selected category ID: ${id}`);
-    navigation.navigate("CategoryProducts", { categoryId: id });
+    navigation.navigate("CategoryProducts", {
+      categoryId: id,
+      subcategoryId: null, // ✅ Pass null to avoid undefined
+    });
   };
 
   const handleSeeAllCategories = () => {
-    console.log(`See all categories`);
     navigation.navigate("Category");
   };
 
   const handleSelectProduct = (label: string) => {
-    console.log(`Pressed: ${label}`);
+    // console.log(`Pressed: ${label}`);
   };
 
   const handleSeeAllNewItems = () => {
-    console.log(`See all new items`);
     navigation.navigate("AllProduct");
   };
 

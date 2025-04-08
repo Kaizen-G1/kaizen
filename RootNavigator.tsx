@@ -7,7 +7,7 @@ import SplashScreen from "./src/screens/authentication/Splash";
 import OTPScreen from "./src/screens/authentication/recovery/Otp";
 import Login from "./src/screens/authentication/login/login";
 import AddProduct from "./src/components/AddOrUpdateProduct";
-import FlashShowAll from "./src/components/flash/FlashShowAll";
+import FlashShowAll from "./src/screens/flash-sale/ui/FlashShowAll";
 import OrderDetailScreen from "./src/screens/vendors/home/ui/OrderDetailScreen";
 import AllProductPage from "./src/screens/product/AllProduct";
 import ProductDetailsPage from "./src/screens/product/ProductDetails";
@@ -29,6 +29,7 @@ import CustomerOrderList from "./src/screens/profile/CustomerOrderListScreen";
 import ProductReview from "./src/screens/productReview/ProductReviewScreen";
 import SearchList from "./src/screens/search/ui/SearchList";
 import { SearchPayload } from "./src/screens/search/slice/SearchSlice";
+import AllReviewsScreen from "./src/screens/productReview/slice/AllReviewsScreen";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -37,7 +38,7 @@ export type RootStackParamList = {
   Register: undefined;
   OTP: { email: string };
   AddProduct: { mode: "add" | "update"; initialData?: any };
-  FlashShowAll: undefined;
+  FlashShowAll: { products: ProductPayload[]; timeLeftSale: number };
   OrderDetail: { orderId: string };
   AllProduct: undefined;
   ProductDetails: { productId: string; product: ProductPayload };
@@ -50,11 +51,12 @@ export type RootStackParamList = {
   StripePayment: {
     total: number;
   };
-  CategoryProducts: { categoryId: string };
+  CategoryProducts: { categoryId: string; subcategoryId?: string | null };
   CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
   ProductReview: { productId: "" };
   Notifications: undefined;
   SearchList: { query: SearchPayload };
+  AllReviews: { productId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -127,6 +129,8 @@ const RootNavigator = () => {
           options={{
             headerShown: true,
             title: "",
+            headerTransparent: true,
+            headerStyle: { backgroundColor: "transparent" },
           }}
         />
         <Stack.Screen
@@ -179,6 +183,15 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ProductReview"
           component={ProductReview}
+          options={{
+            headerShown: true,
+            title: "Reivews",
+          }}
+        />
+
+        <Stack.Screen
+          name="AllReviews"
+          component={AllReviewsScreen}
           options={{
             headerShown: true,
             title: "Reivews",

@@ -3,8 +3,6 @@ import { View, Button, Text, Alert } from "react-native";
 // import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import axios from "axios";
 
-import { io } from "socket.io-client";
-
 import { useIsFocused } from "@react-navigation/native";
 import http from "../../services/httpService";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -21,25 +19,6 @@ const StripePaymentScreen: React.FC<Props> = ({ route }) => {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
   const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (isFocused) {
-      const socket = io(SOCKET_URL);
-
-      socket.on("payment-success", (data) => {
-        console.log("Payment successful!", data);
-        setPaymentStatus("Payment Completed!");
-        Alert.alert(
-          "Payment Successful!",
-          `Payment ID: ${data.paymentIntentId}`
-        );
-      });
-
-      return () => {
-        socket.disconnect();
-      };
-    }
-  }, []);
 
   const fetchPaymentIntent = async () => {
     const { total } = route.params;
