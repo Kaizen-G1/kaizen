@@ -5,9 +5,14 @@ import { RootStackParamList } from "../../../RootNavigator";
 import CartItem from "../../components/CartItem";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type OrderListScreenRouteProp = RouteProp<RootStackParamList, "CustomerOrderList">;
-
-type ProductReviewRouteProp = StackNavigationProp<RootStackParamList, "ProductReview">;
+type OrderListScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "CustomerOrderList"
+>;
+type ProductReviewRouteProp = StackNavigationProp<
+  RootStackParamList,
+  "ProductReview"
+>;
 
 const CustomerOrderListScreen = () => {
   const route = useRoute<OrderListScreenRouteProp>();
@@ -32,47 +37,57 @@ const CustomerOrderListScreen = () => {
       title: "Orders To Review",
       status: "Complete",
       buttonLabel: "Review",
-      emptyMessage: "No orders to review.",
+      emptyMessage: "No products to review.",
     },
   };
 
   const { title, status, emptyMessage } = screenData[type] || screenData.pay;
 
-  // Filter orders by status dynamically
-  const filteredOrders = orders.filter((order) => order.status === status);
+  // Filter products that belong to completed orders (for review)
+  let productsToReview: any[] = [];
+  if (type === "review") {
+    productsToReview = orders
+      .filter((order) => order.status === status)
+      .flatMap((order) =>
+        order.products.map((product: any) => ({
+          ...product,
+          orderId: order.id, // Keep track of which order this product belongs to
+          companyName: order.companyName,
+        }))
+      );
+  }
 
-  // Handle button press
-  const handleButtonPress = (item : any) => {
+  console.log("Products to reviews:", productsToReview);
+
+  // Handle button press for reviewing a product
+  const handleButtonPress = (product: any) => {
     if (type === "receive") {
-      Alert.alert("Tracking", `Your order #${item.id} is being tracked.`);
+      Alert.alert(
+        "Tracking",
+        `Your order #${product.product_id} is being tracked.`
+      );
     } else if (type === "review") {
-      navigation.navigate("ProductReview", { productId: item.id });
-      
-      return;
-    } else {
-      Alert.alert("Payment", "Redirecting to payment gateway...");
+      console.log("Product ID:", product);
+      navigation.navigate("ProductReview", { productId: product.product_id });
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      {filteredOrders.length > 0 ? (
+      {productsToReview.length > 0 ? (
         <FlatList
-          data={filteredOrders}
-          keyExtractor={(item) => item.id}
+          data={productsToReview}
+          keyExtractor={(item) => item.product_id}
           renderItem={({ item }) => (
             <CartItem
-              title={`Order #${item.id}`}
-              description={`Status: ${item.status}`}
-            //   price={`$${item.total_price}`}
-              imageUrl="https://via.placeholder.com/100" // You can change this dynamicallyinitialQuantity={item.quantity}
+              title={`${item.product_name} (${item.companyName})`}
+              description={`Quantity: ${item.quantity}`}
+              imageUrl={item.images?.[0] || "https://via.placeholder.com/100"}
               isWish={false}
-              buttonLabel={screenData[type].buttonLabel}
+              price={item.price}
+              buttonLabel="Review"
               isCompleted={true}
-              onRemove={() => {}}
-              onPress={() => {}}
-              onQuantityChange={() => {}}
               onWishPress={() => handleButtonPress(item)}
             />
           )}

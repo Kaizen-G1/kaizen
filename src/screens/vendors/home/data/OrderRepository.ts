@@ -24,10 +24,10 @@ class OrderRepository {
         customer_id: order.customerId,
         products: order.products.map((product) => ({
           product_id: product.id,
-          product_name: product.name,
+          product_name: product.title,
           price: product.price,
           quantity: product.quantity,
-          image: product.image,
+          images: product.images || "https://example.com/image.jpg", // Placeholder image URL
         })), 
         total_price: order.totalPrice,
         status: order.status,
@@ -62,10 +62,10 @@ class OrderRepository {
         customer_id: order.customerId,
         products: order.products.map((product) => ({
           product_id: product.id,
-          product_name: product.name,
+          product_name: product.title,
           price: product.price,
           quantity: product.quantity,
-          image: product.image,
+          images: product.images,
         })), 
         total_price: order.totalPrice,
         status: order.status,

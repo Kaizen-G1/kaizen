@@ -29,6 +29,7 @@ import CustomerOrderList from "./src/screens/profile/CustomerOrderListScreen";
 import ProductReview from "./src/screens/productReview/ProductReviewScreen";
 import SearchList from "./src/screens/search/ui/SearchList";
 import { SearchPayload } from "./src/screens/search/slice/SearchSlice";
+import AllReviewsScreen from "./src/screens/productReview/slice/AllReviewsScreen";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -55,6 +56,7 @@ export type RootStackParamList = {
   ProductReview: { productId: "" };
   Notifications: undefined;
   SearchList: { query: SearchPayload };
+  AllReviews: { productId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -181,6 +183,15 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ProductReview"
           component={ProductReview}
+          options={{
+            headerShown: true,
+            title: "Reivews",
+          }}
+        />
+
+        <Stack.Screen
+          name="AllReviews"
+          component={AllReviewsScreen}
           options={{
             headerShown: true,
             title: "Reivews",

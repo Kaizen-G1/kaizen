@@ -24,8 +24,8 @@ interface Orders {
 
 interface Products {
   id: string;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
-  image: string;
+  images: string[];
 }

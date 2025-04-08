@@ -75,18 +75,18 @@ const CartItem: React.FC<CartItemProps> = ({
           <Text style={styles.price}>${price}</Text>
           {isCompleted ? (
             <Button
-            mode="outlined"
-            style={{ borderRadius: 5, margin: 5 }}
-            onPress={onWishPress}
+              mode="outlined"
+              style={{ borderRadius: 15, margin: 5, borderWidth: 1.5 }}
+              onPress={onWishPress}
             >
               {buttonLabel}
-              </Button> 
-            ) : (
+            </Button>
+          ) : (
             <Counter
-            isWish={isWish}
-            quantity={quantity}
-            onWishPress={onWishPress}
-            onChangeQuantity={handleQuantityChange}
+              isWish={isWish}
+              quantity={quantity}
+              onWishPress={onWishPress}
+              onChangeQuantity={handleQuantityChange}
             />
           )}
         </View>
@@ -103,10 +103,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     backgroundColor: "#fff",
     marginHorizontal: 10,
+    marginBottom: 10,
   },
   imageContainer: {
     width: 129,
     height: 109,
+    padding: 4,
+    backgroundColor: "#fff",
     marginRight: 10,
     position: "relative",
     borderRadius: 9,
