@@ -82,16 +82,7 @@ export const saveVendorThunk = createAsyncThunk(
   "vendor/save",
   async (payload: VendorPayload, { rejectWithValue }) => {
     try {
-      console.log("Save Vendor Payload:", payload); // Debugging
-
       const isUpdate = !!payload._id;
-      console.log("Is Update:", isUpdate);
-
-      if (isUpdate) {
-        console.log("Updating vendor with ID:", payload._id);
-      } else {
-        console.log("Creating a new vendor");
-      }
 
       const endpoint = isUpdate
         ? API_ROUTES.company.update(`${payload._id}`)
@@ -101,12 +92,6 @@ export const saveVendorThunk = createAsyncThunk(
       const token = await AsyncStorage.getItem("accessToken");
       const customer_id = await AsyncStorage.getItem("vendorId");
 
-      // const updatedPayload = {
-      //   ...payload,
-      //   customer_id: customer_id,
-      // };
-
-      
       // Ensure customer_id is added dynamically
       const { _id, ...updatedPayload } = payload; // Remove _id for updates
       const finalPayload = {
@@ -114,7 +99,6 @@ export const saveVendorThunk = createAsyncThunk(
         customer_id: customer_id, // Only add customer_id if it exists
       };
 
-      console.log("Final Payload Sent to API:", finalPayload);
       const response = await fetch(endpoint, {
         method,
         headers: {

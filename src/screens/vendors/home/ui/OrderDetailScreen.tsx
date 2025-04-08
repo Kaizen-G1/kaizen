@@ -47,7 +47,7 @@ export default function OrderDetailScreen() {
 
   useEffect(() => {
     if (selectedOrder) {
-      console.log("Fetched Order Data:", selectedOrder);
+      // console.log("Fetched Order Data:", selectedOrder);
     }
   }, [selectedOrder]);
 

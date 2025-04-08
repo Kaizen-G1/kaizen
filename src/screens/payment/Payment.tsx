@@ -69,7 +69,7 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
     try {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.post(
-        `${config.API_URL}/api/v1/orders/company/orders/`,
+        `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/company/orders/`,
         order,
         {
           headers: {

@@ -27,10 +27,10 @@ export default function NewPasswordScreen() {
 
   const handleSubmit = () => {
     if (newPassword === repeatPassword) {
-      console.log("Password updated");
+      // console.log("Password updated");
       // Proceed with password update logic
     } else {
-      console.log("Passwords do not match");
+      // console.log("Passwords do not match");
     }
   };
 

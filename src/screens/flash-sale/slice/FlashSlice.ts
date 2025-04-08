@@ -49,7 +49,6 @@ export const enabaleFlashSale = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to enable flash sale");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -68,7 +67,6 @@ export const disableFlashSale = createAsyncThunk(
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to disable flash sale");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
@@ -80,13 +78,11 @@ export const getFlashSaleListThunk = createAsyncThunk(
   "flashSale/get",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching flash sale list");
       const response = await http.get(API_ROUTES.flashSale.getAll);
       const data = await response.data;
       if (data.status !== "success") {
         throw new Error(data?.message || "Failed to fetch flash sale list");
       }
-      console.log(data);
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);

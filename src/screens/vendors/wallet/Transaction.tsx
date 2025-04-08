@@ -13,12 +13,8 @@ import { useAppSelector } from "../../../services/constants";
 const TransactionScreen = () => {
   const [walletBalance, setWalletBalance] = useState(55000);
 
-   // ✅ Get orders from Redux store
    const { orders } = useAppSelector((state) => state.orders);
 
-   console.log("orders", orders.filter((order) => order.status === "Complete"));
-   
-   // ✅ Filter only completed transactions
    const completedTransactions = orders
     .filter((order) => order.status === "Complete")
     .map((order) => ({ 

@@ -30,15 +30,17 @@ export const getWishlistThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const customerId = await AsyncStorage.getItem("vendorId");
-      const response = await http.get(
-        API_ROUTES.wishlist.getWishlist(`${customerId}`)
-      );
-      const data = await response.data;
-      if (data.status !== "success") {
-        throw new Error(data?.message || "Failed to fetch categories");
+      if (customerId !== null) {
+        const response = await http.get(
+          API_ROUTES.wishlist.getWishlist(`${customerId}`)
+        );
+        const data = await response.data;
+        if (data.status !== "success") {
+          throw new Error(data?.message || "Failed to fetch categories");
+        }
+        return data;
       }
-      console.log(data);
-      return data;
+      return [];
     } catch (err: any) {
       return rejectWithValue(err.message);
     }
