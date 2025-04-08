@@ -1,9 +1,7 @@
-// FilterModal.tsx
 import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
   TextInput,
   StyleSheet,
   TouchableOpacity,

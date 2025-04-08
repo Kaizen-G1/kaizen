@@ -14,13 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.app.kaizen",
+      "bundleIdentifier": "com.gbc.kaizen",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": ["en"]
       }
     },
     "android": {
-      "package": "com.app.kaizen",
+      "package": "com.gbc.kaizen",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -38,6 +39,15 @@
         "projectId": "494f071b-6f58-4f34-9d01-897d7a12af2e"
       }
     },
-    "owner": "kaizen-app"
+    "owner": "kaizen-app",
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "pk_test_51R0lR8H8cqL7ypGhRQPKAMDcae5QQLc4qNbLM3UV9GAmbq8aj9N6urpZnOu8DNEdgZJBTjVDYBRaUIf3D9R6Dh5U00hHzWkmrz",
+          "enableGooglePay": false
+        }
+      ]
+    ]
   }
 }
