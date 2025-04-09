@@ -1,4 +1,8 @@
-import { EXPO_PUBLIC_API_URL, EXPO_PUBLIC_DEBUG_MODE, EXPO_PUBLIC_ENV_FILE } from "@env";
+import {
+  EXPO_PUBLIC_API_URL,
+  EXPO_PUBLIC_DEBUG_MODE,
+  EXPO_PUBLIC_ENV_FILE,
+} from "@env";
 import { Platform } from "react-native";
 import { logger } from "react-native-logs";
 import { LogBox } from "react-native";

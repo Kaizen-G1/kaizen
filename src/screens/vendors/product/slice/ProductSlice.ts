@@ -28,6 +28,7 @@ export interface ProductPayload {
   inStock: number;
   price: number;
   discount: number;
+  imageUrl?: string; //for banners
   images: Array<string> | string[];
   costPrice: number;
   lowStockWarning: number;

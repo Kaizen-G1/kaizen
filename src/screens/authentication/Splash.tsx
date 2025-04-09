@@ -66,9 +66,8 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
             routes: [{ name: "Home", params: { isVendor: false } }],
           })
         }
-        // navigation.navigate("Home", { isVendor: false })}
       >
-        <Text style={styles.accountText}>Skip</Text>
+        <Text style={styles.accountText}>Explore as Guest</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

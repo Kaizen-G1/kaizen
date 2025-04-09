@@ -5,12 +5,15 @@ import {
   ScrollView,
   Dimensions,
   Keyboard,
+  Image,
+  TouchableOpacity,
 } from "react-native";
-import { PaperProvider, Searchbar, Text } from "react-native-paper";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-
-// services
-import http from "../../services/httpService";
+import {
+  ActivityIndicator,
+  PaperProvider,
+  Searchbar,
+  Text,
+} from "react-native-paper";
 
 // Components
 import FlashSaleScreen from "../flash-sale/ui/FlashSale";
@@ -24,11 +27,20 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../RootNavigator";
 import { useIsFocused } from "@react-navigation/native";
 import { getWishlistThunk } from "../favourites/slice/WishlistSlice";
-import { useAppDispatch } from "../../services/constants";
+import { useAppDispatch, useAppSelector } from "../../services/constants";
 import API_ROUTES from "../../api/apiRoutes";
 import { SearchBar } from "react-native-screens";
 import { SearchPayload, searchQueryAction } from "../search/slice/SearchSlice";
 import { getFlashSaleListThunk } from "../flash-sale/slice/FlashSlice";
+import { FlatList } from "react-native-gesture-handler";
+import { getCustomerDashboardThunk } from "./slice/CustomerDashboardSlice";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
+import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
+import ProductItem from "../../components/ProductItem";
+import PagerView from "react-native-pager-view";
+import BannerCarousel from "./ui/BannerCarousel";
+import CategoryCard from "kaizen-components/components/CategoryCard/CategoryCard";
+import CateogoryComponentProps from "./ui/CategoryComponent";
 
 const MARGIN_HORIZONTAL = 14;
 
@@ -39,80 +51,31 @@ const HomeScreen = () => {
 
   const sliderWidth = Dimensions.get("window").width - MARGIN_HORIZONTAL * 2;
 
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const width = Dimensions.get("screen").width;
 
-  const [banners, setBanners] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [topProducts, setTopProducts] = useState([]);
-  const [newItems, setNewItems] = useState([]);
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const isFocused = useIsFocused();
 
   const dispach = useAppDispatch();
 
+  const { loading, error, success, response } = useAppSelector(
+    (state) => state.dashboard.dashboard
+  );
+
   useEffect(() => {
     if (isFocused) {
       dispach(getWishlistThunk());
     }
+
+    dispach(getCustomerDashboardThunk());
     dispach(getFlashSaleListThunk());
-
-    const fetchDashboardData = async () => {
-      try {
-        const { data } = await http.get(API_ROUTES.dashboard.get);
-
-        // Getting active banners
-        const activeBanners = data.banners
-          .filter((banner: any) => banner.isActive)
-          .map((banner: any) => ({
-            id: banner.id,
-            imageUrl: banner.imageUrl,
-          }));
-        setBanners(activeBanners);
-
-        // Getting active categories
-        const activeCategories = data.categories
-          .filter((category: any) => category.isActive)
-          .map((category: any) => ({
-            id: category.id,
-            title: category.name,
-            count: category.count,
-            images: category.demoImages,
-          }));
-        setCategories(activeCategories);
-
-        // Getting top products
-        const formattedTopProducts = data.topProducts.map(
-          (topProduct: any) => ({
-            id: topProduct.id,
-            image: topProduct.images[0],
-          })
-        );
-        setTopProducts(formattedTopProducts);
-
-        // Getting new items
-        const formattedNewItems = data.newItems.map((newProduct: any) => ({
-          id: newProduct.id,
-          image: newProduct.images[0],
-          title: newProduct.title,
-          price: newProduct.price,
-        }));
-        setNewItems(formattedNewItems);
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-      }
-    };
-
-    fetchDashboardData();
-  }, [isFocused]);
-
-  const handleImagePress = (id: string) => {
-    // console.log(`Selected image ID: ${id}`);
-  };
+  }, [dispach, isFocused]);
 
   const handleSelectCategory = (id: string) => {
     navigation.navigate("CategoryProducts", {
       categoryId: id,
-      subcategoryId: null, // ✅ Pass null to avoid undefined
+      subcategoryId: null,
     });
   };
 
@@ -120,13 +83,51 @@ const HomeScreen = () => {
     navigation.navigate("Category");
   };
 
-  const handleSelectProduct = (label: string) => {
-    // console.log(`Pressed: ${label}`);
-  };
-
   const handleSeeAllNewItems = () => {
     navigation.navigate("AllProduct");
   };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color="#BC6C25" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (!response) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>No data available</Text>
+      </View>
+    );
+  }
 
   return (
     <>
@@ -173,33 +174,115 @@ const HomeScreen = () => {
           />
         </View>
         <ScrollView>
-          <View style={styles.sliderContainer}>
-            <ImageSlider
-              data={banners}
-              handleImagePress={handleImagePress}
-              sliderWidth={sliderWidth}
-            />
-          </View>
+          <BannerCarousel
+            data={response?.data?.dashboard.banners || []}
+            handleImagePress={(id: string) => {}}
+          />
 
-          <CategoryList
-            title="Categories"
-            categories={categories}
+          <CateogoryComponentProps
+            data={response?.data?.dashboard.categories.slice(0, 6) || []}
             onSelectCategory={handleSelectCategory}
             onSeeAll={handleSeeAllCategories}
           />
 
-          <TopProducts
-            title="Top Products"
-            items={topProducts}
-            onPress={handleSelectProduct}
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              paddingHorizontal: 20,
+            }}
+          >
+            Top Products
+          </Text>
+
+          <FlatList
+            style={{
+              paddingVertical: 16,
+              paddingHorizontal: 20,
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={response?.data?.dashboard.topProducts.slice(0, 8) || []}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("ProductDetails", {
+                    productId: item.id || "",
+                    product: item,
+                  });
+                }}
+              >
+                <View style={styles.avatar}>
+                  <View
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 30,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: item.images[0] }}
+                      style={{ width: 60, height: 60 }}
+                      resizeMode="cover"
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
           />
 
           <HorizontalProductList
-            products={newItems}
+            products={response?.data?.dashboard.newItems || []}
             onPressSeeAll={handleSeeAllNewItems}
           />
 
           <FlashSaleScreen />
+
+          {/* Just for You */}
+
+          <Text
+            style={{ fontSize: 24, fontWeight: "bold", paddingHorizontal: 20 }}
+          >
+            Just for You
+          </Text>
+          <FlatList
+            style={{
+              paddingVertical: 16,
+              paddingHorizontal: 20,
+            }}
+            data={
+              response?.data?.dashboard.allProducts.slice().toReversed() || []
+            }
+            renderItem={({ item }) => (
+              <ProductItem
+                productCardstyle={{ width: width / 2 - 20 }}
+                imageStyle={{ height: 250 }}
+                title={item.title}
+                price={"$" + item.price.toString()}
+                originalPrice={"$" + item.costPrice.toString()}
+                image={
+                  item.images.length > 0
+                    ? item.images[0]
+                    : "https://images.unsplash.com/photo-1628842456883-f8d529168be9"
+                }
+                isDiscounted={false}
+                discount={"0"}
+                onPress={() =>
+                  navigation.navigate("ProductDetails", {
+                    productId: item.id?.toString() ?? "",
+                    product: item,
+                  })
+                }
+              />
+            )}
+            numColumns={2}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              columnGap: 10,
+            }}
+            scrollEnabled={false}
+          />
         </ScrollView>
       </PaperProvider>
     </>
@@ -227,6 +310,33 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginBottom: 20,
+  },
+  avatarContainer: {
+    overflow: "hidden",
+    backgroundColor: "#eee",
+  },
+  avatar: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.16,
+    shadowRadius: 5,
+    marginRight: 10,
+    elevation: 10,
+  },
+
+  seeAllText: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  seeAllContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

@@ -1,6 +1,13 @@
 // ProductItem.tsx
 import React from "react";
-import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ViewStyle,
+  ImageStyle,
+} from "react-native";
 import { Text } from "react-native-paper";
 import DiscountBadge from "./DiscountBadge";
 
@@ -12,6 +19,8 @@ interface ProductItemProps {
   discount: string;
   isDiscounted?: boolean;
   onPress?: () => void;
+  productCardstyle?: ViewStyle;
+  imageStyle?: ImageStyle;
 }
 
 const ProductItem: React.FC<ProductItemProps> = ({
@@ -21,19 +30,24 @@ const ProductItem: React.FC<ProductItemProps> = ({
   image,
   discount,
   isDiscounted = true,
+  productCardstyle,
+  imageStyle,
   onPress,
 }) => {
   return (
-    <View style={styles.productCard}>
+    <View style={[styles.productCard, productCardstyle]}>
       <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
         <View style={styles.productImageContainer}>
-          <Image source={{ uri: image }} style={styles.productImage} />
+          <Image
+            source={{ uri: image }}
+            style={[styles.productImage, imageStyle]}
+          />
           {isDiscounted && <DiscountBadge discountPercentage={discount} />}
         </View>
         <Text style={styles.productTitle}>{title}</Text>
         <View style={styles.priceContainer}>
           <Text style={styles.productPrice}>{price}</Text>
-          {originalPrice && (
+          {originalPrice !== price && (
             <Text style={styles.originalPrice}>{originalPrice}</Text>
           )}
         </View>
