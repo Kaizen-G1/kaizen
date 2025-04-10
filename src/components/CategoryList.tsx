@@ -7,17 +7,13 @@ import {
   Dimensions,
 } from "react-native";
 
-import CategoryCard from 'kaizen-components/components/CategoryCard/CategoryCard';
-import CustomIcon from 'kaizen-components/components/CustomIcon/CustomIcon';
+import CategoryCard from "kaizen-components/components/CategoryCard/CategoryCard";
+import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
+import { CategoryPayload } from "../screens/category/slice/CategorySlice";
 
 type CategoryListProps = {
   title: string;
-  categories: {
-    id: string;
-    title: string;
-    count: number;
-    images: string[];
-  }[];
+  categories: CategoryPayload[];
   onSelectCategory: (id: string) => void;
   onSeeAll: () => void;
   maxVisibleCategories?: number;
@@ -51,9 +47,9 @@ const CategoryList: React.FC<CategoryListProps> = ({
         {visibleCategories.map((item) => (
           <View key={item.id} style={styles.cardContainer}>
             <CategoryCard
-              title={item.title}
+              title={item.name}
               count={item.count}
-              images={item.images}
+              images={item.demoImages}
               onPress={() => onSelectCategory(item.id)}
             />
           </View>

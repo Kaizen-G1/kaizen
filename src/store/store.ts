@@ -10,6 +10,7 @@ import notificationReducer from "../screens/notifcations/slice/NotificatiosSlice
 import searchReducer from "../screens/search/slice/SearchSlice";
 import flashReducer from "../screens/flash-sale/slice/FlashSlice";
 import productReviewReducer from "../screens/productReview/slice/ProductReviewSlice";
+import customerDashboardSlice from "../screens/home/slice/CustomerDashboardSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     search: searchReducer,
     flash: flashReducer,
     review: productReviewReducer,
+    dashboard: customerDashboardSlice,
   },
 });
 

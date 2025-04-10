@@ -1,7 +1,14 @@
-import React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Dimensions,
+  Image,
+} from "react-native";
 
-import CircleItem from 'kaizen-components/components/CircleItem/CircleItem';
+import CircleItem from "kaizen-components/components/CircleItem/CircleItem";
 
 type TopProductsProps = {
   title: string;
@@ -18,31 +25,59 @@ const TopProducts: React.FC<TopProductsProps> = ({ title, items, onPress }) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        {items.map((item) => (
-          <CircleItem
-            key={item.id}
-            image={item.image}
-            onPress={() => onPress(item.id)}
-          />
-        ))}
+        <View style={styles.outerCircle}>
+          <View style={styles.innerCircle}>
+            {/* <Image source={{ uri: items[0].image }} style={styles.image} /> */}
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
 };
 
+const CIRCLE_SIZE = Math.min(Dimensions.get("window").width / 7.5, 100); // Dynamic size based on the screen width
+const BORDER_WIDTH = 5; // Width of the white border
+
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
-    marginBottom: 15,
+    paddingVertical: 10,
   },
   title: {
     fontSize: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   scrollContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  circle: {
+    marginHorizontal: CIRCLE_SIZE / 10,
+    height: CIRCLE_SIZE + 20,
+  },
+  outerCircle: {
+    width: CIRCLE_SIZE + BORDER_WIDTH * 2,
+    height: CIRCLE_SIZE + BORDER_WIDTH * 2,
+    borderRadius: (CIRCLE_SIZE + BORDER_WIDTH * 2) / 2,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  innerCircle: {
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
+    borderRadius: CIRCLE_SIZE / 2,
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
 });
 

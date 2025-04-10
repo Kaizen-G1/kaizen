@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { Card } from "react-native-paper";
 import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
+import { ProductPayload } from "../screens/vendors/product/slice/ProductSlice";
+import ProductItem from "./ProductItem";
 
 type Product = {
   id: string;
@@ -28,35 +30,16 @@ type ProductCardProps = {
 };
 
 type HorizontalProductListProps = {
-  products: {
-    id: string;
-    title: string;
-    count: number;
-    price: number;
-    stock: number;
-    image: string;
-  }[];
+  products: ProductPayload[];
   onPressSeeAll: () => void;
 };
 
-const HeaderSection: React.FC<HeaderSectionProps> = ({ onPressSeeAll }) => {
-  return (
-    <View style={styles.header}>
-      <Text style={styles.title}>New Items</Text>
-      <TouchableOpacity onPress={onPressSeeAll} style={styles.seeAllButton}>
-        <Text style={styles.seeAllText}>See All</Text>
-        <CustomIcon icon="arrow-right" type="circle" />
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
+const ProductCard: React.FC<{ item: ProductPayload }> = ({ item }) => {
   return (
     <View style={styles.productCard}>
       <Card style={styles.card}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: item.image }} style={styles.productImage} />
+          <Image source={{ uri: item.images[0] }} style={styles.productImage} />
         </View>
       </Card>
       <View style={styles.itemsFooterContainer}>
@@ -72,21 +55,39 @@ const HorizontalProductList: React.FC<HorizontalProductListProps> = ({
   onPressSeeAll,
 }) => {
   return (
-    <View style={styles.container}>
-      {/* Header Section */}
-      <HeaderSection onPressSeeAll={onPressSeeAll} />
-
-      {/* Product List */}
-      <View style={styles.listcontainer}>
-        <FlatList
-          horizontal
-          data={products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ProductCard item={item} />}
-          showsHorizontalScrollIndicator={false}
-        />
+    <>
+      <View style={styles.header}>
+        <Text style={styles.title}>New Items</Text>
+        <TouchableOpacity onPress={onPressSeeAll} style={styles.seeAllButton}>
+          <Text style={styles.seeAllText}>See All</Text>
+          <CustomIcon icon="arrow-right" type="circle" />
+        </TouchableOpacity>
       </View>
-    </View>
+      <FlatList
+        style={{ paddingHorizontal: 20, paddingVertical: 10, marginRight: 20 }}
+        horizontal
+        data={products.slice(0, 5)}
+        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+        renderItem={({ item }) => (
+          <ProductItem
+            productCardstyle={{ width: 140 }}
+            imageStyle={{ height: 170 }}
+            title={item.title}
+            price={"$" + item.price.toString()}
+            originalPrice={"$" + item.costPrice.toString()}
+            image={
+              item.images.length > 0
+                ? item.images[0]
+                : "https://images.unsplash.com/photo-1628842456883-f8d529168be9"
+            }
+            isDiscounted={false}
+            discount={"0"}
+            onPress={() => console.log("Product clicked:", item.title)}
+          />
+        )}
+        showsHorizontalScrollIndicator={false}
+      />
+    </>
   );
 };
 
@@ -100,21 +101,14 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   container: {
-    marginHorizontal: 20,
     marginBottom: 15,
-    backgroundColor: "#fff",
   },
-  listcontainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-evenly",
-  },
+
   header: {
+    paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
   },
   title: {
     fontSize: 24,
@@ -139,7 +133,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     width: 145,
-    // height: 200,
   },
   productImage: {
     width: "100%",

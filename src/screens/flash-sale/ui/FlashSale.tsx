@@ -83,17 +83,12 @@ export default function FlashSaleScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          // console.log(flashSaleList.response?.data.timeLeft);
-        }}
-      >
-        <FlashSaleHeader
-          hours={hours}
-          minutes={minutes}
-          remainingSeconds={remainingSeconds}
-        />
-      </TouchableOpacity>
+      <FlashSaleHeader
+        hours={hours}
+        minutes={minutes}
+        remainingSeconds={remainingSeconds}
+      />
+
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() =>
@@ -139,7 +134,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-    marginTop: 20,
   },
   headerContainer: {
     flexDirection: "row",
