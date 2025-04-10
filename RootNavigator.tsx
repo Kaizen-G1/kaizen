@@ -17,7 +17,7 @@ import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUp
 import PaymentScreen from "./src/screens/payment/Payment";
 import { CartPayload } from "./src/screens/cart/slice/CartSlice";
 
-import { Icon, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { Dimensions, Platform, View } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -40,7 +40,7 @@ export type RootStackParamList = {
   AddProduct: { mode: "add" | "update"; initialData?: any };
   FlashShowAll: { products: ProductPayload[]; timeLeftSale: number };
   OrderDetail: { orderId: string };
-  AllProduct: undefined;
+  AllProduct: { products: ProductPayload[] };
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
   AddOrUpdateVendor: { mode: "add" | "update"; initialData?: any };
@@ -167,7 +167,7 @@ const RootNavigator = () => {
           component={CategoryProducts}
           options={{
             headerShown: true,
-            title: "Product Details",
+            title: "Products",
           }}
         />
 

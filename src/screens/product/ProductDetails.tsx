@@ -29,8 +29,8 @@ import {
   ProductPayload,
 } from "../vendors/product/slice/ProductSlice";
 import { getReviewsByProductThunk } from "../../screens/productReview/slice/ProductReviewSlice";
-
 import { addToCartThunk, CartPayload } from "../cart/slice/CartSlice";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 const { width } = Dimensions.get("window");
 
@@ -50,19 +50,25 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   const { loading, error, success, response } = useAppSelector(
     (state) => state.wishlist.wishlist
   );
-
+  const { userDetails } = useAppSelector((state) => state.auth);
   const { reviewList } = useAppSelector((state) => state.review);
-
   const isFocused = useIsFocused();
 
+  // Create a helper variable to simplify checks on user authentication.
+  const isUserLoggedIn = Boolean(userDetails?.userId);
+
   useEffect(() => {
+    // Fetch product reviews unconditionally.
     dispatch(getReviewsByProductThunk(product.id || ""));
-    if (isFocused) {
+    // Only fetch wishlist if the user is logged in and the screen is focused.
+    if (isUserLoggedIn && isFocused) {
       dispatch(getWishlistThunk());
     }
-  }, [dispatch, isFocused]);
+  }, [dispatch, isFocused, product.id, isUserLoggedIn]);
 
-  const products: ProductPayload[] = response?.data.wishList || [];
+  // Get wishlist products from the response.
+  const products: ProductPayload[] = response?.data?.wishList ?? [];
+
   const existingProduct = products.find((item) => item.id === product.id);
 
   const imageUrls =
@@ -79,7 +85,7 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
     if (existingProduct) {
       setIsFavorite(true);
     }
-  }, [existingProduct, isFavorite]);
+  }, [existingProduct]);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const slide = Math.floor(event.nativeEvent.contentOffset.x / width);
@@ -113,7 +119,7 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
         visible={showSuccessModal}
         message="Something went wrong"
         btnlabel="Try again"
-        onPress={() => getWishlistThunk()}
+        onPress={() => isUserLoggedIn && dispatch(getWishlistThunk())}
         onClose={() => setShowSuccessModal(false)}
       />
     );
@@ -122,14 +128,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <AlertModal
-          title={loading ? "Loading" : "Success"}
-          isLoading={loading}
-          visible={showSuccessModal}
-          message={response?.data.message}
-          onClose={() => setShowSuccessModal(false)}
-        />
-
         {/* Image Carousel */}
         <View style={styles.carouselContainer}>
           <ScrollView
@@ -163,31 +161,29 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
         </View>
 
         <View style={styles.content}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.headerRow}>
             <Text style={styles.sectionTitle}>{product.title}</Text>
-            <IconButton
-              icon={isFavorite ? "heart" : "heart-outline"}
-              iconColor={isFavorite ? "#BC6C25" : "gray"}
-              size={30}
-              onPress={() => {
-                if (isFavorite) {
-                  dispatch(removeFromWishlistThunk(product));
-                } else {
-                  dispatch(addToWishlistThunk(product));
-                }
-                toggleFavorite();
-              }}
-            />
+            {isUserLoggedIn && userDetails?.userRole === "customer" && (
+              <IconButton
+                // Disable wishlist actions if user is not logged in
+                disabled={!isUserLoggedIn}
+                icon={isFavorite ? "heart" : "heart-outline"}
+                iconColor={isFavorite ? "#BC6C25" : "gray"}
+                size={30}
+                onPress={() => {
+                  if (isFavorite) {
+                    dispatch(removeFromWishlistThunk(product));
+                  } else {
+                    dispatch(addToWishlistThunk(product));
+                  }
+                  toggleFavorite();
+                }}
+              />
+            )}
           </View>
           <Text style={styles.price}>${product.price}</Text>
           <Text style={styles.description}>
-            {product.description ?? "Desciption not available"}
+            {product.description ?? "Description not available"}
           </Text>
 
           <Text style={styles.sectionTitle}>Delivery</Text>
@@ -279,12 +275,14 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
         )}
       </ScrollView>
 
-      <TouchableOpacity
-        style={styles.addToCartButton}
-        onPress={handleAddToCart}
-      >
-        <Text style={styles.addToCartText}>Add to Cart</Text>
-      </TouchableOpacity>
+      {isUserLoggedIn && userDetails?.userRole === "customer" && (
+        <TouchableOpacity
+          style={styles.addToCartButton}
+          onPress={handleAddToCart}
+        >
+          <Text style={styles.addToCartText}>Add to Cart</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -294,12 +292,12 @@ const styles = StyleSheet.create({
   carouselContainer: {
     marginHorizontal: 5,
     marginVertical: 2,
-    height: 300,
+
     backgroundColor: "#000",
   },
   image: {
     width: width,
-    height: 300,
+    height: 550,
   },
   indicators: {
     position: "absolute",
@@ -323,6 +321,11 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   price: {
     fontSize: 26,

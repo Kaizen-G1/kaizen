@@ -40,6 +40,7 @@ const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
+  const { userDetails } = useAppSelector((state) => state.auth);
 
   const { loading, error, success, response } = useAppSelector(
     (state) => state.dashboard.dashboard
@@ -50,9 +51,8 @@ const HomeScreen = () => {
   const PAGE_SIZE = 4;
 
   useEffect(() => {
-    if (isFocused) {
-      dispatch(getWishlistThunk());
-    }
+    userDetails?.userId !== null && isFocused && dispatch(getWishlistThunk());
+
     dispatch(getCustomerDashboardThunk());
     dispatch(getFlashSaleListThunk());
   }, [dispatch, isFocused]);
@@ -88,7 +88,9 @@ const HomeScreen = () => {
   };
 
   const handleSeeAllNewItems = () => {
-    navigation.navigate("AllProduct");
+    navigation.navigate("AllProduct", {
+      products: response?.data?.dashboard?.allProducts || [],
+    });
   };
 
   const renderHeader = () => (

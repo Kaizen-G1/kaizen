@@ -18,6 +18,7 @@ type CartItemProps = StackNavigationProp<RootStackParamList, "Home">;
 export default function CartScreen() {
   const navigation = useNavigation<CartItemProps>();
   const dispatch = useAppDispatch();
+  const { userDetails } = useAppSelector((state) => state.auth);
   const isFocused = useIsFocused();
 
   const { response } = useAppSelector((state) => state.cart.cartList);
@@ -37,80 +38,99 @@ export default function CartScreen() {
 
   return (
     <>
-      <ScrollView style={{ flex: 1 }}>
+      {!userDetails && (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ marginBottom: 20, fontSize: 20, letterSpacing: 1 }}>
+            Please Login to continue
+          </Text>
+          <CustomButton
+            label="Login"
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          />
+        </View>
+      )}
+      {userDetails && (
+        <ScrollView style={{ flex: 1 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 5,
+              paddingHorizontal: 18,
+            }}
+          >
+            <Text style={{ fontSize: 24, fontWeight: "bold" }}>Cart</Text>
+            <View
+              style={{
+                backgroundColor: "#6B3A2A",
+                borderRadius: 50,
+                paddingHorizontal: 13,
+                paddingVertical: 7,
+              }}
+            >
+              <Text style={{ color: "#FFF", fontWeight: "bold" }}>
+                {cartItems.length}
+              </Text>
+            </View>
+          </View>
+
+          <FlatList
+            scrollEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            data={cartItems}
+            style={{ paddingHorizontal: 18, paddingVertical: 16 }}
+            keyExtractor={(item) => item.id!.toString()}
+            renderItem={({ item }) => (
+              <View style={{ paddingVertical: 5 }}>
+                <CartItem
+                  title={item.product.title}
+                  imageUrl={item.product.images[0]}
+                  price={item.product.price}
+                  description={item.product.description}
+                  onRemove={() => handleDeleteFromCart(item)}
+                  initialQuantity={item.quantity}
+                  onQuantityChange={(quantity) =>
+                    dispatch(updateSubTotal({ id: item.id, quantity }))
+                  }
+                  onPress={() => {
+                    navigation.navigate("ProductDetails", {
+                      productId: item.product.id?.toString() ?? "",
+                      product: item.product,
+                    });
+                  }}
+                />
+              </View>
+            )}
+          />
+        </ScrollView>
+      )}
+
+      {userDetails && (
         <View
           style={{
             flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: 5,
-            paddingHorizontal: 18,
+            padding: 16,
+            backgroundColor: "#F8F8F8",
           }}
         >
-          <Text style={{ fontSize: 24, fontWeight: "bold" }}>Cart</Text>
-          <View
-            style={{
-              backgroundColor: "#6B3A2A",
-              borderRadius: 50,
-              paddingHorizontal: 13,
-              paddingVertical: 7,
-            }}
-          >
-            <Text style={{ color: "#FFF", fontWeight: "bold" }}>
-              {cartItems.length}
-            </Text>
-          </View>
+          <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+            <Text style={{ fontSize: 18, fontWeight: "heavy" }}>Total: </Text>$
+            {subTotal.toFixed(2)}
+          </Text>
+          <CustomButton
+            label="Checkout"
+            onPress={() =>
+              navigation.navigate("Payment", { cart: cartItems, subTotal })
+            }
+          />
         </View>
-
-        <FlatList
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          data={cartItems}
-          style={{ paddingHorizontal: 18, paddingVertical: 16 }}
-          keyExtractor={(item) => item.id!.toString()}
-          renderItem={({ item }) => (
-            <View style={{ paddingVertical: 5 }}>
-              <CartItem
-                title={item.product.title}
-                imageUrl={item.product.images[0]}
-                price={item.product.price}
-                description={item.product.description}
-                onRemove={() => handleDeleteFromCart(item)}
-                initialQuantity={item.quantity}
-                onQuantityChange={(quantity) =>
-                  dispatch(updateSubTotal({ id: item.id, quantity }))
-                }
-                onPress={() => {
-                  navigation.navigate("ProductDetails", {
-                    productId: item.product.id?.toString() ?? "",
-                    product: item.product,
-                  });
-                }}
-              />
-            </View>
-          )}
-        />
-      </ScrollView>
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 16,
-          backgroundColor: "#F8F8F8",
-        }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-          <Text style={{ fontSize: 18, fontWeight: "heavy" }}>Total: </Text>$
-          {subTotal.toFixed(2)}
-        </Text>
-        <CustomButton
-          label="Checkout"
-          onPress={() =>
-            navigation.navigate("Payment", { cart: cartItems, subTotal })
-          }
-        />
-      </View>
+      )}
     </>
   );
 }

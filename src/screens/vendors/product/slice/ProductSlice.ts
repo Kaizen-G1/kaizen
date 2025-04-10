@@ -89,7 +89,11 @@ export const getProductThunk = createAsyncThunk(
   "products/productList",
   async (_, { rejectWithValue }) => {
     try {
-      const baseUrl = API_ROUTES.products.getAll;
+      const role = await AsyncStorage.getItem("userRole");
+      const baseUrl =
+        role === "company"
+          ? API_ROUTES.products.getAll
+          : API_ROUTES.products.getAllCustomers;
       const response = await http.get(baseUrl);
 
       const data = await response.data;
@@ -111,7 +115,7 @@ export const getProductsByCategoryThunk = createAsyncThunk(
   async (categoryId: string, { rejectWithValue }) => {
     try {
       const response = await http.get(
-        `/api/v1/products/category/${categoryId}`
+        `/api/v1/categories/products/${categoryId}`
       );
       const data = response.data;
       if (data.status !== "success") {

@@ -28,29 +28,6 @@ import {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const recentlyViewed = [
-  {
-    id: "1",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-  {
-    id: "2",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
-  },
-  {
-    id: "3",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-  {
-    id: "4",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
-  },
-  {
-    id: "5",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-];
-
 type WishlistScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
 const WishlistScreen = () => {
@@ -60,6 +37,8 @@ const WishlistScreen = () => {
   const { loading, error, success, response } = useAppSelector(
     (state) => state.wishlist.wishlist
   );
+
+  const { dashboard } = useAppSelector((state) => state.dashboard);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -94,20 +73,34 @@ const WishlistScreen = () => {
 
       <Text style={styles.subtitle}>Recomended for you</Text>
 
-      <View style={styles.recentlyViewedContainer}>
-        <FlatList
-          data={recentlyViewed}
-          horizontal
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Image source={{ uri: item.image }} style={styles.recentImage} />
-          )}
-          showsHorizontalScrollIndicator={false}
-        />
-        <TouchableOpacity style={styles.arrowButton}>
-          <Ionicons name="arrow-forward" size={15} color="#6C3EA6" />
-        </TouchableOpacity>
-      </View>
+      {dashboard.response?.data?.dashboard?.topProducts && (
+        <View style={styles.recentlyViewedContainer}>
+          <FlatList
+            data={dashboard.response?.data?.dashboard?.allProducts
+              .slice(0, 8)
+              .toReversed()}
+            horizontal
+            renderItem={({ item }) => (
+              <Image
+                source={{ uri: item.images[2] }}
+                style={styles.recentImage}
+              />
+            )}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            style={styles.arrowButton}
+            onPress={() => {
+              navigation.navigate("AllProduct", {
+                products:
+                  dashboard.response?.data?.dashboard?.allProducts || [],
+              });
+            }}
+          >
+            <Ionicons name="arrow-forward" size={15} color="#6C3EA6" />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {wishList.length > 0 ? (
         <FlatList<ProductPayload>

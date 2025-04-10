@@ -13,13 +13,15 @@ export const API_ROUTES = {
     getAll: `${config.EXPO_PUBLIC_API_URL}/api/v1/categories/`,
     getAllSubcategories: `${config.EXPO_PUBLIC_API_URL}/api/v1/categories/subcategories`,
     getWithSubcategories: `${config.EXPO_PUBLIC_API_URL}/api/v1/products/categories/subcategories/`,
-    getById: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/categories/${id}`,
+    getById: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/categories/${id}`,
   },
   company: {
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/company/`,
     get: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/company/${id}`,
     getAll: `${config.EXPO_PUBLIC_API_URL}/api/v1/company/`,
-    update: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/company/${id}`,
+    update: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/company/${id}`,
     delete: `${config.EXPO_PUBLIC_API_URL}/api/v1/company/`,
   },
   dashboard: {
@@ -28,42 +30,60 @@ export const API_ROUTES = {
   orders: {
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/orders`,
     getAll: () => `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/`,
-    getOrderById: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/${id}`,
+    getOrderById: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/${id}`,
   },
   products: {
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/products`,
     get: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/products/${id}`,
     getAll: `${config.EXPO_PUBLIC_API_URL}/api/v1/products/`,
-    update: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/products/${id}`,
-    delete: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/products/${id}`,
+    getAllCustomers: `${config.EXPO_PUBLIC_API_URL}/api/v1/customer/products`,
+
+    update: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/products/${id}`,
+    delete: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/products/${id}`,
   },
   reviews: {
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews`,
-    get: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/product/${id}`,
-    getAll: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
-    update: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
-    delete: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
+    get: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/product/${id}`,
+    getAll: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
+    update: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
+    delete: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/reviews/${id}`,
   },
   shoppingCart: {
     addToCart: `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/`,
     getCartList: `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/`,
-    getById: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
-    update: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
-    delete: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
+    getById: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
+    update: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
+    delete: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/shoppingCart/${id}`,
   },
   wishlist: {
-    addToWishlist: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
-    getWishlist: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
+    addToWishlist: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
+    getWishlist: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
     removeFromWishlist: (id: string) =>
       `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
-    clearWishlist: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
+    clearWishlist: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/wishlist/${id}`,
   },
   notifcation: {
     getAll: `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications`,
-    getById: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
+    getById: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/`,
-    markAsRead: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
-    delete: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
+    markAsRead: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
+    delete: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/notifications/${id}`,
   },
 
   search: {
@@ -71,8 +91,10 @@ export const API_ROUTES = {
   },
 
   flashSale: {
-    enable: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/flash/enable/${id}`,
-    disable: (id: string) => `${config.EXPO_PUBLIC_API_URL}/api/v1/flash/disable/${id}`,
+    enable: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/flash/enable/${id}`,
+    disable: (id: string) =>
+      `${config.EXPO_PUBLIC_API_URL}/api/v1/flash/disable/${id}`,
     getAll: `${config.EXPO_PUBLIC_API_URL}/api/v1/flash/active`,
   },
 };
