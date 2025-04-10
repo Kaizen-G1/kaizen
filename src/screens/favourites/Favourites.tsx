@@ -27,6 +27,7 @@ import {
 } from "../cart/slice/CartSlice";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator } from "react-native-paper";
 
 type WishlistScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -59,6 +60,14 @@ const WishlistScreen = () => {
 
   const wishList = response?.data?.wishList || [];
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#6C3EA6 " />
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       <AlertModal
@@ -81,10 +90,19 @@ const WishlistScreen = () => {
               .toReversed()}
             horizontal
             renderItem={({ item }) => (
-              <Image
-                source={{ uri: item.images[2] }}
-                style={styles.recentImage}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("ProductDetails", {
+                    productId: item.id!,
+                    product: item,
+                  });
+                }}
+              >
+                <Image
+                  source={{ uri: item.images[2] }}
+                  style={styles.recentImage}
+                />
+              </TouchableOpacity>
             )}
             showsHorizontalScrollIndicator={false}
           />
@@ -118,27 +136,13 @@ const WishlistScreen = () => {
                 }
                 description={item.description || "No description available"}
                 isWish={true}
+                onRemove={() => handleRemoveFromWishlist(item)}
                 onPress={() => {
                   navigation.navigate("ProductDetails", {
                     productId: item.id!,
                     product: item,
                   });
                 }}
-                onWishPress={async () => {
-                  const customerId = await AsyncStorage.getItem("vendorId");
-                  const cart: CartPayload = {
-                    id: "",
-                    customerId: customerId || "",
-                    productId: item.id!,
-                    quantity: 1,
-                    status: "active",
-                    product: item,
-                  };
-                  dispach(addToCartThunk(cart));
-                  dispach(getCartThunk());
-                  setShowSuccessModal(true);
-                }}
-                onRemove={() => handleRemoveFromWishlist(item)}
               />
             </View>
           )}

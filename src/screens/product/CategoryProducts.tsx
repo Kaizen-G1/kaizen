@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 
-import { Text } from "react-native-paper";
+import { ActivityIndicator, Text } from "react-native-paper";
 import ProductItem from "../../components/ProductItem";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { useIsFocused, useRoute } from "@react-navigation/native";
@@ -39,15 +39,15 @@ export default function CategoryProducts() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { loading, error, response } = useAppSelector(
-    (state) => subcategoryId !== null ? state.product.searchProduct : state.product.productCategoryList
-    
+  const { loading, error, response } = useAppSelector((state) =>
+    subcategoryId !== null
+      ? state.product.searchProduct
+      : state.product.productCategoryList
   );
 
   const isFocused = useIsFocused();
   useEffect(() => {
     if (isFocused) {
-      
       if (subcategoryId) {
         dispatch(searchProducts(subcategoryId));
       } else {
@@ -63,8 +63,14 @@ export default function CategoryProducts() {
 
   if (loading) {
     return (
-      <View style={{ marginTop: 20 }}>
-        <Text variant="bodyLarge">Loading...</Text>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color="#753742" />
       </View>
     );
   }

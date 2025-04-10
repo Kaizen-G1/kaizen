@@ -33,6 +33,7 @@ const ProfileScreenCustomer = () => {
 
   const dispatch = useAppDispatch();
   const { userDetails } = useAppSelector((state) => state.auth);
+  const { dashboard } = useAppSelector((state) => state.dashboard);
 
   const {
     orders = [],
@@ -101,7 +102,7 @@ const ProfileScreenCustomer = () => {
 
   return (
     <>
-      {userDetails?.userId !== null ? (
+      {!userDetails ? (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
@@ -166,24 +167,6 @@ const ProfileScreenCustomer = () => {
           <Text style={styles.greeting}>Hello, {customerName}</Text>
           <Text style={styles.emailText}>{customerEmail}</Text>
 
-          {/* Recently Viewed Section */}
-          <Text style={styles.sectionTitle}>Recently viewed</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.recentlyViewed}
-          >
-            {[1, 2, 3, 4, 5].map((item) => (
-              <Image
-                key={item}
-                source={{
-                  uri: "https://images.unsplash.com/photo-1617019114583-affb34d1b3cd",
-                }}
-                style={styles.recentImage}
-              />
-            ))}
-          </ScrollView>
-
           {/* My Orders Section */}
           <Text style={styles.sectionTitle}>My Orders</Text>
           <View style={styles.orderButtons}>
@@ -214,15 +197,24 @@ const ProfileScreenCustomer = () => {
             showsHorizontalScrollIndicator={false}
             style={styles.newArrivals}
           >
-            {[1, 2, 3].map((item) => (
-              <Image
-                key={item}
-                source={{
-                  uri: "https://images.unsplash.com/photo-1582509042139-71bbd7c519da",
-                }}
-                style={styles.newArrivalImage}
-              />
-            ))}
+            {dashboard?.response?.data?.dashboard?.newItems
+              .slice(0, 5)
+              .reverse()
+              .map((item) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ProductDetails", {
+                      productId: item.id || "",
+                      product: item,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{ uri: item.images[0] }}
+                    style={styles.newArrivalImage}
+                  />
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </ScrollView>
       )}

@@ -126,7 +126,7 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingBottom: 50 }}>
       <ScrollView style={styles.container}>
         {/* Image Carousel */}
         <View style={styles.carouselContainer}>
@@ -205,7 +205,7 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
         {reviewList.loading ? (
           <Text>Loading reviews...</Text>
         ) : reviewList.error ? (
-          <Text>Error: {reviewList.error}</Text>
+          <Text style={{ paddingHorizontal: 20 }}>No reviews found</Text>
         ) : reviewList.success &&
           reviewList.response?.data &&
           reviewList.response.data.reviews.length > 0 ? (
@@ -290,9 +290,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {},
   carouselContainer: {
-    marginHorizontal: 5,
-    marginVertical: 2,
-
     backgroundColor: "#000",
   },
   image: {
