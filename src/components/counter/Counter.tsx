@@ -73,11 +73,7 @@ const Counter = ({
 
   return (
     <>
-      {isWish ? (
-        <TouchableOpacity onPress={onWishPress}>
-          <AddIcon />
-        </TouchableOpacity>
-      ) : (
+      {isWish ? null : (
         <View style={styles.container}>
           <IconButton
             icon="minus"

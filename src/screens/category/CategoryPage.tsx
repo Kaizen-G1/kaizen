@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Text } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
-import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+  Image,
+  Dimensions,
+} from "react-native";
 import Collapsible from "react-native-collapsible";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   CategoryPayload,
@@ -17,6 +27,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "Category">;
 
+const SCREEN_WIDTH = Dimensions.get("window").width;
+
 export default function Category() {
   const navigation = useNavigation<NavigationProp>();
 
@@ -24,7 +36,6 @@ export default function Category() {
   const [openCategoryId, setOpenCategoryId] = useState(null);
 
   const handleToggle = (categoryId: any) => {
-    // If the same category is tapped, close it; otherwise, open the tapped category
     setOpenCategoryId((prevId) => (prevId === categoryId ? null : categoryId));
   };
   const { categoryList, selectedSubCategory } = useAppSelector(
@@ -34,19 +45,15 @@ export default function Category() {
 
   useEffect(() => {
     dispatch(getCategoryThunk());
-    const unsubscribe = navigation.addListener("focus", () => {
-      // console.log("Screen is focused or backed into view");
-      // Call your function here
-    });
+    const unsubscribe = navigation.addListener("focus", () => {});
 
-    // Clean up the listener on unmount
     return unsubscribe;
   }, [selectedSubCategory, navigation]);
 
   if (categoryList.loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#BC6C25" />
       </View>
     );
   }
@@ -59,7 +66,7 @@ export default function Category() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 16 }}>
       {categoryList.success &&
         categoryList.response?.data &&
         categoryList.response.data.categories.map((category) => (
@@ -69,14 +76,14 @@ export default function Category() {
             isOpen={openCategoryId === category.id}
             onToggle={handleToggle}
             onSubToggle={(sub) => {
-              if (userDetails?.userRole === "customer") {
-                navigation.replace("CategoryProducts", {
+              if (userDetails?.userRole === "company") {
+                dispatch(setSelectedSubCategory(sub));
+                navigation.goBack();
+              } else {
+                navigation.navigate("CategoryProducts", {
                   categoryId: category.id,
                   subcategoryId: sub.id,
                 });
-              } else {
-                dispatch(setSelectedSubCategory(sub));
-                navigation.goBack();
               }
             }}
           />
@@ -97,15 +104,40 @@ const CategoryItem = ({
   onSubToggle: (sub: SubCategoryPayload) => void;
 }) => (
   <View style={styles.categoryContainer}>
-    <TouchableOpacity onPress={() => onToggle(category.id)}>
-      <Text style={styles.header}>{category.name}</Text>
+    <TouchableOpacity
+      style={styles.headerContainer}
+      onPress={() => onToggle(category.id)}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <Image
+          source={{ uri: category.demoImages[1] }}
+          style={{ width: 60, height: 60, borderRadius: 7 }}
+        />
+        <Text style={styles.header}>{category.name}</Text>
+      </View>
+      <Ionicons
+        name={isOpen ? "chevron-up" : "chevron-down"}
+        size={Platform.OS === "ios" ? 24 : 18}
+      />
     </TouchableOpacity>
     <Collapsible collapsed={!isOpen}>
       {category.subcategories && category.subcategories.length > 0 ? (
-        <View style={styles.subcategories}>
+        <View style={[styles.subcategories, styles.subcategoriesGrid]}>
           {category.subcategories.map((sub: any) => (
-            <TouchableOpacity key={sub.id} onPress={() => onSubToggle(sub)}>
-              <Text style={styles.subcategoryText}>{sub.name}</Text>
+            <TouchableOpacity
+              key={sub.id}
+              style={styles.gridItem}
+              onPress={() => onSubToggle(sub)}
+            >
+              <Text style={styles.subcategoryText}>
+                {sub.name.slice(0, 1).toUpperCase() + sub.name.slice(1)}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -115,16 +147,25 @@ const CategoryItem = ({
     </Collapsible>
   </View>
 );
-
 const styles = StyleSheet.create({
   container: {
     padding: 10,
   },
   categoryContainer: {
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
     paddingBottom: 10,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 7,
+    backgroundColor: "#fff",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.102,
+    shadowRadius: 10,
+    elevation: 5,
   },
   header: {
     fontSize: 18,
@@ -132,10 +173,29 @@ const styles = StyleSheet.create({
   },
   subcategories: {
     marginTop: 10,
-    paddingLeft: 20,
+  },
+
+  subcategoriesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+
+  gridItem: {
+    width: "50%",
+    paddingVertical: 8,
+    paddingRight: 10,
   },
   subcategoryText: {
-    fontSize: 16,
+    backgroundColor: "#fff",
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#753742",
     marginVertical: 3,
+    borderColor: "#753742",
+    borderWidth: 1.5,
+    paddingHorizontal: 10,
+    paddingVertical: 16,
+    borderRadius: 7,
   },
 });

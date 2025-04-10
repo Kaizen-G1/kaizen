@@ -17,7 +17,7 @@ import AddOrUpdateVendorDetail from "./src/screens/vendors/vendordetails/AddOrUp
 import PaymentScreen from "./src/screens/payment/Payment";
 import { CartPayload } from "./src/screens/cart/slice/CartSlice";
 
-import { Icon, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { Dimensions, Platform, View } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -30,6 +30,7 @@ import ProductReview from "./src/screens/productReview/ProductReviewScreen";
 import SearchList from "./src/screens/search/ui/SearchList";
 import { SearchPayload } from "./src/screens/search/slice/SearchSlice";
 import AllReviewsScreen from "./src/screens/productReview/slice/AllReviewsScreen";
+import { Order } from "./src/screens/vendors/home/data/OrderTypes";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -40,7 +41,7 @@ export type RootStackParamList = {
   AddProduct: { mode: "add" | "update"; initialData?: any };
   FlashShowAll: { products: ProductPayload[]; timeLeftSale: number };
   OrderDetail: { orderId: string };
-  AllProduct: undefined;
+  AllProduct: { products: ProductPayload[] };
   ProductDetails: { productId: string; product: ProductPayload };
   Category: undefined;
   AddOrUpdateVendor: { mode: "add" | "update"; initialData?: any };
@@ -52,7 +53,7 @@ export type RootStackParamList = {
     total: number;
   };
   CategoryProducts: { categoryId: string; subcategoryId?: string | null };
-  CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
+  CustomerOrderList: { type: "pay" | "receive" | "review"; orders: Order[] };
   ProductReview: { productId: "" };
   Notifications: undefined;
   SearchList: { query: SearchPayload };
@@ -167,7 +168,7 @@ const RootNavigator = () => {
           component={CategoryProducts}
           options={{
             headerShown: true,
-            title: "Product Details",
+            title: "Products",
           }}
         />
 

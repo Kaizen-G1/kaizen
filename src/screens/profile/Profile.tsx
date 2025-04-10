@@ -19,6 +19,7 @@ import { Badge, IconButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { getNotificationsThunk } from "../notifcations/slice/NotificatiosSlice";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,12 +32,14 @@ const ProfileScreenCustomer = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const dispatch = useAppDispatch();
+  const { userDetails } = useAppSelector((state) => state.auth);
+  const { dashboard } = useAppSelector((state) => state.dashboard);
 
   const {
     orders = [],
     loading,
     error,
-  } = useAppSelector((state) => state.orders || { orders: [] });
+  } = useAppSelector((state) => state.orders);
 
   useEffect(() => {
     const fetchCustomerName = async () => {
@@ -52,19 +55,18 @@ const ProfileScreenCustomer = () => {
   // Filter orders for ToReceive and ToReview
   const toReceiveOrders = orders.filter(
     (order) =>
-      order.status === "Awaiting Pickup" || order.status === "In transit"
+      order.status.toLowerCase() === "pending" ||
+      order.status === "Awaiting Pickup" ||
+      order.status === "In transit"
   );
   const toReviewOrders = orders.filter((order) => order.status === "Complete");
   const toPayOrders = orders.filter((order) => order.status === "Pending");
 
   const handleNavigateToOrders = (type: string) => {
-    if (type === "pay") {
-      navigation.navigate("CustomerOrderList", { type, orders: toPayOrders });
-      return;
-    } else if (type === "receive") {
+    if (type === "receive") {
       navigation.navigate("CustomerOrderList", {
         type,
-        orders: toReceiveOrders,
+        orders: orders,
       });
       return;
     } else if (type === "review") {
@@ -77,7 +79,6 @@ const ProfileScreenCustomer = () => {
   };
 
   const handleLogout = async () => {
-    // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
     await AsyncStorage.removeItem("userEmail");
@@ -98,120 +99,118 @@ const ProfileScreenCustomer = () => {
   }, [dispatch]);
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+    <>
+      {!userDetails ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text style={{ marginBottom: 20, fontSize: 20, letterSpacing: 1 }}>
+            Please Login to continue
+          </Text>
+          <CustomButton
+            label="Login"
+            onPress={() => {
+              navigation.navigate("Login");
             }}
-            style={styles.profileImage}
           />
-
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <IconButton
-              icon={() => (
-                <Icon name="bell-outline" size={30} color="#753742" />
-              )}
-              onPress={() => {
-                navigation.navigate("Notifications");
-              }}
-            />
-            {notificationCount > 0 && (
-              <Badge
-                size={20}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: -2,
-                  fontSize: 12,
-                  fontWeight: "900",
-                  color: "#fff",
-                  backgroundColor: "#9B2C2D",
-                }}
-              >
-                {notificationCount}
-              </Badge>
-            )}
-          </View>
         </View>
+      ) : (
+        <ScrollView style={styles.container}>
+          {/* Header Section */}
+          <View style={styles.header}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                source={{
+                  uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+                }}
+                style={styles.profileImage}
+              />
 
-        <TouchableOpacity style={styles.activityButton} onPress={handleLogout}>
-          <Text style={styles.activityText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <IconButton
+                  icon={() => (
+                    <Icon name="bell-outline" size={30} color="#753742" />
+                  )}
+                  onPress={() => {
+                    navigation.navigate("Notifications");
+                  }}
+                />
+                {notificationCount > 0 && (
+                  <Badge
+                    size={20}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: -2,
+                      fontSize: 12,
+                      fontWeight: "900",
+                      color: "#fff",
+                      backgroundColor: "#9B2C2D",
+                    }}
+                  >
+                    {notificationCount}
+                  </Badge>
+                )}
+              </View>
+            </View>
 
-      <Text style={styles.greeting}>Hello, {customerName}</Text>
-      <Text style={styles.emailText}>{customerEmail}</Text>
+            <TouchableOpacity
+              style={styles.activityButton}
+              onPress={handleLogout}
+            >
+              <Text style={styles.activityText}>Log Out</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* Announcement Section */}
-      <View style={styles.announcement}>
-        <Text style={styles.announcementTitle}>Announcement</Text>
-        <Text style={styles.announcementText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </Text>
-      </View>
+          <Text style={styles.greeting}>Hello, {customerName}</Text>
+          <Text style={styles.emailText}>{customerEmail}</Text>
 
-      {/* Recently Viewed Section */}
-      <Text style={styles.sectionTitle}>Recently viewed</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.recentlyViewed}
-      >
-        {[1, 2, 3, 4, 5].map((item) => (
-          <Image
-            key={item}
-            source={{
-              uri: "https://images.unsplash.com/photo-1617019114583-affb34d1b3cd",
-            }}
-            style={styles.recentImage}
-          />
-        ))}
-      </ScrollView>
+          {/* My Orders Section */}
+          <Text style={styles.sectionTitle}>My Orders</Text>
+          <View style={styles.orderButtons}>
+            <TouchableOpacity
+              style={styles.orderButtonActive}
+              onPress={() => handleNavigateToOrders("receive")}
+            >
+              <Text style={styles.orderText}>To Receive</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.orderButton}
+              onPress={() => handleNavigateToOrders("review")}
+            >
+              <Text style={styles.orderText}>To Review</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* My Orders Section */}
-      <Text style={styles.sectionTitle}>My Orders</Text>
-      <View style={styles.orderButtons}>
-        <TouchableOpacity
-          style={styles.orderButton}
-          onPress={() => handleNavigateToOrders("pay")}
-        >
-          <Text style={styles.orderText}>To Pay</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.orderButtonActive}
-          onPress={() => handleNavigateToOrders("receive")}
-        >
-          <Text style={styles.orderText}>To Receive</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.orderButton}
-          onPress={() => handleNavigateToOrders("review")}
-        >
-          <Text style={styles.orderText}>To Review</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* New Arrivals Section */}
-      <Text style={styles.sectionTitle}>New Arrivals</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.newArrivals}
-      >
-        {[1, 2, 3].map((item) => (
-          <Image
-            key={item}
-            source={{
-              uri: "https://images.unsplash.com/photo-1582509042139-71bbd7c519da",
-            }}
-            style={styles.newArrivalImage}
-          />
-        ))}
-      </ScrollView>
-    </ScrollView>
+          {/* New Arrivals Section */}
+          <Text style={styles.sectionTitle}>New Arrivals</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.newArrivals}
+          >
+            {dashboard?.response?.data?.dashboard?.newItems
+              .slice(0, 5)
+              .reverse()
+              .map((item) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ProductDetails", {
+                      productId: item.id || "",
+                      product: item,
+                    });
+                  }}
+                >
+                  <Image
+                    source={{ uri: item.images[0] }}
+                    style={styles.newArrivalImage}
+                  />
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

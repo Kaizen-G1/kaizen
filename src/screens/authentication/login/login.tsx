@@ -32,8 +32,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
   const dispatch = useAppDispatch();
 
-  const { userDetails } = useAppSelector((state) => state.auth);
-
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Email and password are required.");

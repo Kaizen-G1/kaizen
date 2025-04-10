@@ -157,7 +157,7 @@ export default function OrderDetailScreen() {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card}>
+        {/* <Card style={styles.card}>
           <Card.Title title="Products" />
           <Card.Content>
             {selectedOrder.products.length > 0 ? (
@@ -175,15 +175,15 @@ export default function OrderDetailScreen() {
                     <Image
                       source={{
                         uri:
-                          product.image && product.image.length > 0
-                            ? product.image
+                          product.images && product.images.length > 0
+                            ? product.images[0]
                             : "https://images.unsplash.com/photo-1628842456883-f8d529168be9",
                       }}
                       style={styles.productImage}
                     />
                     <View style={styles.textContainer}>
                       <Text style={styles.productTitle}>
-                        {product.product_name || "Unknown Product"} (x
+                        {product.title || "Unknown Product"} (x
                         {product.quantity})
                       </Text>
                       <Text style={styles.productId}>ID: {formattedId}</Text>
@@ -201,7 +201,7 @@ export default function OrderDetailScreen() {
               </Text>
             )}
           </Card.Content>
-        </Card>
+        </Card> */}
 
         <Card style={styles.card}>
           <Card.Title title="Order Status" />

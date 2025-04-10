@@ -27,29 +27,7 @@ import {
 } from "../cart/slice/CartSlice";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const recentlyViewed = [
-  {
-    id: "1",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-  {
-    id: "2",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
-  },
-  {
-    id: "3",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-  {
-    id: "4",
-    image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea",
-  },
-  {
-    id: "5",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2",
-  },
-];
+import { ActivityIndicator } from "react-native-paper";
 
 type WishlistScreenProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -60,6 +38,8 @@ const WishlistScreen = () => {
   const { loading, error, success, response } = useAppSelector(
     (state) => state.wishlist.wishlist
   );
+
+  const { dashboard } = useAppSelector((state) => state.dashboard);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -80,6 +60,14 @@ const WishlistScreen = () => {
 
   const wishList = response?.data?.wishList || [];
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#6C3EA6 " />
+      </View>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
       <AlertModal
@@ -94,20 +82,43 @@ const WishlistScreen = () => {
 
       <Text style={styles.subtitle}>Recomended for you</Text>
 
-      <View style={styles.recentlyViewedContainer}>
-        <FlatList
-          data={recentlyViewed}
-          horizontal
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <Image source={{ uri: item.image }} style={styles.recentImage} />
-          )}
-          showsHorizontalScrollIndicator={false}
-        />
-        <TouchableOpacity style={styles.arrowButton}>
-          <Ionicons name="arrow-forward" size={15} color="#6C3EA6" />
-        </TouchableOpacity>
-      </View>
+      {dashboard.response?.data?.dashboard?.topProducts && (
+        <View style={styles.recentlyViewedContainer}>
+          <FlatList
+            data={dashboard.response?.data?.dashboard?.allProducts
+              .slice(0, 8)
+              .toReversed()}
+            horizontal
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("ProductDetails", {
+                    productId: item.id!,
+                    product: item,
+                  });
+                }}
+              >
+                <Image
+                  source={{ uri: item.images[2] }}
+                  style={styles.recentImage}
+                />
+              </TouchableOpacity>
+            )}
+            showsHorizontalScrollIndicator={false}
+          />
+          <TouchableOpacity
+            style={styles.arrowButton}
+            onPress={() => {
+              navigation.navigate("AllProduct", {
+                products:
+                  dashboard.response?.data?.dashboard?.allProducts || [],
+              });
+            }}
+          >
+            <Ionicons name="arrow-forward" size={15} color="#6C3EA6" />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {wishList.length > 0 ? (
         <FlatList<ProductPayload>
@@ -125,27 +136,13 @@ const WishlistScreen = () => {
                 }
                 description={item.description || "No description available"}
                 isWish={true}
+                onRemove={() => handleRemoveFromWishlist(item)}
                 onPress={() => {
                   navigation.navigate("ProductDetails", {
                     productId: item.id!,
                     product: item,
                   });
                 }}
-                onWishPress={async () => {
-                  const customerId = await AsyncStorage.getItem("vendorId");
-                  const cart: CartPayload = {
-                    id: "",
-                    customerId: customerId || "",
-                    productId: item.id!,
-                    quantity: 1,
-                    status: "active",
-                    product: item,
-                  };
-                  dispach(addToCartThunk(cart));
-                  dispach(getCartThunk());
-                  setShowSuccessModal(true);
-                }}
-                onRemove={() => handleRemoveFromWishlist(item)}
               />
             </View>
           )}
