@@ -11,6 +11,7 @@ import searchReducer from "../screens/search/slice/SearchSlice";
 import flashReducer from "../screens/flash-sale/slice/FlashSlice";
 import productReviewReducer from "../screens/productReview/slice/ProductReviewSlice";
 import customerDashboardSlice from "../screens/home/slice/CustomerDashboardSlice";
+import paymentSlice from "../screens/payment/PaymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     flash: flashReducer,
     review: productReviewReducer,
     dashboard: customerDashboardSlice,
+    payment: paymentSlice,
   },
 });
 

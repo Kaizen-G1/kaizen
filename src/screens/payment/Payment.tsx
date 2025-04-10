@@ -24,6 +24,10 @@ import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import { useIsFocused } from "@react-navigation/native";
 import http from "../../services/httpService";
 
+import { useAppDispatch } from "../../services/constants";
+import { deleteFromCartThunk } from "../cart/slice/CartSlice";
+import { Toast } from "toastify-react-native";
+
 type Props = StackScreenProps<RootStackParamList, "Payment">;
 
 const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
@@ -54,6 +58,7 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
   const isFocused = useIsFocused();
+  const dispatch = useAppDispatch();
 
   // Handlers for shipping selection
   const handleShippingSelect = (option: "standard" | "express") => {
@@ -65,33 +70,16 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const createOrder = async (order: Order) => {
-    try {
-      const token = await AsyncStorage.getItem("accessToken");
-      const response = await axios.post(
-        `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/company/orders/`,
-        order,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data.data.order;
-    } catch (error) {
-      throw new Error("Failed to create order");
-    }
-  };
-
   const fetchPaymentIntent = async () => {
     setLoading(true);
+    const customerId = await AsyncStorage.getItem("vendorId");
     try {
       const response = await http.post(
         `api/v1/payments/create-payment-intent`,
         {
-          orderId: "67bea8c61e62ce46ed7efb04",
-          amount: total,
+          customerId: customerId,
+          products: cart,
+          total_price: total,
         }
       );
 
@@ -116,8 +104,11 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
     if (error) {
       console.log("Payment failed", error);
     } else {
+      cart.map((item) => {
+        dispatch(deleteFromCartThunk(item));
+      });
       navigation.reset({ index: 0, routes: [{ name: "Home" }] });
-      console.log("Payment successful!");
+      Toast.success("Payment successful");
     }
   };
 

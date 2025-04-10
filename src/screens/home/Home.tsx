@@ -29,6 +29,7 @@ import CateogoryComponentProps from "./ui/CategoryComponent";
 import HorizontalProductList from "../../components/HorizontalProducList";
 import FlashSaleScreen from "../flash-sale/ui/FlashSale";
 import ProductItem from "../../components/ProductItem";
+import { getCartThunk } from "../cart/slice/CartSlice";
 
 const MARGIN_HORIZONTAL = 14;
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -55,6 +56,7 @@ const HomeScreen = () => {
 
     dispatch(getCustomerDashboardThunk());
     dispatch(getFlashSaleListThunk());
+    dispatch(getCartThunk());
   }, [dispatch, isFocused]);
 
   useEffect(() => {

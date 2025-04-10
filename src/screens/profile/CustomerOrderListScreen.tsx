@@ -4,6 +4,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../../../RootNavigator";
 import CartItem from "../../components/CartItem";
 import { StackNavigationProp } from "@react-navigation/stack";
+import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 
 type OrderListScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -19,7 +20,6 @@ const CustomerOrderListScreen = () => {
   const navigation = useNavigation<ProductReviewRouteProp>();
   const { type, orders } = route.params;
 
-  // Define dynamic labels and filter conditions
   const screenData = {
     pay: {
       title: "Orders To Pay",
@@ -43,7 +43,6 @@ const CustomerOrderListScreen = () => {
 
   const { title, status, emptyMessage } = screenData[type] || screenData.pay;
 
-  // Filter products that belong to completed orders (for review)
   let productsToReview: any[] = [];
   if (type === "review") {
     productsToReview = orders
@@ -62,10 +61,7 @@ const CustomerOrderListScreen = () => {
   // Handle button press for reviewing a product
   const handleButtonPress = (product: any) => {
     if (type === "receive") {
-      Alert.alert(
-        "Tracking",
-        `Your order #${product.product_id} is being tracked.`
-      );
+      Alert.alert("Tracking", `Your order #${product.id} is being tracked.`);
     } else if (type === "review") {
       console.log("Product ID:", product);
       navigation.navigate("ProductReview", { productId: product.product_id });
@@ -75,6 +71,47 @@ const CustomerOrderListScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
+      {type === "receive" && (
+        <FlatList
+          data={orders.filter(
+            (order) =>
+              order.status.toLowerCase() === "pending" ||
+              order.status.toLocaleLowerCase() === "awaiting pickup" ||
+              order.status.toLocaleLowerCase() === "in transit"
+          )}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                marginBottom: 10,
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
+            >
+              <View>
+                <Text style={{ fontWeight: "bold" }}>
+                  Order ID: {item.customer_id}
+                </Text>
+                <Text style={{ fontWeight: "bold" }}>{item.customerName}</Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  Status: {item.status}
+                </Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  Total products: {item.products.length}
+                </Text>
+                <Text style={{ fontWeight: "bold" }}>
+                  Total: ${item.total_price}
+                </Text>
+              </View>
+              <CustomButton
+                label="Track"
+                onPress={() => handleButtonPress(item)}
+              />
+            </View>
+          )}
+        />
+      )}
       {productsToReview.length > 0 ? (
         <FlatList
           data={productsToReview}

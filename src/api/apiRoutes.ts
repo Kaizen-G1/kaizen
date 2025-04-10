@@ -1,3 +1,4 @@
+import { create } from "tailwind-rn";
 import config from "../config/config";
 
 export const API_ROUTES = {
@@ -30,6 +31,7 @@ export const API_ROUTES = {
   orders: {
     create: `${config.EXPO_PUBLIC_API_URL}/api/v1/orders`,
     getAll: () => `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/`,
+    getPayments: `${config.EXPO_PUBLIC_API_URL}/api/v1/payments/create-payment-intent`,
     getOrderById: (id: string) =>
       `${config.EXPO_PUBLIC_API_URL}/api/v1/orders/${id}`,
   },

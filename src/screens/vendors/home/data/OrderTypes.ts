@@ -1,9 +1,14 @@
+import { CartPayload } from "../../../cart/slice/CartSlice";
+import { ProductPayload } from "../../product/slice/ProductSlice";
+
 export interface Product {
   product_id: string;
-  product_name?: string;
+  title?: string;
   price?: number;
   quantity: number;
   images: string[];
+  product: CartPayload;
+  totalPrice: number;
 }
 
 export interface Order {
@@ -11,7 +16,12 @@ export interface Order {
   customer_id: string;
   products: Product[];
   total_price: number;
-  status: "Pending" | "Awaiting Pickup" | "In transit" | "Complete" | "Cancelled";
+  status:
+    | "Pending"
+    | "Awaiting Pickup"
+    | "In transit"
+    | "Complete"
+    | "Cancelled";
   created_date: Date;
   updated_date: Date;
   companyName: string;

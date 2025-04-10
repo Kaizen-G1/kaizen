@@ -39,7 +39,7 @@ const ProfileScreenCustomer = () => {
     orders = [],
     loading,
     error,
-  } = useAppSelector((state) => state.orders || { orders: [] });
+  } = useAppSelector((state) => state.orders);
 
   useEffect(() => {
     const fetchCustomerName = async () => {
@@ -55,19 +55,18 @@ const ProfileScreenCustomer = () => {
   // Filter orders for ToReceive and ToReview
   const toReceiveOrders = orders.filter(
     (order) =>
-      order.status === "Awaiting Pickup" || order.status === "In transit"
+      order.status.toLowerCase() === "pending" ||
+      order.status === "Awaiting Pickup" ||
+      order.status === "In transit"
   );
   const toReviewOrders = orders.filter((order) => order.status === "Complete");
   const toPayOrders = orders.filter((order) => order.status === "Pending");
 
   const handleNavigateToOrders = (type: string) => {
-    if (type === "pay") {
-      navigation.navigate("CustomerOrderList", { type, orders: toPayOrders });
-      return;
-    } else if (type === "receive") {
+    if (type === "receive") {
       navigation.navigate("CustomerOrderList", {
         type,
-        orders: toReceiveOrders,
+        orders: orders,
       });
       return;
     } else if (type === "review") {
@@ -80,7 +79,6 @@ const ProfileScreenCustomer = () => {
   };
 
   const handleLogout = async () => {
-    // TODO: Implement method on logout event
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
     await AsyncStorage.removeItem("userEmail");
@@ -170,12 +168,6 @@ const ProfileScreenCustomer = () => {
           {/* My Orders Section */}
           <Text style={styles.sectionTitle}>My Orders</Text>
           <View style={styles.orderButtons}>
-            <TouchableOpacity
-              style={styles.orderButton}
-              onPress={() => handleNavigateToOrders("pay")}
-            >
-              <Text style={styles.orderText}>To Pay</Text>
-            </TouchableOpacity>
             <TouchableOpacity
               style={styles.orderButtonActive}
               onPress={() => handleNavigateToOrders("receive")}

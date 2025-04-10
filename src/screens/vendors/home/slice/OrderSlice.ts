@@ -5,7 +5,7 @@ import { Order } from "../data/OrderTypes";
 interface OrderState {
   orders: Order[];
   selectedOrder: Order | null;
-  totalCompletedAmount: number; 
+  totalCompletedAmount: number;
   loading: boolean;
   updating: boolean;
   error: string | null;
@@ -14,7 +14,7 @@ interface OrderState {
 const initialState: OrderState = {
   orders: [],
   selectedOrder: null,
-  totalCompletedAmount: 0, //initial value would be 0 
+  totalCompletedAmount: 0, //initial value would be 0
   loading: false,
   updating: false,
   error: null,
@@ -69,11 +69,10 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
 
-        // ✅ Calculate total price of completed orders
         const completedOrders = action.payload.filter(
           (order) => order.status === "Complete"
         );
-        
+
         state.totalCompletedAmount = completedOrders.reduce(
           (total, order) => total + order.total_price,
           0

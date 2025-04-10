@@ -30,6 +30,7 @@ import ProductReview from "./src/screens/productReview/ProductReviewScreen";
 import SearchList from "./src/screens/search/ui/SearchList";
 import { SearchPayload } from "./src/screens/search/slice/SearchSlice";
 import AllReviewsScreen from "./src/screens/productReview/slice/AllReviewsScreen";
+import { Order } from "./src/screens/vendors/home/data/OrderTypes";
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -52,7 +53,7 @@ export type RootStackParamList = {
     total: number;
   };
   CategoryProducts: { categoryId: string; subcategoryId?: string | null };
-  CustomerOrderList: { type: "pay" | "receive" | "review"; orders: any[] };
+  CustomerOrderList: { type: "pay" | "receive" | "review"; orders: Order[] };
   ProductReview: { productId: "" };
   Notifications: undefined;
   SearchList: { query: SearchPayload };

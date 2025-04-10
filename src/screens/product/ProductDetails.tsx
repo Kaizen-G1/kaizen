@@ -31,6 +31,7 @@ import {
 import { getReviewsByProductThunk } from "../../screens/productReview/slice/ProductReviewSlice";
 import { addToCartThunk, CartPayload } from "../cart/slice/CartSlice";
 import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
+import { Toast } from "toastify-react-native";
 
 const { width } = Dimensions.get("window");
 
@@ -109,6 +110,7 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
       product: product,
     };
     dispatch(addToCartThunk(cart));
+    Toast.success("Product added to cart");
   };
 
   if (error) {
