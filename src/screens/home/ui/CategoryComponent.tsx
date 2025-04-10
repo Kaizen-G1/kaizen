@@ -61,6 +61,7 @@ const CateogoryComponent: React.FC<CateogoryComponentProps> = ({
         </TouchableOpacity>
       </View>
       <FlatList
+        style={{ paddingHorizontal: 10 }}
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}

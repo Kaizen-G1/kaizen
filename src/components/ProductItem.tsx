@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#7A4B94",
+    color: "#000000",
   },
   originalPrice: {
     fontSize: 14,
-    color: "#999",
+    color: "#753742",
     textDecorationLine: "line-through",
   },
 });

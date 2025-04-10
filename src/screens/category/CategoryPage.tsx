@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Text } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
-import { View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import Collapsible from "react-native-collapsible";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
@@ -24,7 +30,6 @@ export default function Category() {
   const [openCategoryId, setOpenCategoryId] = useState(null);
 
   const handleToggle = (categoryId: any) => {
-    // If the same category is tapped, close it; otherwise, open the tapped category
     setOpenCategoryId((prevId) => (prevId === categoryId ? null : categoryId));
   };
   const { categoryList, selectedSubCategory } = useAppSelector(
@@ -34,19 +39,15 @@ export default function Category() {
 
   useEffect(() => {
     dispatch(getCategoryThunk());
-    const unsubscribe = navigation.addListener("focus", () => {
-      // console.log("Screen is focused or backed into view");
-      // Call your function here
-    });
+    const unsubscribe = navigation.addListener("focus", () => {});
 
-    // Clean up the listener on unmount
     return unsubscribe;
   }, [selectedSubCategory, navigation]);
 
   if (categoryList.loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="#BC6C25" />
       </View>
     );
   }
@@ -69,14 +70,14 @@ export default function Category() {
             isOpen={openCategoryId === category.id}
             onToggle={handleToggle}
             onSubToggle={(sub) => {
-              if (userDetails?.userRole === "customer") {
-                navigation.replace("CategoryProducts", {
+              if (userDetails?.userRole === "company") {
+                dispatch(setSelectedSubCategory(sub));
+                navigation.goBack();
+              } else {
+                navigation.navigate("CategoryProducts", {
                   categoryId: category.id,
                   subcategoryId: sub.id,
                 });
-              } else {
-                dispatch(setSelectedSubCategory(sub));
-                navigation.goBack();
               }
             }}
           />
