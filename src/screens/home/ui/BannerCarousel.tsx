@@ -29,14 +29,14 @@ const BannerCarousel = ({
   const windowWidth = Dimensions.get("window").width;
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
-  // Correct width calculation accounting for parent margins (16*2) and gap
-  const cardWidth = windowWidth - 32 - gap; // 32 = 16px margin on both sides
+
+  const cardWidth = windowWidth - 32 - gap;
   const autoSlideTimer = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToIndex = (index: number) => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
-        x: index * (cardWidth + gap), // Account for card width + gap
+        x: index * (cardWidth + gap),
         animated: true,
       });
     }

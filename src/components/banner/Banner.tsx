@@ -18,9 +18,9 @@ const Banner: React.FC<BannerProps> = ({
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={{ uri: imageUrl }} // Use the imageUrl prop
+        source={{ uri: imageUrl }}
         style={styles.imageBackground}
-        resizeMode="cover" // Ensure the image covers the container
+        resizeMode="cover"
       >
         <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>

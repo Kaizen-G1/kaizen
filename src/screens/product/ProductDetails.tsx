@@ -55,19 +55,16 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   const { reviewList } = useAppSelector((state) => state.review);
   const isFocused = useIsFocused();
 
-  // Create a helper variable to simplify checks on user authentication.
   const isUserLoggedIn = Boolean(userDetails?.userId);
 
   useEffect(() => {
-    // Fetch product reviews unconditionally.
     dispatch(getReviewsByProductThunk(product.id || ""));
-    // Only fetch wishlist if the user is logged in and the screen is focused.
+
     if (isUserLoggedIn && isFocused) {
       dispatch(getWishlistThunk());
     }
   }, [dispatch, isFocused, product.id, isUserLoggedIn]);
 
-  // Get wishlist products from the response.
   const products: ProductPayload[] = response?.data?.wishList ?? [];
 
   const existingProduct = products.find((item) => item.id === product.id);
@@ -130,7 +127,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
   return (
     <View style={{ flex: 1, paddingBottom: 50 }}>
       <ScrollView style={styles.container}>
-        {/* Image Carousel */}
         <View style={styles.carouselContainer}>
           <ScrollView
             ref={scrollViewRef}
@@ -167,7 +163,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
             <Text style={styles.sectionTitle}>{product.title}</Text>
             {isUserLoggedIn && userDetails?.userRole === "customer" && (
               <IconButton
-                // Disable wishlist actions if user is not logged in
                 disabled={!isUserLoggedIn}
                 icon={isFavorite ? "heart" : "heart-outline"}
                 iconColor={isFavorite ? "#BC6C25" : "gray"}
@@ -201,7 +196,6 @@ const ProductDetailsPage: React.FC<Props> = ({ route }) => {
           </View>
         </View>
 
-        {/* Rating & Reviews Section */}
         <Text style={styles.reviewHeader}>Rating & Reviews</Text>
 
         {reviewList.loading ? (

@@ -15,8 +15,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RootStackParamList } from "../../../RootNavigator";
 
 import { fetchOrders } from "../vendors/home/slice/OrderSlice";
-import { Badge, IconButton } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useAppDispatch, useAppSelector } from "../../services/constants";
 import { getNotificationsThunk } from "../notifcations/slice/NotificatiosSlice";
 import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
@@ -52,7 +50,6 @@ const ProfileScreenCustomer = () => {
     dispatch(fetchOrders());
   }, [dispatch]);
 
-  // Filter orders for ToReceive and ToReview
   const toReceiveOrders = orders.filter(
     (order) =>
       order.status.toLowerCase() === "pending" ||
@@ -116,7 +113,6 @@ const ProfileScreenCustomer = () => {
         </View>
       ) : (
         <ScrollView style={styles.container}>
-          {/* Header Section */}
           <View style={styles.header}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
@@ -138,7 +134,6 @@ const ProfileScreenCustomer = () => {
           <Text style={styles.greeting}>Hello, {customerName}</Text>
           <Text style={styles.emailText}>{customerEmail}</Text>
 
-          {/* My Orders Section */}
           <Text style={styles.sectionTitle}>My Orders</Text>
           <View style={styles.orderButtons}>
             <TouchableOpacity
@@ -155,7 +150,6 @@ const ProfileScreenCustomer = () => {
             </TouchableOpacity>
           </View>
 
-          {/* New Arrivals Section */}
           <Text style={styles.sectionTitle}>New Arrivals</Text>
           <ScrollView
             horizontal

@@ -26,9 +26,7 @@ const ProductReviewScreen = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(5);
 
-  useEffect(() => {
-    // dispatch(getReviewsByProductThunk(productId));
-  }, [dispatch, productId]);
+  useEffect(() => {}, [dispatch, productId]);
 
   const handleAddReview = async () => {
     if (!comment.trim()) {

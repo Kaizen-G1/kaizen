@@ -81,10 +81,6 @@ export default function OrderListScreen() {
           title={customerName}
           searchQuery={searchQuery}
           onSearch={setSearchQuery}
-          notificationCount={totalNotifications}
-          onNotificationPress={() => {
-            navigation.navigate("Notifications");
-          }}
         />
         <View style={styles.filterContainer}>
           <ScrollView

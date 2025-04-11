@@ -8,8 +8,6 @@ import http from "../../services/httpService";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../RootNavigator";
 
-const SOCKET_URL = "http://localhost:3000/api/v1/payments/webhook";
-
 type Props = StackScreenProps<RootStackParamList, "StripePayment">;
 
 const StripePaymentScreen: React.FC<Props> = ({ route }) => {

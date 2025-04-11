@@ -140,7 +140,7 @@ export const notificationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetch notifications
+
       .addCase(getNotificationsThunk.pending, (state) => {
         handleApiCall(state.notifications, {}, "loading");
       })
@@ -152,7 +152,6 @@ export const notificationsSlice = createSlice({
         handleApiCall(state.notifications, { error: action.payload }, "failed");
       })
 
-      // fetch notifications by user id
       .addCase(getNotificationsByUserIdThunk.pending, (state) => {
         handleApiCall(state.notifications, {}, "loading");
       })
@@ -163,8 +162,6 @@ export const notificationsSlice = createSlice({
       .addCase(getNotificationsByUserIdThunk.rejected, (state, action) => {
         handleApiCall(state.notifications, { error: action.payload }, "failed");
       })
-
-      // create notification
 
       .addCase(createNotificationThunk.pending, (state) => {
         handleApiCall(state.notifications, {}, "loading");
@@ -177,8 +174,6 @@ export const notificationsSlice = createSlice({
         handleApiCall(state.notifications, { error: action.payload }, "failed");
       })
 
-      // remove notification
-
       .addCase(removeNotificationThunk.pending, (state) => {
         handleApiCall(state.notifications, {}, "loading");
       })
@@ -190,7 +185,6 @@ export const notificationsSlice = createSlice({
         handleApiCall(state.notifications, { error: action.payload }, "failed");
       })
 
-      // mark as read
       .addCase(markAsReadThunk.pending, (state) => {
         handleApiCall(state.notifications, {}, "loading");
       })

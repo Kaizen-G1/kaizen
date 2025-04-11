@@ -5,11 +5,10 @@ const AddIcon: React.FC<SvgProps> = (props) => (
   <Svg
     width={props.width || 40}
     height={props.height || 40}
-    viewBox="0 0 30 30" // Ensures correct scaling
+    viewBox="0 0 30 30"
     fill="none"
     {...props}
   >
-    {/* Main Box Icon */}
     <G
       stroke="#753742"
       strokeLinecap="round"
@@ -20,13 +19,11 @@ const AddIcon: React.FC<SvgProps> = (props) => (
       <Path d="M22.893 9.77a4.885 4.885 0 1 1-9.77 0" />
     </G>
 
-    {/* Add Circle */}
     <G stroke="#753742" strokeWidth={2}>
       <Path fill="#fff" d="M17 16a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
       <Path d="M9.082 12.752v6.66M12.412 16.082h-6.66" strokeLinecap="round" />
     </G>
 
-    {/* Clipping Definition (if needed) */}
     <Defs>
       <ClipPath id="a">
         <Path

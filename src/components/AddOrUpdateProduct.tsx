@@ -15,13 +15,8 @@ import AlertModal from "./alert/AlertCustomModal";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { SaveFormat } from "expo-image-manipulator";
-import {
-  getCategoryByIdThunk,
-  resetSelectedCategory,
-  setSelectedCategory,
-} from "../screens/category/slice/CategorySlice";
 
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 type Props = StackScreenProps<RootStackParamList, "AddProduct">;
 
@@ -318,9 +313,7 @@ const AddOrUpdateProduct: React.FC<Props> = ({ navigation, route }) => {
           <CustomButton
             label="Delete Product"
             type="primary"
-            onPress={() => {
-              // console.log(form.subCategoryId);
-            }}
+            onPress={() => {}}
           />
         )}
       </View>

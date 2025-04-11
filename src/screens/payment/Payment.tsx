@@ -12,13 +12,10 @@ import {
   FlatList,
   Alert,
 } from "react-native";
-import { Badge, Text, Icon, IconButton } from "react-native-paper";
+import { Badge, Text, IconButton } from "react-native-paper";
 import CustomButton from "kaizen-components/components/CustomButton/CustomButton";
 import { RootStackParamList } from "../../../RootNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import config from "../../config/config";
-import { Order } from "../vendors/home/data/OrderTypes";
 import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
 
 import { useIsFocused } from "@react-navigation/native";
@@ -45,12 +42,9 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   const [shippingModalVisible, setShippingModalVisible] = useState(false);
   const [contactModalVisible, setContactModalVisible] = useState(false);
 
-  // Shipping option state
   const [selectedShipping, setSelectedShipping] = useState<
     "standard" | "express"
   >("standard");
-
-  const SOCKET_URL = "http://localhost:3000/api/v1/payments/webhook";
 
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
@@ -60,7 +54,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const dispatch = useAppDispatch();
 
-  // Handlers for shipping selection
   const handleShippingSelect = (option: "standard" | "express") => {
     setSelectedShipping(option);
     if (option === "standard") {
@@ -115,10 +108,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Page Title */}
-        {/* <Text style={styles.headerTitle}>Payment</Text> */}
-
-        {/* SHIPPING ADDRESS */}
         <View style={styles.sectionContainer}>
           <View style={styles.sectionTitleRow}>
             <Text style={styles.sectionTitle}>Shipping Address</Text>
@@ -133,7 +122,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
           <Text style={styles.sectionDescription}>{shippingAddress}</Text>
         </View>
 
-        {/* CONTACT INFORMATION */}
         <View style={styles.sectionContainer}>
           <View style={styles.sectionTitleRow}>
             <Text style={styles.sectionTitle}>Contact Information</Text>
@@ -150,7 +138,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
           <Text style={styles.sectionDescription}>{contactEmail}</Text>
         </View>
 
-        {/* ITEMS */}
         <View style={styles.sectionContainer}>
           <View style={styles.itemsHeader}>
             <Text style={styles.sectionTitle}>Items</Text>
@@ -183,11 +170,9 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
           />
         </View>
 
-        {/* SHIPPING OPTIONS */}
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Shipping Options</Text>
 
-          {/* Standard */}
           <TouchableOpacity
             style={styles.shippingOptionRow}
             onPress={() => handleShippingSelect("standard")}
@@ -211,7 +196,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
 
-          {/* Express */}
           <TouchableOpacity
             style={styles.shippingOptionRow}
             onPress={() => handleShippingSelect("express")}
@@ -240,7 +224,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
           </Text>
         </View>
 
-        {/* PAYMENT METHOD */}
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Payment Method</Text>
           <Text style={styles.paymentMethod}>Card</Text>
@@ -263,7 +246,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
       </ScrollView>
 
-      {/* Edit Shipping Address Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -297,7 +279,6 @@ const PaymentScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
       </Modal>
 
-      {/* Edit Contact Information Modal */}
       <Modal
         animationType="slide"
         transparent={true}

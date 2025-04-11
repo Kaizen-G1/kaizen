@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 5,
-    width: SCREEN_WIDTH / 2 - 24, // Each card takes up 50% of the width minus margins
+    width: SCREEN_WIDTH / 2 - 24,
   },
 });
 

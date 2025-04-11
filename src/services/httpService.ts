@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logger } from 'react-native-logs';
+import { logger } from "react-native-logs";
 import config from "../config/config";
 import API_ROUTES from "../api/apiRoutes";
 
@@ -13,7 +13,6 @@ const http: AxiosInstance = axios.create({
   },
 });
 
-// Agregar un interceptor para incluir el token en las peticiones
 http.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("accessToken");
@@ -26,7 +25,6 @@ http.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Manejo de respuestas y errores
 http.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
@@ -40,25 +38,22 @@ http.interceptors.response.use(
       log.error(`Error Status: ${error.response.status}`);
       log.error("Error Data:", error.response.data);
 
-      // Resfresh token if 401 Unauthorized
       if (error.response.status === 401) {
         log.debug("Token expired, checking if JWT exists");
 
-        // No JWT found. User is not logged in
         const token = await AsyncStorage.getItem("accessToken");
         if (!token) {
           log.error("No access token found. User is not logged in.");
-          return
+          return;
         }
 
-        // Attempting to refresh token
         const newToken = await refreshAccessToken();
 
-        if (newToken && error.config) { // Asegurar que error.config existe
-          error.config.headers = error.config.headers || {}; // Asegurar que headers existe
+        if (newToken && error.config) {
+          error.config.headers = error.config.headers || {};
           error.config.headers.Authorization = `Bearer ${newToken}`;
 
-          return http.request(error.config); // Reintentar la petición con el nuevo token
+          return http.request(error.config);
         }
       }
     } else if (error.request) {
@@ -69,8 +64,6 @@ http.interceptors.response.use(
   }
 );
 
-
-// Función para refrescar el token
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     const refreshToken = await AsyncStorage.getItem("refreshToken");

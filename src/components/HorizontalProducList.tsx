@@ -12,23 +12,6 @@ import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
 import { ProductPayload } from "../screens/vendors/product/slice/ProductSlice";
 import ProductItem from "./ProductItem";
 
-type Product = {
-  id: string;
-  title: string;
-  count: number;
-  price: number;
-  stock: number;
-  image: string;
-};
-
-type HeaderSectionProps = {
-  onPressSeeAll: () => void;
-};
-
-type ProductCardProps = {
-  item: Product;
-};
-
 type HorizontalProductListProps = {
   products: ProductPayload[];
   onPressSeeAll: () => void;

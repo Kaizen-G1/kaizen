@@ -1,7 +1,7 @@
 export interface ApiResponse<T = any> {
   status: string;
-  data: T; // 'data' contains the actual API response
-  message?: string; // Optional message field
+  data: T;
+  message?: string;
 }
 
 export interface ApiState {
@@ -11,5 +11,5 @@ export interface ApiState {
 }
 
 export interface ExtendedApiState<T = null> extends ApiState {
-  response: ApiResponse<T> | null; // 'response' contains the actual API response
+  response: ApiResponse<T> | null;
 }

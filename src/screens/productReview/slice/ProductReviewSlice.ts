@@ -4,7 +4,6 @@ import http from "../../../services/httpService";
 import API_ROUTES from "../../../api/apiRoutes";
 import { ExtendedApiState } from "../../../services/apiState";
 
-// Review type for the slice state
 export interface ReviewPayload {
   id?: string;
   product_id: string;
@@ -24,14 +23,12 @@ export interface ReviewListResponseData {
   reviews: ReviewPayload[];
 }
 
-// Review slice state interface
 interface ReviewState {
   reviewSave: ExtendedApiState<ReviewResponseData>;
   reviewList: ExtendedApiState<ReviewListResponseData>;
   reviewDelete: ExtendedApiState<{ message: string }>;
 }
 
-// Initial state
 const initialState: ReviewState = {
   reviewSave: {
     loading: false,
@@ -53,7 +50,6 @@ const initialState: ReviewState = {
   },
 };
 
-// Fetch reviews by product
 export const getReviewsByProductThunk = createAsyncThunk(
   "reviews/getReviewsByProduct",
   async (productId: string, { rejectWithValue }) => {
@@ -70,13 +66,14 @@ export const getReviewsByProductThunk = createAsyncThunk(
   }
 );
 
-// Save (Create/Update) Review
 export const saveReviewThunk = createAsyncThunk(
   "reviews/save",
   async (payload: ReviewPayload, { rejectWithValue }) => {
     try {
       const isUpdate = !!payload.id;
-      const endpoint = isUpdate ? API_ROUTES.reviews.update(`${payload.id}`) : API_ROUTES.reviews.create;
+      const endpoint = isUpdate
+        ? API_ROUTES.reviews.update(`${payload.id}`)
+        : API_ROUTES.reviews.create;
       const method = isUpdate ? "PUT" : "POST";
       const response = await http.request({
         url: endpoint,
@@ -90,7 +87,6 @@ export const saveReviewThunk = createAsyncThunk(
   }
 );
 
-// Delete review
 export const deleteReviewThunk = createAsyncThunk(
   "reviews/delete",
   async (reviewId: string, { rejectWithValue }) => {
@@ -144,7 +140,7 @@ const reviewSlice = createSlice({
       .addCase(getReviewsByProductThunk.rejected, (state, action) => {
         handleApiCall(state.reviewList, { error: action.payload }, "failed");
       })
-      
+
       .addCase(deleteReviewThunk.pending, (state) => {
         handleApiCall(state.reviewDelete, {}, "loading");
       })
@@ -158,5 +154,6 @@ const reviewSlice = createSlice({
   },
 });
 
-export const { reviewSaveAction, reviewListAction, reviewDeleteAction } = reviewSlice.actions;
+export const { reviewSaveAction, reviewListAction, reviewDeleteAction } =
+  reviewSlice.actions;
 export default reviewSlice.reducer;

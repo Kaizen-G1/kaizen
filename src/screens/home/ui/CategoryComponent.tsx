@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: cardMargin,
-    // backgroundColor: "white",
+    backgroundColor: "white",
   },
   card: {
     width: cardSize,

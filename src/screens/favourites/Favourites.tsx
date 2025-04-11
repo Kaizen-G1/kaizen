@@ -20,13 +20,6 @@ import AlertModal from "../../components/alert/AlertCustomModal";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../RootNavigator";
 import CartItem from "../../components/CartItem";
-import {
-  addToCartThunk,
-  CartPayload,
-  getCartThunk,
-} from "../cart/slice/CartSlice";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native-paper";
 
 type WishlistScreenProp = StackNavigationProp<RootStackParamList, "Home">;

@@ -31,7 +31,6 @@ const LazyProductGrid: React.FC<LazyProductGridProps> = ({
 
     setIsLoading(true);
 
-    // Simulate delay before loading new items
     setTimeout(() => {
       const start = (page - 1) * itemsPerPage;
       const end = page * itemsPerPage;
@@ -43,13 +42,13 @@ const LazyProductGrid: React.FC<LazyProductGridProps> = ({
       }
 
       setIsLoading(false);
-    }, 100); // 600ms delay
+    }, 100);
   };
 
   useEffect(() => {
     setVisibleProducts([]);
     setPage(1);
-    loadMoreProducts(); // Initial load
+    loadMoreProducts();
   }, [allProducts]);
 
   return (
