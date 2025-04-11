@@ -21,7 +21,7 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Image
-            source={require("../../../assets/logo.png")} // Fetching the logo from the assets folder
+            source={require("../../../assets/logo.png")}
             style={styles.logo}
           />
         </View>
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
     alignItems: "center",
-    // justifyContent: 'space-evenly',
     paddingHorizontal: 20,
     marginBottom: 25,
   },
