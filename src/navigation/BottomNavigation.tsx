@@ -4,9 +4,8 @@ import { BottomNavigation } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-// Import Screens
-import HomeScreen from "../screens/home/Home"; // Customer Home
-import Home from "../screens/vendors/home/ui/OrderListScreen"; // Vendor Dashboard
+import HomeScreen from "../screens/home/Home";
+import Home from "../screens/vendors/home/ui/OrderListScreen";
 import ProductListScreen from "../screens/vendors/product/Product";
 import FlipCard from "../screens/vendors/wallet/Transaction";
 import ProfileScreen from "../screens/vendors/profile/profile";
@@ -14,12 +13,9 @@ import ProfileScreenCustomer from "../screens/profile/Profile";
 import CartScreen from "../screens/cart/Cart";
 import FavouriteScreen from "../screens/favourites/Favourites";
 
-// Placeholder screens for customers
-
 const CustomBottomNavigation = ({ isVendor = false }) => {
   const [index, setIndex] = useState(0);
 
-  // Define routes dynamically
   const routes = isVendor
     ? [
         {
@@ -74,7 +70,6 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
         },
       ];
 
-  // Function-based scene rendering for better performance
   const renderScene = ({ route }: { route: { key: string } }) => {
     switch (route.key) {
       case "home":
@@ -121,7 +116,7 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
         renderIcon={renderIcon}
         barStyle={[
           styles.bottomNav,
-          { backgroundColor: "#fff", paddingHorizontal: isVendor ? 20 : 0 }, // Adjusted padding
+          { backgroundColor: "#fff", paddingHorizontal: isVendor ? 20 : 0 },
         ]}
         activeIndicatorStyle={{ backgroundColor: "transparent" }}
         compact={true}
@@ -137,7 +132,6 @@ const CustomBottomNavigation = ({ isVendor = false }) => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -156,7 +150,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -1 },
     shadowOpacity: 0.1,
     elevation: 3,
-    borderTopWidth: 1, // Set the width of the top border
+    borderTopWidth: 1,
     borderTopColor: "rgba(0, 0, 0, 0.1)",
   },
 });

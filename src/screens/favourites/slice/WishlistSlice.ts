@@ -24,7 +24,6 @@ const initialState: WishlistState = {
   },
 };
 
-// Fetch wishlist list
 export const getWishlistThunk = createAsyncThunk(
   "wishlist/get",
   async (_, { rejectWithValue }) => {
@@ -47,7 +46,6 @@ export const getWishlistThunk = createAsyncThunk(
   }
 );
 
-// Add to wishlist
 export const addToWishlistThunk = createAsyncThunk(
   "wishlist/add",
   async (payload: ProductPayload, { rejectWithValue }) => {
@@ -69,8 +67,6 @@ export const addToWishlistThunk = createAsyncThunk(
     }
   }
 );
-
-// Remove from wishlist
 
 export const removeFromWishlistThunk = createAsyncThunk(
   "wishlist/remove",
@@ -104,7 +100,7 @@ export const wishlistSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch wishlist list
+
       .addCase(getWishlistThunk.pending, (state) => {
         handleApiCall(state.wishlist, {}, "loading");
       })
@@ -116,7 +112,6 @@ export const wishlistSlice = createSlice({
         handleApiCall(state.wishlist, { error: action.payload }, "failed");
       })
 
-      //   Add to wishlist
       .addCase(addToWishlistThunk.pending, (state) => {
         handleApiCall(state.wishlist, {}, "loading");
       })
@@ -128,7 +123,6 @@ export const wishlistSlice = createSlice({
         handleApiCall(state.wishlist, { error: action.payload }, "failed");
       })
 
-      //   Remove from wishlist
       .addCase(removeFromWishlistThunk.pending, (state) => {
         handleApiCall(state.wishlist, {}, "loading");
       })

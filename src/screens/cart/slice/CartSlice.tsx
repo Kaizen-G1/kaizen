@@ -54,7 +54,6 @@ const initialState: CartState = {
   subTotal: 0.0,
 };
 
-// Fetch cart list
 export const getCartThunk = createAsyncThunk(
   "cart/get",
   async (_, { rejectWithValue }) => {
@@ -76,7 +75,6 @@ export const getCartThunk = createAsyncThunk(
   }
 );
 
-// Add to cart
 export const addToCartThunk = createAsyncThunk(
   "cart/add",
   async (payload: CartPayload, { rejectWithValue }) => {
@@ -97,7 +95,6 @@ export const addToCartThunk = createAsyncThunk(
   }
 );
 
-// Delete from cart
 export const deleteFromCartThunk = createAsyncThunk(
   "cart/delete",
   async (payload: CartPayload, { rejectWithValue }) => {
@@ -140,19 +137,19 @@ const cartSlice = createSlice({
         state.cartList.response.data.cart =
           state.cartList.response.data.cart.map((item) => {
             if (item.id === id) {
-              item.quantity = quantity; // Update quantity
+              item.quantity = quantity;
             }
             total += item.product.price * item.quantity;
             return item;
           });
       }
 
-      state.subTotal = total; // Update subtotal
+      state.subTotal = total;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Add to cart
+
       .addCase(addToCartThunk.pending, (state) => {
         handleApiCall(state.cartSave, {}, "loading");
       })
@@ -164,7 +161,6 @@ const cartSlice = createSlice({
         handleApiCall(state.cartSave, { error: action.payload }, "failed");
       })
 
-      // Fetch cart list
       .addCase(getCartThunk.pending, (state) => {
         handleApiCall(state.cartList, {}, "loading");
       })
@@ -172,7 +168,6 @@ const cartSlice = createSlice({
         handleApiCall(state.cartList, action, "success");
         state.cartList.response = action.payload;
 
-        // Calculate subTotal by summing up all item (price * quantity)
         let total = 0;
         const cartItems = action.payload.data.cart;
         for (let i = 0; i < cartItems.length; i++) {
@@ -184,7 +179,6 @@ const cartSlice = createSlice({
         handleApiCall(state.cartList, { error: action.payload }, "failed");
       })
 
-      // Delete from cart
       .addCase(deleteFromCartThunk.pending, (state) => {
         handleApiCall(state.cartDelete, {}, "loading");
       })

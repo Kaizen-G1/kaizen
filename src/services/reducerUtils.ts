@@ -1,6 +1,5 @@
 import { ApiState } from "./apiState";
 
-// Function to handle API calls and update the state
 export const handleApiCall = <T>(
   state: ApiState,
   action: { payload?: T; error?: any },

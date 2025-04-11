@@ -1,4 +1,3 @@
-import { create } from "tailwind-rn";
 import config from "../config/config";
 
 export const API_ROUTES = {

@@ -93,7 +93,6 @@ const initialState: CategoryState = {
   },
 };
 
-// Fetch category list
 export const getCategoryThunk = createAsyncThunk(
   "categories/get",
   async (_, { rejectWithValue }) => {
@@ -110,7 +109,6 @@ export const getCategoryThunk = createAsyncThunk(
   }
 );
 
-// Fetch subcategory list
 export const getAllSubcategoriesThunk = createAsyncThunk(
   "subcategories/get",
   async (_, { rejectWithValue }) => {
@@ -129,7 +127,6 @@ export const getAllSubcategoriesThunk = createAsyncThunk(
   }
 );
 
-// Thunk to fetch categories with subcategories
 export const getCategoriesWithSubcategoriesThunk = createAsyncThunk(
   "categories/getWithSubcategories",
   async (_, { rejectWithValue }) => {
@@ -137,8 +134,8 @@ export const getCategoriesWithSubcategoriesThunk = createAsyncThunk(
       const response = await http.get(
         API_ROUTES.categories.getWithSubcategories
       );
-      // console.log(response.data.data.categories);
-      return response.data; // Adjusted to match response structure
+
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "Something went wrong");
     }
@@ -187,7 +184,7 @@ export const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch category list
+
       .addCase(getCategoryThunk.pending, (state) => {
         handleApiCall(state.categoryList, {}, "loading");
       })
@@ -199,7 +196,6 @@ export const categorySlice = createSlice({
         handleApiCall(state.categoryList, { error: action.payload }, "failed");
       })
 
-      // Fetch subcategory list
       .addCase(getAllSubcategoriesThunk.pending, (state) => {
         handleApiCall(state.subCategoryList, {}, "loading");
       })
@@ -236,7 +232,6 @@ export const categorySlice = createSlice({
         }
       )
 
-      // Fetch category by id
       .addCase(getCategoryByIdThunk.pending, (state) => {
         handleApiCall(state.categoryById, {}, "loading");
       })
@@ -250,7 +245,6 @@ export const categorySlice = createSlice({
   },
 });
 
-// Export actions
 export const {
   setSelectedCategory,
   setSelectedSubCategory,
@@ -259,5 +253,4 @@ export const {
   resetCategoryById,
 } = categorySlice.actions;
 
-// Export reducer
 export default categorySlice.reducer;

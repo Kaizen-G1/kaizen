@@ -58,25 +58,6 @@ export const createOrderThunk = createAsyncThunk(
   }
 );
 
-// export const paymentIntentThunk = createAsyncThunk(
-//   "payment/paymentIntent",
-//   async (payload: PaymentPayload, { rejectWithValue }) => {
-//     try {
-//       const response = await http.post(API_ROUTES.orders.getPayments, {
-//         orderId: payload.orderId,
-//       });
-//       const data = await response.data;
-//       if (data.status !== "success") {
-//         throw new Error(data?.message || "Failed to create payment intent");
-//       }
-//       console.log(data);
-//       return data;
-//     } catch (err: any) {
-//       return rejectWithValue(err.message);
-//     }
-//   }
-// );
-
 export const paymentSlice = createSlice({
   name: "payment",
   initialState,

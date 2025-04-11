@@ -7,7 +7,7 @@ import { Platform } from "react-native";
 import { logger } from "react-native-logs";
 import { LogBox } from "react-native";
 
-LogBox.ignoreAllLogs(true); // Ignore all log notifications
+LogBox.ignoreAllLogs(true);
 const log = logger.createLogger();
 
 const getBaseURL = (apiURL: string): string => {

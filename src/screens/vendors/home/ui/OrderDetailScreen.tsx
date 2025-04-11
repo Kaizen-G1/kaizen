@@ -157,7 +157,7 @@ export default function OrderDetailScreen() {
           </Card.Content>
         </Card>
 
-        {/* <Card style={styles.card}>
+        <Card style={styles.card}>
           <Card.Title title="Products" />
           <Card.Content>
             {selectedOrder.products.length > 0 ? (
@@ -201,7 +201,7 @@ export default function OrderDetailScreen() {
               </Text>
             )}
           </Card.Content>
-        </Card> */}
+        </Card>
 
         <Card style={styles.card}>
           <Card.Title title="Order Status" />

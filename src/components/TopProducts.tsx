@@ -8,8 +8,6 @@ import {
   Image,
 } from "react-native";
 
-import CircleItem from "kaizen-components/components/CircleItem/CircleItem";
-
 type TopProductsProps = {
   title: string;
   items: { id: string; image: string }[];
@@ -24,19 +22,13 @@ const TopProducts: React.FC<TopProductsProps> = ({ title, items, onPress }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
-      >
-        <View style={styles.outerCircle}>
-          <View style={styles.innerCircle}>
-            {/* <Image source={{ uri: items[0].image }} style={styles.image} /> */}
-          </View>
-        </View>
-      </ScrollView>
+      ></ScrollView>
     </View>
   );
 };
 
-const CIRCLE_SIZE = Math.min(Dimensions.get("window").width / 7.5, 100); // Dynamic size based on the screen width
-const BORDER_WIDTH = 5; // Width of the white border
+const CIRCLE_SIZE = Math.min(Dimensions.get("window").width / 7.5, 100);
+const BORDER_WIDTH = 5;
 
 const styles = StyleSheet.create({
   container: {

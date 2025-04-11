@@ -12,26 +12,10 @@ import CustomIcon from "kaizen-components/components/CustomIcon/CustomIcon";
 import { ProductPayload } from "../screens/vendors/product/slice/ProductSlice";
 import ProductItem from "./ProductItem";
 
-type Product = {
-  id: string;
-  title: string;
-  count: number;
-  price: number;
-  stock: number;
-  image: string;
-};
-
-type HeaderSectionProps = {
-  onPressSeeAll: () => void;
-};
-
-type ProductCardProps = {
-  item: Product;
-};
-
 type HorizontalProductListProps = {
   products: ProductPayload[];
   onPressSeeAll: () => void;
+  navigation: any;
 };
 
 const ProductCard: React.FC<{ item: ProductPayload }> = ({ item }) => {
@@ -53,6 +37,7 @@ const ProductCard: React.FC<{ item: ProductPayload }> = ({ item }) => {
 const HorizontalProductList: React.FC<HorizontalProductListProps> = ({
   products,
   onPressSeeAll,
+  navigation,
 }) => {
   return (
     <>
@@ -82,7 +67,12 @@ const HorizontalProductList: React.FC<HorizontalProductListProps> = ({
             }
             isDiscounted={false}
             discount={"0"}
-            onPress={() => console.log("Product clicked:", item.title)}
+            onPress={() => {
+              navigation.navigate("ProductDetails", {
+                productId: item.id?.toString() || "",
+                product: item,
+              });
+            }}
           />
         )}
         showsHorizontalScrollIndicator={false}

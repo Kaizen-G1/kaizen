@@ -12,7 +12,7 @@ import CustomButton from "kaizen-components/components/CustomButton/CustomButton
 export default function NewPasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [passwordMatch, setPasswordMatch] = useState(true); // For password match validation
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
   const handleNewPasswordChange = (value: React.SetStateAction<string>) =>
     setNewPassword(value);
@@ -27,32 +27,26 @@ export default function NewPasswordScreen() {
 
   const handleSubmit = () => {
     if (newPassword === repeatPassword) {
-      // console.log("Password updated");
-      // Proceed with password update logic
     } else {
-      // console.log("Passwords do not match");
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Profile Avatar */}
       <View style={styles.avatarContainer}>
         <View style={styles.avatarCircle}>
           <Image
-            source={{ uri: "https://via.placeholder.com/100" }} // Replace with actual avatar URL
+            source={{ uri: "https://via.placeholder.com/100" }}
             style={styles.avatar}
           />
         </View>
       </View>
 
-      {/* Title and Subtitle */}
       <Text style={styles.title}>Create a New Password</Text>
       <Text style={styles.subtitle}>
         Please set a new password for your account.
       </Text>
 
-      {/* New Password */}
       <TextInput
         style={styles.input}
         placeholder="New Password"
@@ -61,7 +55,6 @@ export default function NewPasswordScreen() {
         onChangeText={handleNewPasswordChange}
       />
 
-      {/* Repeat Password */}
       <TextInput
         style={styles.input}
         placeholder="Repeat Password"
@@ -70,19 +63,14 @@ export default function NewPasswordScreen() {
         onChangeText={handleRepeatPasswordChange}
       />
 
-      {/* Password Match Error */}
       {!passwordMatch && (
         <Text style={styles.errorText}>Passwords do not match</Text>
       )}
 
-      {/* Submit Button */}
-      {/* <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity> */}
       <View style={{ paddingTop: 50 }}>
         <CustomButton label="Submit" onPress={handleSubmit} />
       </View>
-      {/* Cancel Button */}
+
       <TouchableOpacity>
         <Text style={styles.cancelText}>Cancel</Text>
       </TouchableOpacity>

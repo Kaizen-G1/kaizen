@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DiscountBadge from "../../../components/DiscountBadge";
 import ProductItem from "../../../components/ProductItem";
 import FlashSaleHeader from "../../../components/FlashSaleHeader";
-import Banner from "../../../components/banner/test";
+import Banner from "../../../components/banner/Banner";
 
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../RootNavigator";
@@ -30,7 +30,6 @@ interface Product {
 
 type Props = StackScreenProps<RootStackParamList, "FlashShowAll">;
 
-// export default function FlashShowAll({ navigation }) {
 const FlashShowAll: React.FC<Props> = ({ navigation, route }) => {
   const { products, timeLeftSale } = route.params || {};
 

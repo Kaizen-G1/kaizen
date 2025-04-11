@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Order } from "./OrderTypes";
 import API_ROUTES from "../../../../api/apiRoutes";
-import { OrdersResponse } from '../../../../api/interfaces/orders-response';
+import { OrdersResponse } from "../../../../api/interfaces/orders-response";
 
 class OrderRepository {
   async fetchOrders(): Promise<Order[]> {
@@ -27,8 +27,8 @@ class OrderRepository {
           product_name: product.title,
           price: product.price,
           quantity: product.quantity,
-          images: product.images || "https://example.com/image.jpg", // Placeholder image URL
-        })), 
+          images: product.images || "https://example.com/image.jpg",
+        })),
         total_price: order.totalPrice,
         status: order.status,
         created_date: order.created_date,
@@ -66,7 +66,7 @@ class OrderRepository {
           price: product.price,
           quantity: product.quantity,
           images: product.images,
-        })), 
+        })),
         total_price: order.totalPrice,
         status: order.status,
         created_date: order.created_date,
@@ -107,9 +107,7 @@ class OrderRepository {
       const token = await AsyncStorage.getItem("accessToken");
       const response = await axios.put(
         API_ROUTES.orders.getOrderById(orderId),
-        { status,
-          updated_date: new Date().toISOString(),
-         },
+        { status, updated_date: new Date().toISOString() },
         {
           headers: {
             "Content-Type": "application/json",

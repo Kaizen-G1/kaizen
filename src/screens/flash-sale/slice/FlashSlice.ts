@@ -100,7 +100,7 @@ export const flashSaleSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetch flash sale list
+
       .addCase(getFlashSaleListThunk.pending, (state) => {
         handleApiCall(state.flashSaleList, {}, "loading");
       })
@@ -112,7 +112,6 @@ export const flashSaleSlice = createSlice({
         handleApiCall(state.flashSaleList, { error: action.payload }, "failed");
       })
 
-      // enable flash sale
       .addCase(enabaleFlashSale.pending, (state) => {
         handleApiCall(state.flashSaleList, {}, "loading");
       })
@@ -124,7 +123,6 @@ export const flashSaleSlice = createSlice({
         handleApiCall(state.flashSaleList, { error: action.payload }, "failed");
       })
 
-      // disable flash sale
       .addCase(disableFlashSale.pending, (state) => {
         handleApiCall(state.flashSaleList, {}, "loading");
       })

@@ -30,7 +30,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
   btnlabel = "",
   message = "Your card has been successfully charged",
 }) => {
-  // Animated scale for the icon
   const scaleAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -55,7 +54,6 @@ const AlertModal: React.FC<AlertModalProps> = ({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          {/* Animated Icon positioned above the modal */}
           <Animated.View
             style={[
               styles.iconContainer,
@@ -140,31 +138,31 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   iconContainer: {
-    position: "absolute", // Icon outside modal box
-    top: -25, // Adjusted top to give better visibility with overlap
-    width: 50, // Slightly larger for better visual balance
-    height: 50, // Same size as width
-    borderRadius: 40, // Circle shape for icon
+    position: "absolute",
+    top: -25,
+    width: 50,
+    height: 50,
+    borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
   },
   overlapContainer: {
     position: "absolute",
-    top: -40, // Align with the icon container
-    width: 80, // Slightly larger width for visual separation
-    height: 80, // Slightly larger height for better overlap effect
-    borderRadius: 45, // Keep it round for consistency
+    top: -40,
+    width: 80,
+    height: 80,
+    borderRadius: 45,
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.6,
     shadowRadius: 8,
-    elevation: 5, // Visible shadow for Android
+    elevation: 5,
   },
   title: {
-    fontSize: 22, // Increased size for better readability
+    fontSize: 22,
     fontWeight: "600",
-    marginBottom: 12, // Adjusted margin for balance
+    marginBottom: 12,
   },
   message: {
     fontSize: 16,
@@ -176,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 25,
-    marginBottom: 12, // Added margin for better separation
+    marginBottom: 12,
   },
   buttonText: {
     color: "#fff",

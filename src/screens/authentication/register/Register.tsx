@@ -21,7 +21,6 @@ type RegisterProps = {
 };
 
 function CreateAccountScreen({ navigation }: RegisterProps) {
-  // Custom hooks
   const dispatch = useAppDispatch();
 
   const { loading, error, success, response } = useAppSelector(
@@ -167,8 +166,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     position: "relative",
-
-    // top: -20,
   },
   title: {
     fontSize: 50,
@@ -197,7 +194,7 @@ const styles = StyleSheet.create({
     marginBottom: 7.9,
   },
   textInput: {
-    color: "black", // Set the default text color to black
+    color: "black",
   },
   passwordContainer: {
     position: "relative",
@@ -227,7 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     textAlign: "center",
-    lineHeight: 40, // Adjust this to match the button's height
+    lineHeight: 40,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -243,7 +240,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   iconColor: {
-    color: "#A55C2F", // Customize the color of the icon here
+    color: "#A55C2F",
   },
 });
 

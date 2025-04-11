@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 type Props = {
   rating: number;
-  onRatingChange?: (rating: number) => void; // optional
+  onRatingChange?: (rating: number) => void;
 };
 
 const StarRating: React.FC<Props> = ({ rating, onRatingChange }) => {
@@ -14,7 +14,6 @@ const StarRating: React.FC<Props> = ({ rating, onRatingChange }) => {
         const filled = star <= rating;
         const starIcon = filled ? "star" : "star-o";
 
-        // If onRatingChange is provided, make it tappable
         if (onRatingChange) {
           return (
             <TouchableOpacity
@@ -27,7 +26,6 @@ const StarRating: React.FC<Props> = ({ rating, onRatingChange }) => {
           );
         }
 
-        // Otherwise, just show the star as static
         return (
           <FontAwesome
             key={star}

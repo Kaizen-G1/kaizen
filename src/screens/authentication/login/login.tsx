@@ -59,12 +59,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           return;
         }
 
-        // Decodificar el JWT
         const decodedToken: any = jwtDecode(accessToken);
         log.debug("Decoded JWT:", decodedToken);
         log.debug("RefreshToken:", refreshToken);
 
-        // Guardar tokens en AsyncStorage
         await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken || "");
         await AsyncStorage.setItem("userRole", decodedToken.role || "");
@@ -111,7 +109,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../../../assets/logo.png")} // Fetching the logo from the assets folder
+            source={require("../../../../assets/logo.png")}
             style={styles.logo}
           />
         </View>
@@ -134,18 +132,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity
-          style={styles.forgotPassword}
-          onPress={() => Alert.alert("Forgot Password?")}
-        >
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
-
-        <CustomButton
-          label="Login"
-          onPress={handleLogin}
-          // paddingHorizontal={140}
-        />
+        <CustomButton label="Login" onPress={handleLogin} />
 
         <TouchableOpacity
           onPress={() => {

@@ -38,7 +38,6 @@ const initialState: CustomerDashboardState = {
   },
 };
 
-// Fetch customer dashboard
 export const getCustomerDashboardThunk = createAsyncThunk(
   "customerDashboard/get",
   async (_, { rejectWithValue }) => {
@@ -66,7 +65,7 @@ export const customerDashboardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch wishlist list
+
       .addCase(getCustomerDashboardThunk.pending, (state) => {
         handleApiCall(state.dashboard, {}, "loading");
       })

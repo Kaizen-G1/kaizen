@@ -1,52 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // For the checkmark icon
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function PasswordRecoveryScreen() {
   const [selectedMethod, setSelectedMethod] = useState("SMS");
 
   return (
     <View style={styles.container}>
-      {/* Profile Avatar */}
       <View style={styles.avatarContainer}>
         <View style={styles.avatarCircle}>
           <Image
-            source={{ uri: "https://via.placeholder.com/100" }} // Replace with actual avatar URL
+            source={{ uri: "https://via.placeholder.com/100" }}
             style={styles.avatar}
           />
         </View>
       </View>
 
-      {/* Title and Subtitle */}
       <Text style={styles.title}>Password Recovery</Text>
       <Text style={styles.subtitle}>
         How you would like to reset your password?
       </Text>
 
-      {/* SMS Option */}
-      <TouchableOpacity
-        style={[
-          styles.optionContainer,
-          selectedMethod === "SMS" && styles.selectedOption,
-        ]}
-        onPress={() => setSelectedMethod("SMS")}
-      >
-        <Text
-          style={[
-            styles.optionText,
-            selectedMethod === "SMS" && styles.selectedText,
-          ]}
-        >
-          SMS
-        </Text>
-        {selectedMethod === "SMS" ? (
-          <MaterialIcons name="check-circle" size={20} color="#A5642A" />
-        ) : (
-          <View style={styles.optionCircle} />
-        )}
-      </TouchableOpacity>
-
-      {/* Email Option */}
       <TouchableOpacity
         style={[
           styles.optionContainer,
@@ -69,13 +43,11 @@ export default function PasswordRecoveryScreen() {
         )}
       </TouchableOpacity>
 
-      {/* Next Button */}
       <View style={{ position: "relative", top: 70 }}>
         <TouchableOpacity style={styles.nextButton}>
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
 
-        {/* Cancel Text */}
         <TouchableOpacity>
           <Text style={styles.cancelText}>Cancel</Text>
         </TouchableOpacity>
@@ -89,8 +61,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
-    justifyContent: "center", // Vertically centers content
-    alignItems: "center", // Horizontally centers content
+    justifyContent: "center",
+    alignItems: "center",
   },
   avatarContainer: {
     alignItems: "center",
@@ -126,8 +98,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: 199, // Fixed width
-    height: 40, // Fixed height
+    width: 199,
+    height: 40,
     borderRadius: 20,
     backgroundColor: "#FFF8E5",
     marginBottom: 10,
@@ -140,8 +112,8 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     color: "#6E6E6E",
-    textAlign: "center", // Centers the text horizontally
-    flex: 1, // Ensures the text occupies available space
+    textAlign: "center",
+    flex: 1,
   },
   selectedText: {
     fontWeight: "bold",

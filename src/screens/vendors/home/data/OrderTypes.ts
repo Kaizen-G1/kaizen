@@ -7,8 +7,8 @@ export interface Product {
   price?: number;
   quantity: number;
   images: string[];
-  product: CartPayload;
-  totalPrice: number;
+  product?: CartPayload;
+  totalPrice?: number;
 }
 
 export interface Order {

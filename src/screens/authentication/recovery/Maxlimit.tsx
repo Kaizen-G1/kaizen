@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Modal } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  TextInput,
+  Modal,
+} from "react-native";
 
 export default function PasswordRecoveryScreen() {
-  const [selectedMethod, setSelectedMethod] = useState('SMS');
-  const [otp, setOtp] = useState(['', '', '', '']); // To store OTP values
-  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
+  const [selectedMethod, setSelectedMethod] = useState("SMS");
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleOtpChange = (value: string, index: number) => {
     const newOtp = [...otp];
@@ -13,39 +21,36 @@ export default function PasswordRecoveryScreen() {
   };
 
   const handleSendAgain = () => {
-    // Simulate checking the OTP limit
-    const otpString = otp.join('');
-    if (otpString.length === 4) { // Assuming 4 digits is the max limit
-      setIsModalVisible(true); // Show the modal when max limit is reached
+    const otpString = otp.join("");
+    if (otpString.length === 4) {
+      setIsModalVisible(true);
     }
   };
 
   const handleModalClose = () => {
-    setIsModalVisible(false); // Close the modal when "Okay" is clicked
+    setIsModalVisible(false);
   };
 
   return (
     <View style={styles.container}>
-      {/* Profile Avatar */}
       <View style={styles.avatarContainer}>
         <View style={styles.avatarCircle}>
           <Image
-            source={{ uri: 'https://via.placeholder.com/100' }} // Replace with actual avatar URL
+            source={{ uri: "https://via.placeholder.com/100" }}
             style={styles.avatar}
           />
         </View>
       </View>
 
-      {/* Title and Subtitle */}
       <Text style={styles.title}>Password Recovery</Text>
-      <Text style={styles.subtitle}>Enter 4 digits code we sent you on your phone number</Text>
+      <Text style={styles.subtitle}>
+        Enter 4 digits code we sent you on your phone number
+      </Text>
 
-      {/* Method Selection */}
       <Text style={styles.selectedMethodText}>
         Method Selected: {selectedMethod}
       </Text>
 
-      {/* OTP Input Fields */}
       <View style={styles.otpContainer}>
         {otp.map((digit, index) => (
           <TextInput
@@ -59,17 +64,14 @@ export default function PasswordRecoveryScreen() {
         ))}
       </View>
 
-      {/* Next Button */}
       <TouchableOpacity style={styles.nextButton} onPress={handleSendAgain}>
         <Text style={styles.nextButtonText}>Send Again</Text>
       </TouchableOpacity>
 
-      {/* Cancel Text */}
       <TouchableOpacity>
         <Text style={styles.cancelText}>Cancel</Text>
       </TouchableOpacity>
 
-      {/* Modal for Maximum Limit */}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -79,7 +81,10 @@ export default function PasswordRecoveryScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Maximum limit reached</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={handleModalClose}>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}
+            >
               <Text style={styles.modalButtonText}>Okay</Text>
             </TouchableOpacity>
           </View>
@@ -92,51 +97,51 @@ export default function PasswordRecoveryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
-    justifyContent: 'center', // Vertically centers content
-    alignItems: 'center', // Horizontally centers content
+    justifyContent: "center",
+    alignItems: "center",
   },
   avatarContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   avatarCircle: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#F5F5F5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
+    backgroundColor: "#F5F5F5",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
   avatar: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   title: {
     fontSize: 21,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 10,
-    color: '#000',
+    color: "#000",
   },
   subtitle: {
     fontSize: 19,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 20,
-    color: '#6E6E6E',
+    color: "#6E6E6E",
   },
   selectedMethodText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
     marginBottom: 20,
   },
   otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 220, // Adjust width for OTP inputs
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 220,
     marginBottom: 30,
   },
   otpInput: {
@@ -144,61 +149,60 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 23,
     borderWidth: 2,
-    borderColor: '#6E6E6E',
-    textAlign: 'center',
+    borderColor: "#6E6E6E",
+    textAlign: "center",
     fontSize: 18,
-    fontWeight: 'bold',
-    backgroundColor: '#F5F5F5',
+    fontWeight: "bold",
+    backgroundColor: "#F5F5F5",
   },
   nextButton: {
     marginTop: 138,
-    backgroundColor: '#A5642A',
+    backgroundColor: "#A5642A",
     paddingVertical: 15,
     borderRadius: 20,
-    alignItems: 'center',
+    alignItems: "center",
     width: 335,
     height: 60,
   },
   nextButtonText: {
     fontSize: 24,
-    color: '#FFFFFF',
-    fontWeight: 'medium',
+    color: "#FFFFFF",
+    fontWeight: "medium",
   },
   cancelText: {
     marginTop: 28,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 14,
-    color: '#6E6E6E',
+    color: "#6E6E6E",
   },
 
-  // Modal Styles
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     padding: 20,
     borderRadius: 10,
     width: 280,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalText: {
     fontSize: 18,
-    color: '#000',
+    color: "#000",
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#A5642A',
+    backgroundColor: "#A5642A",
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalButtonText: {
     fontSize: 18,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
 });

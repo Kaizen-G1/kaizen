@@ -14,7 +14,7 @@ interface OrderState {
 const initialState: OrderState = {
   orders: [],
   selectedOrder: null,
-  totalCompletedAmount: 0, //initial value would be 0
+  totalCompletedAmount: 0,
   loading: false,
   updating: false,
   error: null,

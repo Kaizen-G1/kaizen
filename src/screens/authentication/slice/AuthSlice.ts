@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { handleApiCall } from "../../../services/reducerUtils";
 import { ExtendedApiState, ApiResponse } from "../../../services/apiState";
-import config from "../../../config/config";
 import { RegisterPayload, Verify2FAPayload } from "../authTypes";
 import API_ROUTES from "../../../api/apiRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { set } from "mongoose";
 
 export interface RegisterResponseData {
   message: string;

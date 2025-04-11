@@ -31,18 +31,17 @@ const AllReviewsScreen: React.FC = () => {
     dispatch(getReviewsByProductThunk(productId));
 
     return () => {
-      dispatch(reviewListAction()); // Reset state on unmount
+      dispatch(reviewListAction());
     };
   }, [dispatch, productId]);
 
-  // Access reviews properly
   const reviews = response?.data.reviews || [];
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.reviewContainer}>
       <Image
         source={{
-          uri: item.avatarUrl || "https://www.gravatar.com/avatar/?d=mp", // fallback avatar
+          uri: item.avatarUrl || "https://www.gravatar.com/avatar/?d=mp",
         }}
         style={styles.avatar}
       />

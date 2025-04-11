@@ -49,7 +49,6 @@ export const searchListThunk = createAsyncThunk(
   "search/get",
   async (payload: SearchPayload, { rejectWithValue }) => {
     try {
-      // Convert array of subCategoryId to multiple query parameters if it's an array
       const params: any = {
         query: payload.query,
         minPrice: payload.minPrice,
@@ -59,13 +58,11 @@ export const searchListThunk = createAsyncThunk(
         sortBy: payload.sortBy,
       };
 
-      // Check if subCategoryId is an array and append each value as a separate param
       if (Array.isArray(payload.subCategoryId)) {
         payload.subCategoryId.forEach((id, index) => {
           params[`subCategoryId[${index}]`] = id;
         });
       } else if (payload.subCategoryId) {
-        // If it's a single string, send it normally
         params.subCategoryId = payload.subCategoryId;
       }
 

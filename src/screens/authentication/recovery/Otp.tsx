@@ -14,7 +14,7 @@ import CustomButton from "kaizen-components/components/CustomButton/CustomButton
 
 type Props = {
   navigation: any;
-  route: any; // Accept route prop to get parameters
+  route: any;
 };
 
 export default function OTPScreen({ navigation, route }: Props) {
@@ -94,20 +94,10 @@ export default function OTPScreen({ navigation, route }: Props) {
       <View style={{ marginTop: 50 }}>
         <CustomButton
           label="Verify OTP"
-          // paddingHorizontal={100}
           onPress={handleSubmit}
           loading={loading}
         />
       </View>
-
-      {/* {success && response && (
-        <Text style={{ color: "green" }}>
-          Registration successful! Go to Verification,
-          {response.data.message.toString()}!
-        </Text>
-      )}
-
-      {error && <Text style={{ color: "red" }}>this is error: {error}</Text>} */}
 
       <TouchableOpacity>
         <Text style={styles.cancelText}>Cancel</Text>
