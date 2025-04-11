@@ -194,6 +194,7 @@ const HomeScreen = () => {
       <HorizontalProductList
         products={response?.data?.dashboard.newItems || []}
         onPressSeeAll={handleSeeAllNewItems}
+        navigation={navigation}
       />
 
       <FlashSaleScreen />

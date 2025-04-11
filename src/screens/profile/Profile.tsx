@@ -125,33 +125,6 @@ const ProfileScreenCustomer = () => {
                 }}
                 style={styles.profileImage}
               />
-
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <IconButton
-                  icon={() => (
-                    <Icon name="bell-outline" size={30} color="#753742" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate("Notifications");
-                  }}
-                />
-                {notificationCount > 0 && (
-                  <Badge
-                    size={20}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: -2,
-                      fontSize: 12,
-                      fontWeight: "900",
-                      color: "#fff",
-                      backgroundColor: "#9B2C2D",
-                    }}
-                  >
-                    {notificationCount}
-                  </Badge>
-                )}
-              </View>
             </View>
 
             <TouchableOpacity
