@@ -22,10 +22,4 @@ Kaizen is a full-stack application.
 * Node.js / Express
 * MongoDB
 
-## 🌐 Demo
 
-(Add deployed link)
-
-## 📸 Screenshots
-
-(Add images)
